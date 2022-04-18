@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "dgSpecHash": "ENORaviYca13Q0j+5OcFa4PNk3Ovygm0Y/Pu6V+YcD1RjSS2bkBfte0d+2tBjBXLTle1wzZr0cuxbhSVLpmIHQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Gaetan\\source\\repos\\CashphotoWPF\\CashphotoWPF.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Gaetan\\.nuget\\packages\\controlzex\\4.4.0\\controlzex.4.4.0.nupkg.sha512",
+    "C:\\Users\\Gaetan\\.nuget\\packages\\mahapps.metro\\2.4.9\\mahapps.metro.2.4.9.nupkg.sha512",
+    "C:\\Users\\Gaetan\\.nuget\\packages\\materialdesigncolors\\2.0.5\\materialdesigncolors.2.0.5.nupkg.sha512",
+    "C:\\Users\\Gaetan\\.nuget\\packages\\materialdesignthemes\\4.4.0\\materialdesignthemes.4.4.0.nupkg.sha512",
+    "C:\\Users\\Gaetan\\.nuget\\packages\\microsoft.xaml.behaviors.wpf\\1.1.19\\microsoft.xaml.behaviors.wpf.1.1.19.nupkg.sha512",
+    "C:\\Users\\Gaetan\\.nuget\\packages\\showmethexaml\\2.0.0\\showmethexaml.2.0.0.nupkg.sha512",
+    "C:\\Users\\Gaetan\\.nuget\\packages\\showmethexaml.msbuild\\2.0.0\\showmethexaml.msbuild.2.0.0.nupkg.sha512",
+    "C:\\Users\\Gaetan\\.nuget\\packages\\system.text.json\\4.7.2\\system.text.json.4.7.2.nupkg.sha512"
+  ],
+  "logs": []
+}

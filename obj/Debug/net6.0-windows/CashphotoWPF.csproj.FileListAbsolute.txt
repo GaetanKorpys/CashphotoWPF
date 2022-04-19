@@ -27,3 +27,5 @@ C:\Users\Gaetan\source\repos\CashphotoWPF\bin\Debug\net6.0-windows\MaterialDesig
 C:\Users\Gaetan\source\repos\CashphotoWPF\bin\Debug\net6.0-windows\MaterialDesignThemes.Wpf.dll
 C:\Users\Gaetan\source\repos\CashphotoWPF\bin\Debug\net6.0-windows\Microsoft.Xaml.Behaviors.dll
 C:\Users\Gaetan\source\repos\CashphotoWPF\bin\Debug\net6.0-windows\de\MahApps.Metro.resources.dll
+C:\Users\Gaetan\source\repos\CashphotoWPF\bin\Debug\net6.0-windows\Microsoft.WindowsAPICodePack.Shell.dll
+C:\Users\Gaetan\source\repos\CashphotoWPF\bin\Debug\net6.0-windows\Microsoft.WindowsAPICodePack.dll

@@ -21,14 +21,21 @@ namespace CashphotoWPF.Configuration
         }
 
         //Dosser d'import
-        public string commandeAmazon { get; set; }
-        public string commandeCashphoto { get; set; }
-        public string numeroSuiviColiposte { get; set; }
+        public string commandeAmazon { get; set; } //Fichier .txt qui contient les commandes d'Amazon
+        public string commandeCashphoto { get; set; }//Pls fichiers .csv avec 1 fichier = 1 commande pour Cashphoto
+        public string numeroSuiviColiposte { get; set; }//Numéros de suivi obtenu avec l'appli Coliship (Coliposte)
 
         //Dossier d'export
 
-        public string numeroSuiviAmazon { get; set; }
-        public string numeroSuiviCashphoto { get; set; }
+        //Les numéros de suivi
+        public string numeroSuiviAmazon { get; set; }//Numéros de suivi pour faire la maj des commandes sur Amazon
+        public string numeroSuiviCashphoto { get; set; }//Numéros de suivi pour faire la maj des commandes sur Prestashop (Cashphoto)
+
+        //Les commandes parsées pour GLS et Coliship (Coliposte)
+        public string commandeParsePourGLS { get; set; }//Ficher pour GLS
+        public string commandeParsePourColiposte { get; set; }//Fichier pour Coliship (Coliposte)
+
+        //Les backups (tout sauf le fichier de numéro de suivi fourni par Coliship)
         public string backupCommandeAmazon { get; set; } //Copie du fichier .txt qui contient les commandes importées via Amazon, un fichier = pls commandes
         public string backupCommandeCashphoto { get; set; } //Copie des fichiers .csv, un fichier = une commande
         public string backupNumeroSuiviAmazon { get; set; } //Copie du fichier .txt qui contient les numéros de suivie des commandes passées sur Amazon (GLS ou Coliposte)
@@ -42,7 +49,7 @@ namespace CashphotoWPF.Configuration
         public string telephone { get; set; } //Téléphone par défaut
         public bool BDDOK { get; set; } //Permet de controler l'état de la BDD
         public string BDDIP  { get; set; }
-        public ModeSuiviColiposte mode { get; set; }
-        public Transporteur transporteur { get; set; }
+        public ModeSuiviColiposte.ModeSuiviColiposte_LST mode { get; set; }
+        public Transporteur.Transporteurs transporteur { get; set; }
     }
 }

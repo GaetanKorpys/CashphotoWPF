@@ -117,8 +117,8 @@
                     <RowDefinition Height="233*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="55*"/>
-                    <ColumnDefinition Width="36*"/>
+                    <ColumnDefinition Width="374*"/>
+                    <ColumnDefinition Width="263*"/>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Row="0" Grid.Column="1">
                     <Grid.ColumnDefinitions>
@@ -131,19 +131,19 @@
                         <RowDefinition Height="14*"/>
                         <RowDefinition Height="14*"/>
                     </Grid.RowDefinitions>
-                    <Label Grid.ColumnSpan="2" Grid.Column="0"  Content="Les dossiers d'import :" VerticalAlignment="Top" HorizontalAlignment="Center" Height="35" FontSize="16" Width="166" Margin="0,20,0,0" />
+                    <Label Grid.ColumnSpan="2" Grid.Column="0"  Content="Les dossiers d'import :" VerticalAlignment="Center" HorizontalAlignment="Center" Height="35" FontSize="16" Width="166" Margin="0,15,0,0" />
 
                     <Label Grid.Row="1" Grid.Column="0" Content="Commande Amazon" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="25,5,0,0" Height="26" FontSize="14" Width="136"/>
-                    <Label x:Name="DossierCommandeAmazon" Grid.Row="1"  Content="..." VerticalAlignment="Top" HorizontalAlignment="Left" Margin="40,25,0,0" Height="35" FontSize="12" Width="18" Grid.RowSpan="2"/>
-                    <Button x:Name="ModifierDossierCommandeAmazon" Grid.Row="1" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
+                    <Label x:Name="DossierCommandeAmazon" Grid.Row="1"  Content="..." VerticalAlignment="Top" HorizontalAlignment="Left" Margin="40,25,0,0" Height="35" FontSize="12" Width="283" Grid.RowSpan="2"/>
+                    <Button x:Name="ModifierDossierCommandeAmazonBouton" Click="ModifierConfiguration" Grid.Row="1" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
 
                     <Label Grid.Row="2" Grid.Column="0" Content="Commande Cashphoto" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="25,5,0,0" Height="28" FontSize="14" Width="153" />
-                    <Label x:Name="DossierCommandeCashphoto" Grid.Row="2"  Content="..." VerticalAlignment="Top" HorizontalAlignment="Left" Margin="40,26,0,0" Height="35" FontSize="12" Width="18" Grid.RowSpan="2"/>
-                    <Button x:Name="ModifierDossierCommandeCashphoto" Grid.Row="2" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
+                    <Label x:Name="DossierCommandeCashphoto" Grid.Row="2"  Content="..." VerticalAlignment="Top" HorizontalAlignment="Left" Margin="40,26,0,0" Height="35" FontSize="12" Width="283" Grid.RowSpan="2"/>
+                    <Button x:Name="ModifierDossierCommandeCashphotoBouton" Click="ModifierConfiguration" Grid.Row="2" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
 
                     <Label Grid.Row="3" Grid.Column="0" Content="Numéro de suivi Coliposte" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="25,3,0,0" Height="28" FontSize="14" Width="183" />
-                    <Label x:Name="DossierNumeroSuivieColiposte" Grid.Row="3"  Content="..." VerticalAlignment="Top" HorizontalAlignment="Left" Margin="40,24,0,0" Height="35" FontSize="12" Width="18"/>
-                    <Button x:Name="ModifierNumeroSuivieColiposte" Grid.Row="3" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
+                    <Label x:Name="DossierNumeroSuiviColiposte" Grid.Row="3"  Content="..." VerticalAlignment="Top" HorizontalAlignment="Left" Margin="40,24,0,0" Height="35" FontSize="12" Width="276"/>
+                    <Button x:Name="ModifierNumeroSuiviColiposteBouton" Click="ModifierConfiguration" Grid.Row="3" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
 
                 </Grid>
                 <Grid Grid.RowSpan="3" Grid.Row="0" Grid.Column="0">
@@ -152,52 +152,62 @@
                         <ColumnDefinition Width="186*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="91*"/>
-                        <RowDefinition Height="70*"/>
-                        <RowDefinition Height="70*"/>
-                        <RowDefinition Height="70*"/>
-                        <RowDefinition Height="70*"/>
-                        <RowDefinition Height="70*"/>
-                        <RowDefinition Height="70*"/>
-                        <RowDefinition Height="70*"/>
-                        <RowDefinition Height="71*"/>
+                        <RowDefinition Height="60*"/>
+                        <RowDefinition Height="62*"/>
+                        <RowDefinition Height="62*"/>
+                        <RowDefinition Height="62*"/>
+                        <RowDefinition Height="62*"/>
+                        <RowDefinition Height="62*"/>
+                        <RowDefinition Height="62*"/>
+                        <RowDefinition Height="62*"/>
+                        <RowDefinition Height="62*"/>
+                        <RowDefinition Height="62*"/>
+                        <RowDefinition Height="62*"/>
                     </Grid.RowDefinitions>
-                    <Label Grid.Column="0"  Content="Les dossiers d'export :" VerticalAlignment="Center" HorizontalAlignment="Center" Height="35" FontSize="16" Width="166" Margin="0,0,0,0" Grid.ColumnSpan="2" />
+                    <Label Grid.Column="0"  Content="Les dossiers d'export :" VerticalAlignment="Center" HorizontalAlignment="Left" Height="35" FontSize="16" Width="166" Margin="302,0,0,0" Grid.ColumnSpan="2" />
 
-                    <Label Grid.Row="1" Grid.Column="0" Content="Numéro de suivi pour Amazon" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65,0,0,25" Height="26" FontSize="14" Width="208"/>
-                    <Label x:Name="DossierNumeroSuivieAmazon" Grid.Row="1"  Content="..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="80,25,0,0" Height="35" FontSize="12" Width="135"/>
-                    <Button x:Name="ModifierDossierNumeroSuivieAmazon" Grid.Row="1" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
+                    <Label Grid.Row="1" Grid.Column="0" Content="Numéro de suivi pour Amazon" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65,0,0,30" Height="26" FontSize="14" Width="208"/>
+                    <Label x:Name="DossierNumeroSuiviAmazon" Grid.Row="1"  Content="..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="80,25,0,0" Height="35" FontSize="12" Width="297"/>
+                    <Button x:Name="ModifierDossierNumeroSuiviAmazonBouton" Click="ModifierConfiguration" Grid.Row="1" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
 
-                    <Label Grid.Row="2" Grid.Column="0" Content="Numéro de suivi pour Cashphoto" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65,0,0,25" Height="28" FontSize="14" Width="231" />
-                    <Label x:Name="DossierNumeroSuivieCashphoto" Grid.Row="2"  Content="..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="80,25,0,0" Height="35" FontSize="12" Width="18"/>
-                    <Button x:Name="ModifierDossierNumeroSuivieCashphoto" Grid.Row="2" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
+                    <Label Grid.Row="2" Grid.Column="0" Content="Numéro de suivi pour Amazon" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65,0,0,30" Height="26" FontSize="14" Width="208"/>
+                    <Label x:Name="DossierNumeroSuiviCashphoto" Grid.Row="2"  Content="..." VerticalAlignment="Top" HorizontalAlignment="Left" Margin="80,25,0,0" Height="35" FontSize="12" Width="313" />
+                    <Button x:Name="ModifierDossierNumeroSuiviCashphotoBouton" Click="ModifierConfiguration" Grid.Row="2" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
 
-                    <Label Grid.Row="3" Grid.Column="0" Content="Backup des commandes importées via Cashphoto" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65,0,0,25" Height="28" FontSize="14" Width="324" />
-                    <Label x:Name="DossierBackupCommandeCashphoto" Grid.Row="3"  Content="..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="80,25,0,0" Height="35" FontSize="12" Width="18"/>
-                    <Button x:Name="ModifierDossierBackupCommandeCashphoto" Grid.Row="3" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
+                    <Label Grid.Row="3" Grid.Column="0" Content="Commande pour GLS" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65,0,0,30" Height="28" FontSize="14" Width="231" />
+                    <Label x:Name="DossierCommandeGLS" Grid.Row="3"  Content="..." VerticalAlignment="Top" HorizontalAlignment="Left" Margin="80,25,0,0" Height="35" FontSize="12" Width="307" />
+                    <Button x:Name="ModifierDossierCommandeGLSBouton" Click="ModifierConfiguration" Grid.Row="3" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
 
-                    <Label Grid.Row="4" Grid.Column="0" Content="Backup des commandes importées via Amazon" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65,0,0,25" Height="28" FontSize="14" Width="307" />
-                    <Label x:Name="DossierBackupCommandeAmazon" Grid.Row="4"  Content="..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="80,25,0,0" Height="35" FontSize="12" Width="18"/>
-                    <Button x:Name="ModifierDossierBackupCommandeAmazon" Grid.Row="4" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
+                    <Label Grid.Row="4" Grid.Column="0" Content="Commande pour Coliposte" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65,0,0,30" Height="26" FontSize="14" Width="208"/>
+                    <Label x:Name="DossierCommandeColiposte" Grid.Row="4"  Content="..." VerticalAlignment="Top" HorizontalAlignment="Left" Margin="80,25,0,0" Height="35" FontSize="12" Width="309" />
+                    <Button x:Name="ModifierDossierCommandeColiposteBouton" Click="ModifierConfiguration" Grid.Row="4" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
 
-                    <Label Grid.Row="5" Grid.Column="0" Content="Backup des numéros de suivi pour Cashphoto" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65,0,0,25" Height="28" FontSize="14" Width="305" />
-                    <Label x:Name="DossierBackupNumeroSuivieCashphoto" Grid.Row="5"  Content="..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="80,25,0,0" Height="35" FontSize="12" Width="18"/>
-                    <Button x:Name="ModifierDossierBackupNumeroSuivieCashphoto" Grid.Row="5" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
+                    <Label Grid.Row="5" Grid.Column="0" Content="Backup des commandes importées via Cashphoto" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65,0,0,30" Height="28" FontSize="14" Width="324" />
+                    <Label x:Name="DossierBackupCommandeCashphoto" Grid.Row="5"  Content="..." VerticalAlignment="Top" HorizontalAlignment="Left" Margin="80,25,0,0" Height="35" FontSize="12" Width="331" Grid.ColumnSpan="2"/>
+                    <Button x:Name="ModifierDossierBackupCommandeCashphotoBouton" Click="ModifierConfiguration" Grid.Row="5" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
 
-                    <Label Grid.Row="6" Grid.Column="0" Content="Backup des numéros de suivi pour Amazon" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65,0,0,25" Height="28" FontSize="14" Width="287" />
-                    <Label x:Name="DossierBackupNumeroSuivieAmazon" Grid.Row="6"  Content="..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="80,25,0,0" Height="35" FontSize="12" Width="18"/>
-                    <Button x:Name="ModifierDossierBackupNumeroSuivieAmazon" Grid.Row="6" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
+                    <Label Grid.Row="6" Grid.Column="0" Content="Backup des commandes importées via Amazon" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65,0,0,30" Height="28" FontSize="14" Width="307" />
+                    <Label x:Name="DossierBackupCommandeAmazon" Grid.Row="6"  Content="..." VerticalAlignment="Top" HorizontalAlignment="Left" Margin="80,25,0,0" Height="35" FontSize="12" Width="319" Grid.ColumnSpan="2"/>
+                    <Button x:Name="ModifierDossierBackupCommandeAmazonBouton" Click="ModifierConfiguration" Grid.Row="6" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
 
-                    <Label Grid.Row="7" Grid.Column="0" Content="Backup des commandes expédiées via GLS" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65,0,0,25" Height="28" FontSize="14" Width="283" />
-                    <Label x:Name="DossierBackupCommandePourGLS" Grid.Row="7"  Content="..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="80,25,0,0" Height="35" FontSize="12" Width="18"/>
-                    <Button x:Name="ModifierDossierBackupCommandePourGLS" Grid.Row="7" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
+                    <Label Grid.Row="7" Grid.Column="0" Content="Backup des numéros de suivi pour Cashphoto" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65,0,0,30" Height="28" FontSize="14" Width="305" />
+                    <Label x:Name="DossierBackupNumeroSuiviCashphoto" Grid.Row="7"  Content="..." VerticalAlignment="Top" HorizontalAlignment="Left" Margin="80,26,0,0" Height="35" FontSize="12" Width="318" Grid.ColumnSpan="2"/>
+                    <Button x:Name="ModifierDossierBackupNumeroSuiviCashphotoBouton" Click="ModifierConfiguration" Grid.Row="7" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
 
-                    <Label Grid.Row="8" Grid.Column="0" Content="Backup des commandes expédiées via Coliposte" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65,0,0,25" Height="28" FontSize="14" Width="317" />
-                    <Label x:Name="DossierBackupCommandePourColiposte" Grid.Row="9"  Content="..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="80,25,0,0" Height="35" FontSize="12" Width="18"/>
-                    <Button x:Name="ModifierDossierBackupCommandePourColiposte" Grid.Row="8" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
+                    <Label Grid.Row="8" Grid.Column="0" Content="Backup des numéros de suivi pour Amazon" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65,0,0,30" Height="28" FontSize="14" Width="287" />
+                    <Label x:Name="DossierBackupNumeroSuiviAmazon" Grid.Row="8"  Content="..." VerticalAlignment="Top" HorizontalAlignment="Left" Margin="80,29,0,0" Height="35" FontSize="12" Width="306"/>
+                    <Button x:Name="ModifierDossierBackupNumeroSuiviAmazonBouton" Click="ModifierConfiguration" Grid.Row="8" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
+
+                    <Label Grid.Row="9" Grid.Column="0" Content="Backup des commandes expédiées via GLS" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65,0,0,30" Height="28" FontSize="14" Width="283" />
+                    <Label x:Name="DossierBackupCommandePourGLS" Grid.Row="9"  Content="..." VerticalAlignment="Top" HorizontalAlignment="Left" Margin="80,26,0,0" Height="35" FontSize="12" Width="312"/>
+                    <Button x:Name="ModifierDossierBackupCommandePourGLSBouton" Click="ModifierConfiguration" Grid.Row="9" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
+
+                    <Label Grid.Row="10" Grid.Column="0" Content="Backup des commandes expédiées via Coliposte" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65,0,0,30" Height="28" FontSize="14" Width="317" />
+                    <Label x:Name="DossierBackupCommandePourColiposte" Grid.Row="10"  Content="..." VerticalAlignment="Top" HorizontalAlignment="Left" Margin="80,26,0,0" Height="35" FontSize="12" Width="321" Grid.ColumnSpan="2"/>
+                    <Button x:Name="ModifierDossierBackupCommandePourColiposteBouton" Click="ModifierConfiguration" Grid.Row="10" Grid.Column="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
 
                 </Grid>
-                <Grid Grid.Column="1" Margin="0,0,0,0" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Grid Grid.Column="1" Margin="0,212,0,0" Grid.RowSpan="2">
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="56*"/>
@@ -212,7 +222,7 @@
                     <WrapPanel Orientation="Horizontal" Margin="60,0,0,0" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left" Width="402" Height="34">
                         <Label  Content="Entrer l'adresse IP :" VerticalAlignment="Center" HorizontalAlignment="Center" Height="29" FontSize="14" Width="144" />
                         <TextBox x:Name="BDDAdresseTextBox" HorizontalAlignment="Center" VerticalAlignment="Center" Width="144" MaxLines="1" Padding="5,4,4,4" Margin="20,0,0,0"  />
-                        <Button x:Name="ModifierBDDIPButton" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Valider" Height="25"  FontSize="12" Width="56" Margin="20,0,0,0"/>
+                        <Button x:Name="ModifierBDDIPButton" Click="ModifierConfiguration" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Valider" Height="25"  FontSize="12" Width="56" Margin="20,0,0,0"/>
                     </WrapPanel>
                     <Button x:Name="TestConnexionBDD" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Tester la connexion" Height="25" FontSize="12" Width="132" Margin="75,0,0,20"/>
                     <Label  Grid.Row="4" Content="" VerticalAlignment="Center" HorizontalAlignment="Left" Height="29" FontSize="14" Width="184" Margin="245,0,0,20" />
@@ -225,16 +235,16 @@
                         <RowDefinition Height="62*"/>
                     </Grid.RowDefinitions>
                     <Label Content="Paramètres globaux :" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Height="34" Width="164"/>
-                    <Label Content="Adresse e-mail par défaut" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="14" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Height="29" Width="169" Margin="50,0,0,25"/>
-                    <Label Content="" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Center" FontSize="14" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Height="29" Width="10" Margin="75,25,0,0"/>
-                    <Button x:Name="ModifierEmail" Grid.Row="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="0,0,90,0"/>
+                    <Label Content="Adresse e-mail par défaut" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="14" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Height="29" Width="169" Margin="20,0,0,25"/>
+                    <Label x:Name="email" Content="" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Height="29" Width="214" Margin="45,20,0,0"/>
+                    <Button x:Name="ModifierEmail" Click="ModifierConfiguration" Grid.Row="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="0,0,90,0"/>
 
-                    <Label Content="Téléphone par défaut" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center"  FontSize="14" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Height="29" Width="169" Margin="50,0,0,25" />
-                    <Label Content="" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center" FontSize="14" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Height="29" Width="10" Margin="75,25,0,0"/>
-                    <Button x:Name="ModifierTel" Grid.Row="2" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,90,0"/>
+                    <Label Content="Téléphone par défaut" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center"  FontSize="14" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Height="29" Width="169" Margin="20,0,0,25" />
+                    <Label x:Name="tel" Content="" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Height="29" Width="205" Margin="45,20,0,0"/>
+                    <Button x:Name="ModifierTel" Click="ModifierConfiguration" Grid.Row="2" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,90,0"/>
 
-                    <Label Content="Chemin du fichier de configuration" HorizontalAlignment="Left" Grid.Row="3" VerticalAlignment="Top"  FontSize="14" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Height="29" Width="231" Margin="50,4,0,0"/>
-                    <Label Content="" HorizontalAlignment="Left" Grid.Row="3" VerticalAlignment="Center" FontSize="14" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Height="29" Width="10" Margin="75,25,0,0"/>
+                    <Label Content="Fichier de configuration" HorizontalAlignment="Left" Grid.Row="3" VerticalAlignment="Top"  FontSize="14" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Height="29" Width="231" Margin="20,0,0,25"/>
+                    <Label x:Name="CheminFichierConfig" Content="" HorizontalAlignment="Left" Grid.Row="3" VerticalAlignment="Top" FontSize="11" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Height="29" Width="263" Margin="45,20,0,0"/>
                     <Button x:Name="ChargerFichierConfig" Grid.Row="3" Content="Charger" Width="60" Height="32" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="0,0,40,0"/>
                     <Button x:Name="SaveFichierConfig" Grid.Row="3" Content="Sauvegarder" Width="75" Height="32" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="0,0,130,0"/>
                 </Grid>

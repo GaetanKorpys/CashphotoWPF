@@ -34,7 +34,12 @@ namespace CashphotoWPF.Configuration
             _transporteurs = mode;
         }
 
-        public string getTransporteur()
+        public Transporteurs getTransporteur()
+        {
+            return _transporteurs;
+        }
+
+        public string getString()
         {
             return _transporteurs.ToString();
         }

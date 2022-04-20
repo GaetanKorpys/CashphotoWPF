@@ -38,8 +38,15 @@ namespace CashphotoWPF.Configuration
             streamWriter.WriteLine(constante.numeroSuiviColiposte);
 
             //On écrit les fichiers d'export 
+            //Les numéros de suivi
             streamWriter.WriteLine(constante.numeroSuiviAmazon);
             streamWriter.WriteLine(constante.numeroSuiviCashphoto);
+
+            //Les fichiers parsés correctement pour les applis GLS et Coliship
+            streamWriter.WriteLine(constante.commandeParsePourGLS);
+            streamWriter.WriteLine(constante.commandeParsePourColiposte);
+
+            //Les backup
             streamWriter.WriteLine(constante.backupCommandeAmazon);
             streamWriter.WriteLine(constante.backupCommandeCashphoto);
             streamWriter.WriteLine(constante.backupNumeroSuiviAmazon);
@@ -60,9 +67,14 @@ namespace CashphotoWPF.Configuration
         public void charger()
         {
             string chemin = _chemin + "\\Config.txt";
+            System.Diagnostics.Debug.WriteLine("chemin " + chemin);
 
             //Singleton contenant les constantes dans le code source
             Constante constante = Constante.GetConstante();
+            //Idem pour Transporteur et ModeSuiviColiposte
+            Transporteur transporteur = Transporteur.GetInstance();
+            ModeSuiviColiposte modeSuiviColiposte = ModeSuiviColiposte.GetInstance();
+
             try
             {
                 StreamReader reader = new StreamReader(chemin);
@@ -73,8 +85,16 @@ namespace CashphotoWPF.Configuration
                 constante.numeroSuiviColiposte = reader.ReadLine();
 
                 //On lit les fichiers d'export
+                //Les numéros de suivi
                 constante.numeroSuiviAmazon = reader.ReadLine();
                 constante.numeroSuiviCashphoto = reader.ReadLine();
+
+                //Les fichiers parsés correctement pour les applis GLS et Coliship
+                constante.commandeParsePourGLS = reader.ReadLine();
+                constante.commandeParsePourColiposte = reader.ReadLine();
+                
+
+                //Fichiers de backup
                 constante.backupCommandeAmazon = reader.ReadLine();
                 constante.backupCommandeCashphoto = reader.ReadLine();
                 constante.backupNumeroSuiviAmazon = reader.ReadLine();
@@ -82,17 +102,26 @@ namespace CashphotoWPF.Configuration
                 constante.backupCommandeTransporteurGLS = reader.ReadLine();
                 constante.backupCommandeTransporteurColiposte = reader.ReadLine();
 
+
                 //On lit les paramètres globaux
                 constante.email = reader.ReadLine();
                 constante.telephone = reader.ReadLine();
                 constante.BDDIP = reader.ReadLine();
-                constante.mode = (ModeSuiviColiposte)Enum.Parse(typeof(ModeSuiviColiposte), reader.ReadLine());
-                constante.transporteur = (Transporteur)Enum.Parse (typeof(Transporteur), reader.ReadLine());
+
+                Enum.TryParse(reader.ReadLine(), out ModeSuiviColiposte.ModeSuiviColiposte_LST mode); //On convertit la string en type Enum
+                modeSuiviColiposte.setMode(mode);
+                constante.mode = modeSuiviColiposte.getMode();
+
+                Enum.TryParse(reader.ReadLine(), out Transporteur.Transporteurs transporteurs); //On convertit la string en type Enum
+                transporteur.setTransporteur(transporteurs);
+                constante.mode = modeSuiviColiposte.getMode();
+                //constante.transporteur = (Transporteur)Enum.Parse (typeof(Transporteur), reader.ReadLine());
 
                 reader.Close();
             }
-            catch(Exception )
+            catch(Exception e)
             {
+                System.Diagnostics.Debug.WriteLine(e.Message);
                 //Ouverture d'une boite de dialogue pour indiquer le problème
                 System.Windows.MessageBox.Show("Erreur pour chargé le fichier de configuration.\n", "Alert", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
             }

@@ -37,7 +37,12 @@ namespace CashphotoWPF.Configuration
             _mode = mode;
         }
 
-        public string getMode()
+        public ModeSuiviColiposte_LST getMode()
+        {
+            return _mode;
+        }
+
+        public string getString()
         {
             string modestring;
             switch (_mode)

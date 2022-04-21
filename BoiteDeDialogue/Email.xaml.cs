@@ -24,11 +24,12 @@ namespace CashphotoWPF.BoiteDeDialogue
         public Email()
         {
             InitializeComponent();
+            InputTextBox.Focus();
         }
 
         private void Valider(object sender, RoutedEventArgs e)
         {
-            if(IsValidEmail(InputTextBox.Text))
+            if (IsValidEmail(InputTextBox.Text))
             {
                 this.DialogResult = true;
                 this.Close();
@@ -66,11 +67,6 @@ namespace CashphotoWPF.BoiteDeDialogue
                 return false; // Double dot or dot at end of user part.
 
             return true;
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            InputTextBox.Focus(); //permet d'écrire directement dans le champ de texte sans le sélectionner manuellement
         }
     }
 }

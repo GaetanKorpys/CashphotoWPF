@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,12 +15,11 @@ using System.Windows.Shapes;
 namespace CashphotoWPF.BoiteDeDialogue
 {
     /// <summary>
-    /// Logique d'interaction pour Telephone.xaml
+    /// Logique d'interaction pour Configuration.xaml
     /// </summary>
-    public partial class Telephone : Window
+    public partial class ConfigurationDialog : Window
     {
-        private const string motif = @"^([\+]?33[-]?|[0])?[1-9][0-9]{8}$";
-        public Telephone()
+        public ConfigurationDialog()
         {
             InitializeComponent();
             InputTextBox.Focus();
@@ -29,14 +27,14 @@ namespace CashphotoWPF.BoiteDeDialogue
 
         private void Valider(object sender, RoutedEventArgs e)
         {
-            if(isValidPhoneNumber(InputTextBox.Text))
+            if (IsPasswordValid(InputTextBox.Text))
             {
                 this.DialogResult = true;
                 this.Close();
             }
             else
             {
-                ErreurNumero.Content = "Veuillez entrer un numéro de téléphone valide.";
+                ErreurMDP.Content = "Mot de passe incorrect.";
             }
            
         }
@@ -46,12 +44,13 @@ namespace CashphotoWPF.BoiteDeDialogue
             InputTextBox.Text = "";
             this.DialogResult = false;
             this.Close();
+
         }
 
-        private bool isValidPhoneNumber(string numero)
+        private bool IsPasswordValid(string password)
         {
-            if (numero != null) return Regex.IsMatch(numero, motif);
-            else return false;
+            if(password == "Cashphoto") return true;
+            return false;
         }
     }
 }

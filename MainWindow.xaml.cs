@@ -17,6 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Forms;
 using CashphotoWPF.BoiteDeDialogue;
+using System.Text.RegularExpressions;
 
 namespace CashphotoWPF
 {
@@ -33,6 +34,30 @@ namespace CashphotoWPF
             FichierConfig config  = FichierConfig.GetInstance();
             config.charger();
             chargerConfiguration();
+        }
+
+        private bool IsValidIPAddress(string IpAddress)
+        {
+            Regex validIpV4AddressRegex = new Regex(@"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$", RegexOptions.IgnoreCase);
+          
+            return validIpV4AddressRegex.IsMatch(IpAddress.Trim());
+            
+        }
+
+        private void setBDDIP(string IP)
+        {
+            Constante constante = Constante.GetConstante();
+
+            if(IsValidIPAddress(IP))
+            {
+                constante.BDDIP = IP;
+                ReponseBDD.Content = "Adresse IP validée.";
+            }
+            else
+            {
+                ReponseBDD.Content = "Veuillez saisir une adresse IP valide.";
+            }
+            
         }
 
         /// <summary>
@@ -67,7 +92,15 @@ namespace CashphotoWPF
             //Les paramètres globaux
             email.Content = constante.email;
             tel.Content = constante.telephone;
-            CheminFichierConfig.Content = Directory.GetParent(System.Reflection.Assembly.GetExecutingAssembly().Location).ToString();
+
+            if (constante.fichierConfigExist)
+            {
+                CheminFichierConfig.Content = constante.cheminFichierConfig;
+            }
+            else
+            {
+                CheminFichierConfig.Content = "Aucun fichier de configuration chargé.";
+            }
         }
 
         /// <summary>
@@ -211,22 +244,90 @@ namespace CashphotoWPF
         {
             Constante constante = Constante.GetConstante();
             FichierConfig fichierConfig = FichierConfig.GetInstance();
-            string fichier = ChoisirFichierDialog();
 
             if (sender.Equals(ChargerFichierConfig))
             {
+                string fichier = ChoisirFichierDialog();
                 if (!string.IsNullOrEmpty(fichier))
                 {
                     fichierConfig.charger(fichier);
+                     chargerConfiguration();
                 }
             }
             else if (sender.Equals(SaveFichierConfig))
             {
                 fichierConfig.sauvegarder();
+                CheminFichierConfig.Content = constante.cheminFichierConfig;
             }
 
         }
 
+        private void setBDDRadioBouton(object sender, EventArgs e)
+        {
+            Constante constante = Constante.GetConstante();
+            if(sender.Equals(BDDLocaleRadio))
+            {
+                BDDAdresseTextBox.IsEnabled = false;
+                ModifierBDDIPButton.IsEnabled = false;
+                setBDDIP("127.0.0.1");
+            }
+            else if(sender.Equals(BDDDistanteRadio))
+            {
+                ModifierBDDIPButton.IsEnabled = true;
+                BDDAdresseTextBox.IsEnabled = true;
+            }
+        }
 
+        private void ValiderIP(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) setBDDIP(BDDAdresseTextBox.Text);
+        }
+
+        private void ValiderIP(object sender, EventArgs e)
+        {
+            setBDDIP(BDDAdresseTextBox.Text);
+        }
+
+        private void GestionTabItem(object sender, SelectionChangedEventArgs e)
+        {
+            if(sender.Equals(TabControl))
+            {
+                Constante constante = Constante.GetConstante();
+                string tabItem = ((sender as System.Windows.Controls.TabControl).SelectedItem as TabItem).Header as string;
+
+                switch (tabItem)
+                {
+                    case "Préparation":
+                        e.Handled = true;
+                        constante.indexTabItem = 0;
+                        System.Diagnostics.Debug.WriteLine("Menu " + constante.indexTabItem);
+                        break;
+
+                    case "Expédition":
+                        e.Handled = true;
+                        constante.indexTabItem = 1;
+                        System.Diagnostics.Debug.WriteLine("Menu " + constante.indexTabItem);
+                        break;
+
+                    case "Configuration":
+                        ConfigurationDialog configurationDialog = new ConfigurationDialog();
+                        if (configurationDialog.ShowDialog() == true)
+                        {
+                            constante.indexTabItem = 2;
+                        }
+                        else
+                        {
+                            e.Handled = true;
+                            TabControl.SelectedIndex = constante.indexTabItem;
+                        }
+                        System.Diagnostics.Debug.WriteLine("Menu " + constante.indexTabItem);
+
+                        break;
+
+                    default:
+                        return;
+                }
+            }
+        }
     }
 }

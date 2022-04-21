@@ -47,9 +47,14 @@ namespace CashphotoWPF.Configuration
 
         public string email { get; set; } //Email par défaut
         public string telephone { get; set; } //Téléphone par défaut
-        public bool BDDOK { get; set; } //Permet de controler l'état de la BDD
-        public string BDDIP  { get; set; }
+        public string BDDIP { get; set; }
         public ModeSuiviColiposte.ModeSuiviColiposte_LST mode { get; set; }
         public Transporteur.Transporteurs transporteur { get; set; }
+
+        //Paramètres non chargé dans le fichier de config
+        public bool fichierConfigExist { get; set; }
+        public bool BDDOK { get; set; } //Permet de controler l'état de la BDD
+        public string cheminFichierConfig { get; set; }
+        public int indexTabItem { get; set; }
     }
 }

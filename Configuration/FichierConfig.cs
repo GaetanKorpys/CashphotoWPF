@@ -26,12 +26,14 @@ namespace CashphotoWPF.Configuration
         {
             string chemin = _chemin + "\\Config.txt";
 
+
             //On écrase la sauvegarde précédente
             File.Create(chemin).Close();
             StreamWriter streamWriter = new StreamWriter(chemin);
 
             //Singleton contenant les constantes dans le code source
             Constante constante = Constante.GetConstante();
+            constante.cheminFichierConfig = chemin;
 
             //On écrit les dossiers d'import
             streamWriter.WriteLine(constante.commandeAmazon);
@@ -68,16 +70,17 @@ namespace CashphotoWPF.Configuration
 
         public void charger()
         {
-            charger("");
+            charger(_chemin+"\\Config.txt");
         }
 
         public void charger(string chemin)
         {
-            if(chemin == null || chemin.Equals("")) chemin = _chemin + "\\Config.txt";
             System.Diagnostics.Debug.WriteLine("chemin " + chemin);
 
             //Singleton contenant les constantes dans le code source
             Constante constante = Constante.GetConstante();
+            constante.cheminFichierConfig = chemin;
+
             //Idem pour Transporteur et ModeSuiviColiposte
             Transporteur transporteur = Transporteur.GetInstance();
             ModeSuiviColiposte modeSuiviColiposte = ModeSuiviColiposte.GetInstance();
@@ -122,15 +125,16 @@ namespace CashphotoWPF.Configuration
                 Enum.TryParse(reader.ReadLine(), out Transporteur.Transporteurs transporteurs); //On convertit la string en type Enum
                 transporteur.setTransporteur(transporteurs);
                 constante.mode = modeSuiviColiposte.getMode();
-                //constante.transporteur = (Transporteur)Enum.Parse (typeof(Transporteur), reader.ReadLine());
 
+                constante.fichierConfigExist = true;
                 reader.Close();
             }
             catch(Exception e)
             {
                 System.Diagnostics.Debug.WriteLine(e.Message);
+                constante.fichierConfigExist=false;
                 //Ouverture d'une boite de dialogue pour indiquer le problème
-                System.Windows.MessageBox.Show("Erreur pour chargé le fichier de configuration.\n", "Alert", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                System.Windows.MessageBox.Show("Erreur lors du chargement du fichier de configuration.\n", "Alert", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
             }
         }
 

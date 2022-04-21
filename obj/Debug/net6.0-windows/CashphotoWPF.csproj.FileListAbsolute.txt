@@ -29,3 +29,7 @@ C:\Users\Gaetan\source\repos\CashphotoWPF\bin\Debug\net6.0-windows\Microsoft.Xam
 C:\Users\Gaetan\source\repos\CashphotoWPF\bin\Debug\net6.0-windows\de\MahApps.Metro.resources.dll
 C:\Users\Gaetan\source\repos\CashphotoWPF\bin\Debug\net6.0-windows\Microsoft.WindowsAPICodePack.Shell.dll
 C:\Users\Gaetan\source\repos\CashphotoWPF\bin\Debug\net6.0-windows\Microsoft.WindowsAPICodePack.dll
+C:\Users\Gaetan\source\repos\CashphotoWPF\obj\Debug\net6.0-windows\BoiteDeDialogue\Email.g.cs
+C:\Users\Gaetan\source\repos\CashphotoWPF\obj\Debug\net6.0-windows\BoiteDeDialogue\Telephone.g.cs
+C:\Users\Gaetan\source\repos\CashphotoWPF\obj\Debug\net6.0-windows\BoiteDeDialogue\Email.baml
+C:\Users\Gaetan\source\repos\CashphotoWPF\obj\Debug\net6.0-windows\BoiteDeDialogue\Telephone.baml

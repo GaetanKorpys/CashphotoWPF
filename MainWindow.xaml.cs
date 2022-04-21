@@ -16,7 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Forms;
-
+using CashphotoWPF.BoiteDeDialogue;
 
 namespace CashphotoWPF
 {
@@ -38,7 +38,7 @@ namespace CashphotoWPF
         /// <summary>
         /// Pour afficher les chemins et autres paramètres dans le menu Configuartion
         /// </summary>
-        public void chargerConfiguration()
+        private void chargerConfiguration()
         {
             //On récupère l'instance unique de la classe Constante
             Constante constante = Constante.GetConstante();
@@ -77,7 +77,25 @@ namespace CashphotoWPF
         {
             CommonOpenFileDialog dialog = new CommonOpenFileDialog();
             dialog.InitialDirectory = "C:\\\\";
-            dialog.IsFolderPicker = true;
+            dialog.IsFolderPicker = true; //Pour bien chsoisir un dossier et non pas un fichier
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                return dialog.FileName;
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        /// <summary>
+        /// Affiche une boîte de dialogue générique pour choisir un fichier
+        /// </summary>
+        private string ChoisirFichierDialog()
+        {
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+            dialog.InitialDirectory = "C:\\\\";
+            dialog.Filters.Add(new CommonFileDialogFilter("Txt File", "*.txt"));
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 return dialog.FileName;
@@ -90,7 +108,7 @@ namespace CashphotoWPF
 
         // -------------- Bouton --------------
         
-        public void ModifierConfiguration(object sender, EventArgs e)
+        private void ModifierConfiguration(object sender, EventArgs e)
         {
             Constante constante = Constante.GetConstante();
             string dossier = ChoisirDossierDialog();
@@ -165,21 +183,50 @@ namespace CashphotoWPF
             }
         }
 
-        public void ModifierConfigurationParametre(object sender, EventArgs e)
+        private void ModifierConfigurationParametre(object sender, EventArgs e)
         {
             Constante constante = Constante.GetConstante();
-            string dossier = ChoisirDossierDialog();
-
+           
             if (sender.Equals(ModifierEmail))
             {
-                constante.email = dossier;
-                email.Content = dossier;
+                Email emailClass = new Email();
+                if(emailClass.ShowDialog() == true)
+                {
+                    constante.email = emailClass.InputTextBox.Text;
+                    email.Content = emailClass.InputTextBox.Text;
+                }  
             }
             else if (sender.Equals(ModifierTel))
             {
-                constante.telephone = dossier;
-                tel.Content = dossier;
+                Telephone telephoneClass = new Telephone();
+                if (telephoneClass.ShowDialog() == true)
+                {
+                    constante.telephone = telephoneClass.InputTextBox.Text;
+                    tel.Content = telephoneClass.InputTextBox.Text;
+                }
             }
         }
+
+        private void ModifierFichierConfig(object sender, EventArgs e)
+        {
+            Constante constante = Constante.GetConstante();
+            FichierConfig fichierConfig = FichierConfig.GetInstance();
+            string fichier = ChoisirFichierDialog();
+
+            if (sender.Equals(ChargerFichierConfig))
+            {
+                if (!string.IsNullOrEmpty(fichier))
+                {
+                    fichierConfig.charger(fichier);
+                }
+            }
+            else if (sender.Equals(SaveFichierConfig))
+            {
+                fichierConfig.sauvegarder();
+            }
+
+        }
+
+
     }
 }

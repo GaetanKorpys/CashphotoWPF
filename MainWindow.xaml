@@ -237,16 +237,16 @@
                     <Label Content="Paramètres globaux :" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Height="34" Width="164"/>
                     <Label Content="Adresse e-mail par défaut" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="14" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Height="29" Width="169" Margin="20,0,0,25"/>
                     <Label x:Name="email" Content="" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Height="29" Width="214" Margin="45,20,0,0"/>
-                    <Button x:Name="ModifierEmail" Click="ModifierConfiguration" Grid.Row="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="0,0,90,0"/>
+                    <Button x:Name="ModifierEmail" Click="ModifierConfigurationParametre" Grid.Row="1" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="0,0,90,0"/>
 
                     <Label Content="Téléphone par défaut" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center"  FontSize="14" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Height="29" Width="169" Margin="20,0,0,25" />
                     <Label x:Name="tel" Content="" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" FontSize="12" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Height="29" Width="205" Margin="45,20,0,0"/>
-                    <Button x:Name="ModifierTel" Click="ModifierConfiguration" Grid.Row="2" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,90,0"/>
+                    <Button x:Name="ModifierTel" Click="ModifierConfigurationParametre" Grid.Row="2" Content="Modifier" Width="60" Height="32" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,90,0"/>
 
                     <Label Content="Fichier de configuration" HorizontalAlignment="Left" Grid.Row="3" VerticalAlignment="Top"  FontSize="14" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Height="29" Width="231" Margin="20,0,0,25"/>
                     <Label x:Name="CheminFichierConfig" Content="" HorizontalAlignment="Left" Grid.Row="3" VerticalAlignment="Top" FontSize="11" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Height="29" Width="263" Margin="45,20,0,0"/>
-                    <Button x:Name="ChargerFichierConfig" Grid.Row="3" Content="Charger" Width="60" Height="32" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="0,0,40,0"/>
-                    <Button x:Name="SaveFichierConfig" Grid.Row="3" Content="Sauvegarder" Width="75" Height="32" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="0,0,130,0"/>
+                    <Button x:Name="ChargerFichierConfig" Click="ModifierFichierConfig" Grid.Row="3" Content="Charger" Width="60" Height="32" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="0,0,40,0"/>
+                    <Button x:Name="SaveFichierConfig" Click="ModifierFichierConfig" Grid.Row="3" Content="Sauvegarder" Width="75" Height="32" FontSize="12" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="0,0,130,0"/>
                 </Grid>
 
 

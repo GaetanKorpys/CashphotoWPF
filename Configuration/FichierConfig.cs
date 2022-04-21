@@ -21,6 +21,7 @@ namespace CashphotoWPF.Configuration
             return _instance;
         }
 
+
         public void sauvegarder()
         {
             string chemin = _chemin + "\\Config.txt";
@@ -64,9 +65,15 @@ namespace CashphotoWPF.Configuration
             streamWriter.Close();
         }
 
+
         public void charger()
         {
-            string chemin = _chemin + "\\Config.txt";
+            charger("");
+        }
+
+        public void charger(string chemin)
+        {
+            if(chemin == null || chemin.Equals("")) chemin = _chemin + "\\Config.txt";
             System.Diagnostics.Debug.WriteLine("chemin " + chemin);
 
             //Singleton contenant les constantes dans le code source

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CashphotoWPF.BDD;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -56,5 +57,6 @@ namespace CashphotoWPF.Configuration
         public bool BDDOK { get; set; } //Permet de controler l'état de la BDD
         public string cheminFichierConfig { get; set; }
         public int indexTabItem { get; set; }
+        public CashphotoBDD cashphotoBDD { get; set; }
     }
 }

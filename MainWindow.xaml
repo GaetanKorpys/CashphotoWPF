@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CashphotoWPF"
         Title="Cashphoto" Height="720" Width="1280" Background="White">
     <TabControl x:Name="TabControl" SelectionChanged="GestionTabItem">
-        <TabItem Header="Préparation" FontSize="18" Margin="99,-2,-228,0" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+        <TabItem x:Name="Preparation" Header="Préparation" FontSize="18" Margin="99,-2,-228,0" HorizontalAlignment="Stretch" VerticalAlignment="Center">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="9*"/>
@@ -17,14 +17,12 @@
                     <RowDefinition Height="229*"/>
                     <RowDefinition Height="50*"/>
                 </Grid.RowDefinitions>
-                <Label Content="Rechercher : " FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,0,0,0"/>
-                <TextBox
-                        x:Name="RechercheTextBox"
-                        
-                        TextWrapping="Wrap"  Grid.Row="0" Margin="157,40,427,37"/>
+                <Label Content="Entrer le numéro de commande :" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,0,0,0" Width="270"/>
+                <TextBox x:Name="RechercheTextBox" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Margin="150,0,0,0" Width="249"/>
+                <Button x:Name="ValiderCommande" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Valider" Width="60" Height="32" FontSize="12" Margin="0,0,100,0"/>
             </Grid>
         </TabItem>
-        <TabItem Header="Expédition" FontSize="18" Margin="356,-2,-512,0" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+        <TabItem x:Name="Expedition" Header="Expédition" FontSize="18" Margin="356,-2,-512,0" VerticalAlignment="Center" HorizontalAlignment="Stretch">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="857*"/>
@@ -109,8 +107,8 @@
                 </UniformGrid>
             </Grid>
         </TabItem>
-        <TabItem x:Name="Configuration" Header="Configuration" FontSize="18" Margin="629,-1,-766,0" VerticalAlignment="Top">
-            <Grid>
+        <TabItem x:Name="Configuration"  Header="Configuration" FontSize="18" Margin="629,-1,-766,0" VerticalAlignment="Top">
+            <Grid x:Name="GridConfig">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="212*"/>
                     <RowDefinition Height="223*"/>

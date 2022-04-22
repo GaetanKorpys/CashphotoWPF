@@ -290,42 +290,34 @@ namespace CashphotoWPF
 
         private void GestionTabItem(object sender, SelectionChangedEventArgs e)
         {
-            if(sender.Equals(TabControl))
+            if (e.OriginalSource == TabControl)
             {
                 Constante constante = Constante.GetConstante();
-                string tabItem = ((sender as System.Windows.Controls.TabControl).SelectedItem as TabItem).Header as string;
-
-                switch (tabItem)
+                if (Preparation.IsSelected)
                 {
-                    case "Préparation":
-                        e.Handled = true;
-                        constante.indexTabItem = 0;
-                        System.Diagnostics.Debug.WriteLine("Menu " + constante.indexTabItem);
-                        break;
-
-                    case "Expédition":
-                        e.Handled = true;
-                        constante.indexTabItem = 1;
-                        System.Diagnostics.Debug.WriteLine("Menu " + constante.indexTabItem);
-                        break;
-
-                    case "Configuration":
-                        ConfigurationDialog configurationDialog = new ConfigurationDialog();
-                        if (configurationDialog.ShowDialog() == true)
-                        {
-                            constante.indexTabItem = 2;
-                        }
-                        else
-                        {
-                            e.Handled = true;
-                            TabControl.SelectedIndex = constante.indexTabItem;
-                        }
-                        System.Diagnostics.Debug.WriteLine("Menu " + constante.indexTabItem);
-
-                        break;
-
-                    default:
-                        return;
+                    constante.indexTabItem = 0;
+                    System.Diagnostics.Debug.WriteLine("Menu " + constante.indexTabItem);
+                }
+                else if (Expedition.IsSelected)
+                {
+                    constante.indexTabItem = 1;
+                    System.Diagnostics.Debug.WriteLine("Menu " + constante.indexTabItem);
+                }
+                else if (Configuration.IsSelected)
+                {
+                    ConfigurationDialog configurationDialog = new ConfigurationDialog();
+                    if (configurationDialog.ShowDialog() == true)
+                    {
+                        constante.indexTabItem = 2;
+                    }
+                    
+                    else
+                    {
+                        //Important sinon, la boite de dialog prend le focus et perturbe le TabControl
+                        //Cela entraine un bug qui déclenche 2 fois la boite de dialogue
+                        TabControl.Focus(); 
+                        TabControl.SelectedIndex = constante.indexTabItem;
+                    }
                 }
             }
         }

@@ -64,6 +64,9 @@ namespace CashphotoWPF.Configuration
             streamWriter.WriteLine(constante.mode.ToString());
             streamWriter.WriteLine(constante.transporteur.ToString());
 
+            streamWriter.WriteLine(constante.indexTabItem.ToString());
+            streamWriter.WriteLine(constante.connectionString2);
+
             streamWriter.Close();
         }
 
@@ -125,6 +128,11 @@ namespace CashphotoWPF.Configuration
                 Enum.TryParse(reader.ReadLine(), out Transporteur.Transporteurs transporteurs); //On convertit la string en type Enum
                 transporteur.setTransporteur(transporteurs);
                 constante.mode = modeSuiviColiposte.getMode();
+
+                int.TryParse(reader.ReadLine(), out int res);
+                constante.indexTabItem = res;
+
+                constante.connectionString2 = reader.ReadLine();
 
                 constante.fichierConfigExist = true;
                 reader.Close();

@@ -51,12 +51,13 @@ namespace CashphotoWPF.Configuration
         public string BDDIP { get; set; }
         public ModeSuiviColiposte.ModeSuiviColiposte_LST mode { get; set; }
         public Transporteur.Transporteurs transporteur { get; set; }
+        public int indexTabItem { get; set; }
+        public string connectionString2 { get; set; } //2eme partie de la chaine de connexion, contient l'id et le mdp
 
         //Paramètres non chargé dans le fichier de config
         public bool fichierConfigExist { get; set; }
         public bool BDDOK { get; set; } //Permet de controler l'état de la BDD
         public string cheminFichierConfig { get; set; }
-        public int indexTabItem { get; set; }
         public CashphotoBDD cashphotoBDD { get; set; }
     }
 }

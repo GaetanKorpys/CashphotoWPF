@@ -222,7 +222,7 @@
                         <TextBox x:Name="BDDAdresseTextBox" KeyDown="ValiderIP"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="144" MaxLines="1" Padding="5,4,4,4" Margin="20,0,0,0"  />
                         <Button x:Name="ModifierBDDIPButton" Click="ValiderIP" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Valider" Height="25"  FontSize="12" Width="56" Margin="20,0,0,0"/>
                     </WrapPanel>
-                    <Button x:Name="TestConnexionBDD" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Tester la connexion" Height="25" FontSize="12" Width="132" Margin="75,0,0,20"/>
+                    <Button x:Name="TestConnexionBDDButton" Click="TestConnexionBDD" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center" Content="Tester la connexion" Height="25" FontSize="12" Width="132" Margin="75,0,0,20"/>
                     <Label x:Name="ReponseBDD" Grid.Row="4" Content="" VerticalAlignment="Top" HorizontalAlignment="Left" Height="29" FontSize="14" Width="265" Margin="245,4,0,0" />
                 </Grid>
                 <Grid Grid.Row="2" Grid.Column="1" Margin="0,1,0,0">

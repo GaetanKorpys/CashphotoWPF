@@ -16,3 +16,5 @@ contact@cashphoto.com
 127.0.0.1
 SansSignature
 Coliposte
+1
+Initial Catalog=CashphotoWPF;User ID=Gerald;Password=Gerald;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False

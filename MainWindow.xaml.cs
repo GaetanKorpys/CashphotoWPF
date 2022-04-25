@@ -18,6 +18,7 @@ using System.Windows.Shapes;
 using System.Windows.Forms;
 using CashphotoWPF.BoiteDeDialogue;
 using System.Text.RegularExpressions;
+using CashphotoWPF.BDD;
 
 namespace CashphotoWPF
 {
@@ -30,10 +31,76 @@ namespace CashphotoWPF
         {
             InitializeComponent();
 
+            chargementLancement();
+        }
+
+        /// <summary>
+        /// Exécute plusieurs fonctions au lancement de l'application :
+        ///     - Maj des constantes
+        ///     - Test BDD
+        ///     - Affichage dans la fenêtre ...
+        /// </summary>
+        private void chargementLancement()
+        {
+            //Maj des constantes au lancement
+            Constante constante = Constante.GetConstante();
+            constante.BDDOK = false; //On suppose que la BDD n'est pas connectée, on modifie cette valeur lors du test de connexion.
+            
             //On charge le fichier de config pour initiliser les constantes dans la classe Constante
-            FichierConfig config  = FichierConfig.GetInstance();
+            FichierConfig config = FichierConfig.GetInstance();
             config.charger();
+            //Affichage dans le menu Configuartion
             chargerConfiguration();
+
+            //L'utilisateur atterit sur le menu chargé dpuis le fichier de config | Poste 1 = Préparation, Poste 2 = Exépdition
+            TabControl.SelectedIndex = constante.indexTabItem;
+
+            CreationBDD();
+
+            TestConnexionBDD(null, null);
+
+            
+        }
+
+        private void TestConnexionBDD(object sender, EventArgs e)
+        {
+            Constante constante = Constante.GetConstante();
+            constante.BDDOK = ConnexionBDD();
+            AffichageTestBDD();
+        }
+
+        private void AffichageTestBDD()
+        {
+            Constante constante = Constante.GetConstante();
+            SolidColorBrush mySolidColorBrush = new SolidColorBrush();
+            if (constante.BDDOK)
+            {
+                mySolidColorBrush.Color = Color.FromRgb(0, 255, 0);
+                LabelTestBDD.Content = "Connexion OK";
+            }
+            else
+            {
+                mySolidColorBrush.Color = Color.FromRgb(255, 0, 0);
+                LabelTestBDD.Content = "Erreur Connexion";
+            }
+            LedTestBDD.Fill = mySolidColorBrush;
+        }
+
+        private void CreationBDD()
+        {
+            Constante constante = Constante.GetConstante();
+            constante.cashphotoBDD = new CashphotoBDD();
+           
+        }
+
+        private bool ConnexionBDD()
+        {
+            Constante constante = Constante.GetConstante();
+            if(constante.cashphotoBDD.Database.CanConnect())
+            {
+                return true;
+            }          
+            return false;
         }
 
         private bool IsValidIPAddress(string IpAddress)

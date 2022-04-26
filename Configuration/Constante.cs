@@ -53,6 +53,7 @@ namespace CashphotoWPF.Configuration
         public Transporteur.Transporteurs transporteur { get; set; }
         public int indexTabItem { get; set; }
         public string connectionString2 { get; set; } //2eme partie de la chaine de connexion, contient l'id et le mdp
+        public string connectionStringLocal { get; set; } //Chaine de connexion pour BDD Locale
 
         //Paramètres non chargé dans le fichier de config
         public bool fichierConfigExist { get; set; }

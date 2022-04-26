@@ -17,6 +17,15 @@
                     <RowDefinition Height="229*"/>
                     <RowDefinition Height="50*"/>
                 </Grid.RowDefinitions>
+                <WrapPanel Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button Content="Envoyer commande" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Height="30" Width="190" Margin="0,0,40,0"/>
+                    <Button Content="Modifier poids commande" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Height="30" Width="248"/>
+                    <Button Content="Rechercher commande" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40,0,0,0" FontWeight="Bold" Height="30" Width="228"/>
+                </WrapPanel>
+                <WrapPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                    <Ellipse x:Name="LedTestBDDPrep" Height="25" Width="25" Fill="Red" Canvas.Left="10" Canvas.Top="25" Margin="45,20,20,20"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Label x:Name="LabelTestBDDPrep" Content="" FontSize="20" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Visibility="Visible" HorizontalAlignment="Center" VerticalAlignment="Center" Width="288"/>
+                </WrapPanel>
                 <Label Content="Entrer le numéro de commande :" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="40,0,0,0" Width="270"/>
                 <TextBox x:Name="RechercheTextBox" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0" Margin="150,0,0,0" Width="249"/>
                 <Button x:Name="ValiderCommande" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Valider" Width="60" Height="32" FontSize="12" Margin="0,0,100,0"/>
@@ -57,8 +66,8 @@
                     <Label x:Name="ExpediteurLabel" Grid.Column="1" Content="COLIPOSTE" Margin="50,0,5,5" FontSize="36" FontWeight="Normal" FontFamily="Bahnschrift SemiBold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Bottom" Background="#FFFB8E59" Height="91" HorizontalAlignment="Center"/>
                 </WrapPanel>
                 <WrapPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Center">
-                    <Ellipse x:Name="LedTestBDD" Height="25" Width="25" Fill="Red" Canvas.Left="10" Canvas.Top="25" Margin="45,20,20,20"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <Label x:Name="LabelTestBDD" Content="Erreur base de données" FontSize="20" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Margin="0,0,0,0" Visibility="Visible" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Ellipse x:Name="LedTestBDDExpe" Height="25" Width="25" Fill="Red" Canvas.Left="10" Canvas.Top="25" Margin="45,20,20,20"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Label x:Name="LabelTestBDDExpe" Content="" FontSize="20" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Visibility="Visible" HorizontalAlignment="Center" VerticalAlignment="Center" Width="288"/>
                 </WrapPanel>
                 <Grid Grid.Row="1" Grid.Column="1">
                     <Grid.RowDefinitions>

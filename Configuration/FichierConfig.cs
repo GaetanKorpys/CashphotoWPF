@@ -66,6 +66,7 @@ namespace CashphotoWPF.Configuration
 
             streamWriter.WriteLine(constante.indexTabItem.ToString());
             streamWriter.WriteLine(constante.connectionString2);
+            streamWriter.WriteLine(constante.connectionStringLocal);
 
             streamWriter.Close();
         }
@@ -133,6 +134,7 @@ namespace CashphotoWPF.Configuration
                 constante.indexTabItem = res;
 
                 constante.connectionString2 = reader.ReadLine();
+                constante.connectionStringLocal = reader.ReadLine();
 
                 constante.fichierConfigExist = true;
                 reader.Close();

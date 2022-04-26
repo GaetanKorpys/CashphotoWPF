@@ -11,23 +11,23 @@ namespace CashphotoWPF.BDD
 {
     public class CashphotoBDD : DbContext
     {
-        private void InitialiserBDD()
-        {
-            Constante constante = Constante.GetConstante();
-            
-            if (Database.EnsureCreated())
-            {
-                constante.BDDOK = true;
-            }
-        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionString = "Data Source =";
             Constante constante = Constante.GetConstante();
-            connectionString += constante.BDDIP;
-            connectionString += ";";
-            connectionString += constante.connectionString2;
+            string connectionString;
+            if (constante.BDDIP.Equals("127.0.0.1"))
+            {
+                connectionString = constante.connectionStringLocal;
+            }
+            else
+            {
+                connectionString = "Data Source =";
+                connectionString += constante.BDDIP;
+                connectionString += ";";
+                connectionString += constante.connectionString2;
+            }
+            System.Diagnostics.Debug.WriteLine(connectionString);
             optionsBuilder.UseSqlServer(connectionString);
            
         }

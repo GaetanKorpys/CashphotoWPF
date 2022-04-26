@@ -52,7 +52,6 @@ C:\Users\Gaetan\source\repos\CashphotoWPF\bin\Debug\net6.0-windows\Microsoft.Ext
 C:\Users\Gaetan\source\repos\CashphotoWPF\bin\Debug\net6.0-windows\Microsoft.Extensions.FileProviders.Abstractions.dll
 C:\Users\Gaetan\source\repos\CashphotoWPF\bin\Debug\net6.0-windows\Microsoft.Extensions.FileProviders.Physical.dll
 C:\Users\Gaetan\source\repos\CashphotoWPF\bin\Debug\net6.0-windows\Microsoft.Extensions.FileSystemGlobbing.dll
-C:\Users\Gaetan\source\repos\CashphotoWPF\bin\Debug\net6.0-windows\CashphotoWPF.dll.config
 C:\Users\Gaetan\source\repos\CashphotoWPF\bin\Debug\net6.0-windows\Microsoft.Data.SqlClient.dll
 C:\Users\Gaetan\source\repos\CashphotoWPF\bin\Debug\net6.0-windows\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\Gaetan\source\repos\CashphotoWPF\bin\Debug\net6.0-windows\Microsoft.EntityFrameworkCore.SqlServer.dll

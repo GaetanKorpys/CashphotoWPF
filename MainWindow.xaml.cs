@@ -1,6 +1,7 @@
 ﻿using CashphotoWPF.Configuration;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -55,11 +56,40 @@ namespace CashphotoWPF
             //L'utilisateur atterit sur le menu chargé dpuis le fichier de config | Poste 1 = Préparation, Poste 2 = Exépdition
             TabControl.SelectedIndex = constante.indexTabItem;
 
+            if (constante.indexTabItem == 0) ExecuteAsAdmin(GetCheminAppliBalance());
+
             CreationBDD();
 
             TestConnexionBDD(null, null);
 
             
+        }
+
+        private string GetCheminAppliBalance()
+        {
+            string chemin = Directory.GetParent(System.Reflection.Assembly.GetExecutingAssembly().Location).ToString();
+            chemin += "\\";
+            chemin += "activation_V3.01.exe";
+            return chemin;
+        }
+
+        private void ExecuteAsAdmin(string fileName)
+        {
+            Process proc = new Process();
+            proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            proc.StartInfo.FileName = fileName;
+            proc.StartInfo.UseShellExecute = true;
+            proc.StartInfo.Verb = "runas";
+            proc.Start();
+        }
+
+        private void DisplayTempMessage(System.Windows.Controls.Label label, string message)
+        {
+            label.Content = message; //affichage du message
+            Timer aTimer = new Timer();
+            aTimer.Interval = 5000; //délai de 5 seconds
+            aTimer.Tick += (Object o, EventArgs e2) => { aTimer.Stop(); label.Content = ""; }; //effacement du message
+            aTimer.Enabled = true; //démarrage du timer
         }
 
         private void TestConnexionBDD(object sender, EventArgs e)
@@ -76,14 +106,19 @@ namespace CashphotoWPF
             if (constante.BDDOK)
             {
                 mySolidColorBrush.Color = Color.FromRgb(0, 255, 0);
-                LabelTestBDD.Content = "Connexion OK";
+                LabelTestBDDPrep.Content = "Connexion OK";
+                LabelTestBDDExpe.Content = "Connexion OK";
+                DisplayTempMessage(ReponseBDD, "Connexion OK");
             }
             else
             {
                 mySolidColorBrush.Color = Color.FromRgb(255, 0, 0);
-                LabelTestBDD.Content = "Erreur Connexion";
+                LabelTestBDDPrep.Content = "Erreur Connexion";
+                LabelTestBDDExpe.Content = "Connexion OK";
+                ReponseBDD.Content = "Erreur Connexion";
             }
-            LedTestBDD.Fill = mySolidColorBrush;
+            LedTestBDDPrep.Fill = mySolidColorBrush;
+            LedTestBDDExpe.Fill = mySolidColorBrush;
         }
 
         private void CreationBDD()
@@ -118,7 +153,7 @@ namespace CashphotoWPF
             if(IsValidIPAddress(IP))
             {
                 constante.BDDIP = IP;
-                ReponseBDD.Content = "Adresse IP validée.";
+                DisplayTempMessage(ReponseBDD, "Adresse IP validée.");
             }
             else
             {
@@ -336,7 +371,12 @@ namespace CashphotoWPF
             {
                 BDDAdresseTextBox.IsEnabled = false;
                 ModifierBDDIPButton.IsEnabled = false;
+
+                //BDD locale, l'utilisateur ne rentre donc pas d'adresse IP
+                //On valide directement dès que le bouton radio locale est choisi.
                 setBDDIP("127.0.0.1");
+                //Nouvelle BDD locale
+                CreationBDD();
             }
             else if(sender.Equals(BDDDistanteRadio))
             {
@@ -347,12 +387,17 @@ namespace CashphotoWPF
 
         private void ValiderIP(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if (e.Key == Key.Enter) setBDDIP(BDDAdresseTextBox.Text);
+            if (e.Key == Key.Enter)
+            {
+                setBDDIP(BDDAdresseTextBox.Text);
+                CreationBDD();
+            }
         }
 
         private void ValiderIP(object sender, EventArgs e)
         {
             setBDDIP(BDDAdresseTextBox.Text);
+            CreationBDD();
         }
 
         private void GestionTabItem(object sender, SelectionChangedEventArgs e)

@@ -35,6 +35,108 @@ namespace CashphotoWPF
             chargementLancement();
         }
 
+        private void MainWindow_Closed(object sender, EventArgs e)
+        {
+            if (ProgramIsRunning(GetCheminAppliBalance()))
+            {
+                killProcessBalance();
+            }
+                
+            Close();
+           
+        }
+
+        private void ValiderCommande()
+        {
+
+        }
+
+        private bool isValidNumCommande(string numCommande)
+        {
+            Constante constante = Constante.GetConstante();
+            Regex numCommandeAmazon = new Regex(constante.regexCommandeAmazon);
+            Regex numCommandeCashphoto = new Regex(constante.regexCommandeCashphoto);
+            if (numCommandeAmazon.IsMatch(numCommande) || numCommandeCashphoto.IsMatch(numCommande))
+                return true;
+            return false;
+            
+        }
+
+        private bool isValidPoids(string poids)
+        {
+            string pattern = @"^\d{1,2}(\.)?\d{3}$";
+            return true;
+        }
+
+
+        private void SaisiNumCommande_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (isValidNumCommande(SaisirCommande.Text))
+                    SaisirPoids.Focus();
+                else
+                    DisplayTempMessage(PrepCommandeLabel, "Veuillez renseigner un numéro de commande valide.");
+            }
+                
+        }
+
+        private void SaisiPoids_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (isValidNumCommande(SaisirPoids.Text))
+                {
+                    ValiderCommande();
+                    SaisirPoids.Text = "";
+                    SaisirCommande.Text = "";
+                    SaisirCommande.Focus();
+                    DisplayTempMessage(PrepCommandeLabel, "Enregistrement OK.");
+                }
+                else
+                    DisplayTempMessage(PrepCommandeLabel, "Veuillez renseigner le poids du colis.");                
+            } 
+        }
+
+
+        private void killProcessBalance()
+        {
+            string targetProcessPath = GetCheminAppliBalance();
+            string targetProcessName = "activation_V3.01";
+
+            Process[] runningProcesses = Process.GetProcesses();
+            foreach (Process process in runningProcesses)
+            {
+                if (process.ProcessName == targetProcessName &&
+                    process.MainModule != null &&
+                    string.Compare(process.MainModule.FileName, targetProcessPath, StringComparison.InvariantCultureIgnoreCase) == 0)
+                {
+                    process.Kill();
+                }
+            }
+        }
+
+        private bool ProgramIsRunning(string FullPath)
+        {
+            string FilePath = System.IO.Path.GetDirectoryName(FullPath);
+            string FileName = System.IO.Path.GetFileNameWithoutExtension(FullPath).ToLower();
+            bool isRunning = false;
+
+            Process[] pList = Process.GetProcessesByName(FileName);
+
+            foreach (Process p in pList)
+            {
+                if (p.MainModule.FileName.StartsWith(FilePath, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    isRunning = true;
+                    break;
+                }
+            }
+
+            return isRunning;
+        }
+
+
         /// <summary>
         /// Exécute plusieurs fonctions au lancement de l'application :
         ///     - Maj des constantes
@@ -56,8 +158,9 @@ namespace CashphotoWPF
             //L'utilisateur atterit sur le menu chargé dpuis le fichier de config | Poste 1 = Préparation, Poste 2 = Exépdition
             TabControl.SelectedIndex = constante.indexTabItem;
 
-            if (constante.indexTabItem == 0) ExecuteAsAdmin(GetCheminAppliBalance());
-
+            if (constante.indexTabItem == 0)
+                ExecuteAsAdmin(GetCheminAppliBalance());
+            
             CreationBDD();
 
             TestConnexionBDD(null, null);
@@ -242,7 +345,23 @@ namespace CashphotoWPF
         }
 
         // -------------- Bouton --------------
-        
+
+        private void ValiderRecap(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ValiderCommande(object sender, EventArgs e)
+        {
+
+        }
+         
+        private void effacerTextbox(object sender, EventArgs e)
+        {
+            if (sender.Equals(RechercherCommande))
+                RechercherCommande.Text = "";
+        }
+
         private void ModifierConfiguration(object sender, EventArgs e)
         {
             Constante constante = Constante.GetConstante();
@@ -408,12 +527,12 @@ namespace CashphotoWPF
                 if (Preparation.IsSelected)
                 {
                     constante.indexTabItem = 0;
-                    System.Diagnostics.Debug.WriteLine("Menu " + constante.indexTabItem);
+                    SaisirCommande.Focus();
                 }
                 else if (Expedition.IsSelected)
                 {
                     constante.indexTabItem = 1;
-                    System.Diagnostics.Debug.WriteLine("Menu " + constante.indexTabItem);
+                    RechercherCommande.Focus();
                 }
                 else if (Configuration.IsSelected)
                 {

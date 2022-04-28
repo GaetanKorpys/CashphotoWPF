@@ -54,6 +54,8 @@ namespace CashphotoWPF.Configuration
         public int indexTabItem { get; set; }
         public string connectionString2 { get; set; } //2eme partie de la chaine de connexion, contient l'id et le mdp
         public string connectionStringLocal { get; set; } //Chaine de connexion pour BDD Locale
+        public string regexCommandeAmazon { get; set; } //Pattern des numéros de commandes venant d'Amazon | Ex: 408-0983123-2430735
+        public string regexCommandeCashphoto { get; set; } //Pattern des numéros de commandes venant de Cashphoto (Prestashop) | Ex: 56656
 
         //Paramètres non chargé dans le fichier de config
         public bool fichierConfigExist { get; set; }

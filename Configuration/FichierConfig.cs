@@ -67,6 +67,8 @@ namespace CashphotoWPF.Configuration
             streamWriter.WriteLine(constante.indexTabItem.ToString());
             streamWriter.WriteLine(constante.connectionString2);
             streamWriter.WriteLine(constante.connectionStringLocal);
+            streamWriter.WriteLine(constante.regexCommandeAmazon);
+            streamWriter.WriteLine(constante.regexCommandeCashphoto);
 
             streamWriter.Close();
         }
@@ -135,6 +137,8 @@ namespace CashphotoWPF.Configuration
 
                 constante.connectionString2 = reader.ReadLine();
                 constante.connectionStringLocal = reader.ReadLine();
+                constante.regexCommandeAmazon = reader.ReadLine();
+                constante.regexCommandeCashphoto = reader.ReadLine();
 
                 constante.fichierConfigExist = true;
                 reader.Close();

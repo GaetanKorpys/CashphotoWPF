@@ -1,6 +1,7 @@
 ﻿using CashphotoWPF.Configuration;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
+using System.Globalization;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.IO;
@@ -20,6 +21,7 @@ using System.Windows.Forms;
 using CashphotoWPF.BoiteDeDialogue;
 using System.Text.RegularExpressions;
 using CashphotoWPF.BDD;
+using Cursors = System.Windows.Input.Cursors;
 
 namespace CashphotoWPF
 {
@@ -46,9 +48,121 @@ namespace CashphotoWPF
            
         }
 
-        private void ValiderCommande()
+        private void ModifierRecap(object sender, MouseButtonEventArgs e)
         {
+            if(sender.Equals(NumCommandeRecap))
+            {
+                NumCommandeRecap.Focusable = true;
+                NumCommandeRecap.Focus();
+                //NumCommandeRecap.CaretIndex = NumCommandeRecap.Text.Length;
+            }
+            else if(sender.Equals(PoidsRecap))
+            {
+                PoidsRecap.Focusable = true;
+                PoidsRecap.Focus();
+            }
+        }
 
+        private void Recap_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender.Equals(NumCommandeRecap))
+            {
+                NumCommandeRecap.Focusable = false;
+            }
+            else if (sender.Equals(PoidsRecap))
+            {
+                PoidsRecap.Focusable = false;
+            }
+        }
+
+        private void Recap_FocusableChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (sender.Equals(NumCommandeRecap))
+            {
+                NumCommandeRecap.Cursor = NumCommandeRecap.Focusable ? Cursors.IBeam : Cursors.Arrow;
+            }
+            else if (sender.Equals(PoidsRecap))
+            {
+                PoidsRecap.Cursor = PoidsRecap.Focusable ? Cursors.IBeam : Cursors.Arrow;
+            }
+        }
+
+        private void ActualiserRecapEnregistrementCommande()
+        {
+            Constante constante = Constante.GetConstante();
+            string numCommande, poids;
+            numCommande = constante.cashphotoBDD.Commandes.OrderByDescending(p => p.IdCommande).FirstOrDefault().NumCommande;
+            poids = constante.cashphotoBDD.Commandes.OrderByDescending(p => p.IdCommande).FirstOrDefault().Poids.ToString();
+            System.Diagnostics.Debug.WriteLine("Poids " +constante.cashphotoBDD.Commandes.OrderByDescending(p => p.IdCommande).FirstOrDefault().Poids);
+            NumCommandeRecap.Text = numCommande;
+            PoidsRecap.Text = poids;
+        }
+
+        private void AfficherTestEnregistrementCommande(bool status)
+        {
+            if (status)
+            {
+                DisplayTempMessage(PrepCommandeLabel, "Enregistrement OK.");
+                DisplayTempEllipse(LedEnregistrementCommande, 0, 255, 0);
+            }
+            else
+            {
+                DisplayTempMessage(PrepCommandeLabel, "La commande existe déjà.");
+                DisplayTempEllipse(LedEnregistrementCommande, 255, 0, 0);
+            }
+        }
+        
+        private bool validerCommande()
+        {
+            Constante constante = Constante.GetConstante();
+
+            if (constante.cashphotoBDD.Commandes.Where(e => e.NumCommande == SaisirCommande.Text).Count() == 0)
+            {
+                Commande commande = new Commande();
+                commande.NumCommande = SaisirCommande.Text;
+                double poids = double.Parse(SaisirPoids.Text, CultureInfo.InvariantCulture);
+                commande.Poids = poids;
+                commande.Date = DateTime.Now;
+                commande.Prepare = true;
+                commande.Expedie = false;
+
+                constante.cashphotoBDD.Add(commande);
+                constante.cashphotoBDD.SaveChanges();
+                return true;
+            }
+            else
+                return false;
+        }
+
+        private void ActivationBoutonValider(object sender, EventArgs e)
+        {
+            if(isValidPoids(SaisirPoids.Text))
+                ValiderCommandeBouton.IsEnabled = true;
+            else
+                ValiderCommandeBouton.IsEnabled =false;
+        }
+
+        private void EnregistrerCommande_Click(object sender, EventArgs e)
+        {
+            if(validerCommande())
+            {
+                SaisirPoids.Text = "";
+                SaisirCommande.Text = "";
+                SaisirCommande.IsEnabled = true;
+                SaisirCommande.Focus();
+                SaisirPoids.IsEnabled = false;
+                AfficherTestEnregistrementCommande(true);
+                ActualiserRecapEnregistrementCommande();
+            }
+            else
+            {
+                SaisirPoids.Text = "";
+                SaisirCommande.Text = "";
+                SaisirCommande.IsEnabled = true;
+                SaisirCommande.Focus();
+                SaisirPoids.IsEnabled = false;
+                AfficherTestEnregistrementCommande(false);
+            }
         }
 
         private bool isValidNumCommande(string numCommande)
@@ -64,8 +178,11 @@ namespace CashphotoWPF
 
         private bool isValidPoids(string poids)
         {
-            string pattern = @"^\d{1,2}(\.)?\d{3}$";
-            return true;
+            string pattern = "^\\d{1,2}(\\.\\d{1,3})?$"; //Ex: 23.344 ou 34 
+            Regex poidsRegex = new Regex(pattern);
+            if (poidsRegex.IsMatch(poids))
+                return true;
+            return false;
         }
 
 
@@ -74,7 +191,10 @@ namespace CashphotoWPF
             if (e.Key == Key.Enter)
             {
                 if (isValidNumCommande(SaisirCommande.Text))
+                {
+                    SaisirPoids.IsEnabled = true;
                     SaisirPoids.Focus();
+                }
                 else
                     DisplayTempMessage(PrepCommandeLabel, "Veuillez renseigner un numéro de commande valide.");
             }
@@ -85,17 +205,33 @@ namespace CashphotoWPF
         {
             if (e.Key == Key.Enter)
             {
-                if (isValidNumCommande(SaisirPoids.Text))
+                if (isValidPoids(SaisirPoids.Text))
                 {
-                    ValiderCommande();
-                    SaisirPoids.Text = "";
-                    SaisirCommande.Text = "";
-                    SaisirCommande.Focus();
-                    DisplayTempMessage(PrepCommandeLabel, "Enregistrement OK.");
+                    if(validerCommande())
+                    {
+                        SaisirPoids.Text = "";
+                        SaisirCommande.Text = "";
+                        SaisirCommande.IsEnabled = true;
+                        SaisirCommande.Focus();
+                        SaisirPoids.IsEnabled = false;
+                        AfficherTestEnregistrementCommande(true);
+                        ActualiserRecapEnregistrementCommande();
+                    }
+                    else
+                    {
+                        SaisirPoids.Text = "";
+                        SaisirCommande.Text = "";
+                        SaisirCommande.IsEnabled = true;
+                        SaisirCommande.Focus();
+                        SaisirPoids.IsEnabled = false;
+                        AfficherTestEnregistrementCommande(false);
+                    }
                 }
                 else
-                    DisplayTempMessage(PrepCommandeLabel, "Veuillez renseigner le poids du colis.");                
-            } 
+                    DisplayTempMessage(PrepCommandeLabel, "Veuillez renseigner un poids valide.");                
+            }
+            if(isValidPoids(SaisirPoids.Text))
+                ValiderCommandeBouton.IsEnabled = true;
         }
 
 
@@ -195,14 +331,26 @@ namespace CashphotoWPF
             aTimer.Enabled = true; //démarrage du timer
         }
 
+        private void DisplayTempEllipse(Ellipse ellipse, byte r, byte g, byte b)
+        {
+            ellipse.Visibility = Visibility.Visible;
+            Timer aTimer = new Timer();
+            aTimer.Interval = 5000; //délai de 5 seconds
+            aTimer.Tick += (Object o, EventArgs e2) => { aTimer.Stop(); ellipse.Visibility = Visibility.Hidden; }; //effacement de l'ellipse
+            aTimer.Enabled = true; //démarrage du timer
+            SolidColorBrush mySolidColorBrush = new SolidColorBrush();
+            mySolidColorBrush.Color = Color.FromRgb(r, g, b);
+            ellipse.Fill = mySolidColorBrush;
+        }
+
         private void TestConnexionBDD(object sender, EventArgs e)
         {
             Constante constante = Constante.GetConstante();
             constante.BDDOK = ConnexionBDD();
-            AffichageTestBDD();
+            AfficherTestBDD();
         }
 
-        private void AffichageTestBDD()
+        private void AfficherTestBDD()
         {
             Constante constante = Constante.GetConstante();
             SolidColorBrush mySolidColorBrush = new SolidColorBrush();
@@ -216,9 +364,9 @@ namespace CashphotoWPF
             else
             {
                 mySolidColorBrush.Color = Color.FromRgb(255, 0, 0);
-                LabelTestBDDPrep.Content = "Erreur Connexion";
-                LabelTestBDDExpe.Content = "Connexion OK";
-                ReponseBDD.Content = "Erreur Connexion";
+                LabelTestBDDPrep.Content = "Erreur connexion";
+                LabelTestBDDExpe.Content = "Erreur connexion";
+                ReponseBDD.Content = "Erreur connexion";
             }
             LedTestBDDPrep.Fill = mySolidColorBrush;
             LedTestBDDExpe.Fill = mySolidColorBrush;
@@ -348,12 +496,12 @@ namespace CashphotoWPF
 
         private void ValiderRecap(object sender, EventArgs e)
         {
-
-        }
-
-        private void ValiderCommande(object sender, EventArgs e)
-        {
-
+            Constante constante = Constante.GetConstante();
+            Commande commande = constante.cashphotoBDD.Commandes.OrderByDescending(p => p.IdCommande).FirstOrDefault();
+            commande.NumCommande = NumCommandeRecap.Text;
+            double poids = double.Parse(PoidsRecap.Text, CultureInfo.InvariantCulture);
+            commande.Poids = poids;
+            constante.cashphotoBDD.SaveChanges();
         }
          
         private void effacerTextbox(object sender, EventArgs e)

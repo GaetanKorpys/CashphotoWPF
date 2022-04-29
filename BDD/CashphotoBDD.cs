@@ -11,6 +11,10 @@ namespace CashphotoWPF.BDD
 {
     public class CashphotoBDD : DbContext
     {
+        public CashphotoBDD()
+        {
+            Database.EnsureCreated();
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

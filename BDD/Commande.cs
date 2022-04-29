@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,9 @@ namespace CashphotoWPF.BDD
     public class Commande
     {
         [Key]
-        public string IdCommande { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int IdCommande { get; set; }
+        public string NumCommande { get; set; }
         public double Poids { get; set; }
         public string? NomClientFacturation { get; set; }
         public string? NomClientLivraison { get; set; }

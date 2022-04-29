@@ -16,7 +16,7 @@ contact@cashphoto.com
 127.0.0.1
 SansSignature
 Coliposte
-0
+1
 Initial Catalog=CashphotoG;User ID=Gerald;Password=Gerald;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
 Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=CashphotoLocal;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
 ^\d{3}-\d{7}-\d{7}$

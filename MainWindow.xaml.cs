@@ -22,6 +22,7 @@ using CashphotoWPF.BoiteDeDialogue;
 using System.Text.RegularExpressions;
 using CashphotoWPF.BDD;
 using Cursors = System.Windows.Input.Cursors;
+using System.Collections.ObjectModel;
 
 namespace CashphotoWPF
 {
@@ -30,6 +31,8 @@ namespace CashphotoWPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        public List<Commande> _commandes { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -48,13 +51,15 @@ namespace CashphotoWPF
            
         }
 
+
+
         private void ModifierRecap(object sender, MouseButtonEventArgs e)
         {
             if(sender.Equals(NumCommandeRecap))
             {
                 NumCommandeRecap.Focusable = true;
                 NumCommandeRecap.Focus();
-                //NumCommandeRecap.CaretIndex = NumCommandeRecap.Text.Length;
+                
             }
             else if(sender.Equals(PoidsRecap))
             {
@@ -93,7 +98,7 @@ namespace CashphotoWPF
             string numCommande, poids;
             numCommande = constante.cashphotoBDD.Commandes.OrderByDescending(p => p.IdCommande).FirstOrDefault().NumCommande;
             poids = constante.cashphotoBDD.Commandes.OrderByDescending(p => p.IdCommande).FirstOrDefault().Poids.ToString();
-            System.Diagnostics.Debug.WriteLine("Poids " +constante.cashphotoBDD.Commandes.OrderByDescending(p => p.IdCommande).FirstOrDefault().Poids);
+            
             NumCommandeRecap.Text = numCommande;
             PoidsRecap.Text = poids;
         }
@@ -128,6 +133,10 @@ namespace CashphotoWPF
 
                 constante.cashphotoBDD.Add(commande);
                 constante.cashphotoBDD.SaveChanges();
+
+                _commandes = getCommandesDateToday();
+                CommandesList.ItemsSource = _commandes;
+
                 return true;
             }
             else
@@ -171,7 +180,11 @@ namespace CashphotoWPF
             Regex numCommandeAmazon = new Regex(constante.regexCommandeAmazon);
             Regex numCommandeCashphoto = new Regex(constante.regexCommandeCashphoto);
             if (numCommandeAmazon.IsMatch(numCommande) || numCommandeCashphoto.IsMatch(numCommande))
+            {
+                System.Diagnostics.Debug.WriteLine("OK");
                 return true;
+            }
+                
             return false;
             
         }
@@ -301,7 +314,53 @@ namespace CashphotoWPF
 
             TestConnexionBDD(null, null);
 
+            _commandes = getCommandesDateToday();
+            CommandesList.ItemsSource = _commandes;
             
+        }
+
+        private void rechercheCommande_TextChanged(object sender, EventArgs e) 
+        {
+            _commandes = getCommandesRecherche(RechercherCommande1.Text);
+            CommandesList.ItemsSource = _commandes;
+        }
+
+        private List<Commande> getCommandesRecherche(string numCmd)
+        {
+            List<Commande> commandes = new List<Commande>();
+            Constante constante = Constante.GetConstante();
+            IQueryable<Commande> commandesTable;
+
+            if (constante.BDDOK)
+            {
+                commandesTable = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande.Contains(numCmd));
+                if (constante.commandeExpedie)
+                {
+                    commandesTable = commandesTable.Where(commande => commande.Expedie == true);
+                }
+                else
+                {
+                    commandesTable = commandesTable.Where(commande => commande.Expedie == false);
+                }
+                commandesTable = commandesTable.OrderByDescending(commande => commande.Date);
+                commandes = commandesTable.ToList();
+            }
+            return commandes;
+        }
+
+        private List<Commande> getCommandesDateToday()
+        {
+            List<Commande> commandes = new List<Commande>();
+            Constante constante = Constante.GetConstante();
+            IQueryable<Commande> commandesTable;
+
+            if (constante.BDDOK)
+            {
+                commandesTable = constante.cashphotoBDD.Commandes.Where(commande => commande.Date.Date == DateTime.Today);
+                commandesTable = commandesTable.OrderByDescending(commande => commande.Date);
+                commandes = commandesTable.ToList();
+            }
+            return commandes;
         }
 
         private string GetCheminAppliBalance()

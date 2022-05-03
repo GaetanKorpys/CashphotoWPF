@@ -51,7 +51,13 @@ namespace CashphotoWPF
            
         }
 
+      
 
+        private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Commande productItem = (Commande)DatagGridPrep.SelectedItem; //Datagrid bound with ProductItem 
+            System.Diagnostics.Debug.WriteLine(productItem.NumCommande);
+        }
 
         private void ModifierRecap(object sender, MouseButtonEventArgs e)
         {
@@ -98,7 +104,7 @@ namespace CashphotoWPF
             string numCommande, poids;
             numCommande = constante.cashphotoBDD.Commandes.OrderByDescending(p => p.IdCommande).FirstOrDefault().NumCommande;
             poids = constante.cashphotoBDD.Commandes.OrderByDescending(p => p.IdCommande).FirstOrDefault().Poids.ToString();
-            
+            poids = poids.Replace(",", ".");
             NumCommandeRecap.Text = numCommande;
             PoidsRecap.Text = poids;
         }
@@ -116,15 +122,28 @@ namespace CashphotoWPF
                 DisplayTempEllipse(LedEnregistrementCommande, 255, 0, 0);
             }
         }
-        
-        private bool validerCommande()
+
+        private bool commandeExist(string numCommande)
         {
             Constante constante = Constante.GetConstante();
 
-            if (constante.cashphotoBDD.Commandes.Where(e => e.NumCommande == SaisirCommande.Text).Count() == 0)
+            if (constante.cashphotoBDD.Commandes.Where(e => e.NumCommande == numCommande).Count() == 0)
+                return false;
+            else
+                return true;
+        }
+           
+
+        private bool validerCommande(string numCommande)
+        {
+            Constante constante = Constante.GetConstante();
+
+            if (!commandeExist(numCommande))
             {
                 Commande commande = new Commande();
                 commande.NumCommande = SaisirCommande.Text;
+                System.Diagnostics.Debug.WriteLine("Poids :" + SaisirPoids.Text);
+                
                 double poids = double.Parse(SaisirPoids.Text, CultureInfo.InvariantCulture);
                 commande.Poids = poids;
                 commande.Date = DateTime.Now;
@@ -134,8 +153,9 @@ namespace CashphotoWPF
                 constante.cashphotoBDD.Add(commande);
                 constante.cashphotoBDD.SaveChanges();
 
+                //Rechargement du Datagrid
                 _commandes = getCommandesDateToday();
-                CommandesList.ItemsSource = _commandes;
+                DatagGridPrep.ItemsSource = _commandes;
 
                 return true;
             }
@@ -145,15 +165,27 @@ namespace CashphotoWPF
 
         private void ActivationBoutonValider(object sender, EventArgs e)
         {
-            if(isValidPoids(SaisirPoids.Text))
-                ValiderCommandeBouton.IsEnabled = true;
-            else
-                ValiderCommandeBouton.IsEnabled =false;
+            if(sender.Equals(SaisirPoids))
+            {
+                if (isValidPoids(SaisirPoids.Text))
+                    ValiderCommandeBouton.IsEnabled = true;
+                else
+                    ValiderCommandeBouton.IsEnabled = false;
+            }
         }
 
-        private void EnregistrerCommande_Click(object sender, EventArgs e)
+        private void ActiverBoutonRecap(object sender, EventArgs e)
         {
-            if(validerCommande())
+           System.Diagnostics.Debug.WriteLine("Test " + NumCommandeRecap.Text +" "+ PoidsRecap.Text);
+           if(isValidNumCommande(NumCommandeRecap.Text) && isValidPoids(PoidsRecap.Text))
+                ValiderRecapBouton.IsEnabled = true;
+           else
+                ValiderRecapBouton.IsEnabled = false;
+        }
+
+        private void EnregistrerCommande_Click(object sender, RoutedEventArgs e)
+        {
+            if(validerCommande(SaisirCommande.Text))
             {
                 SaisirPoids.Text = "";
                 SaisirCommande.Text = "";
@@ -214,13 +246,13 @@ namespace CashphotoWPF
                 
         }
 
-        private void SaisiPoids_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void EnregistrerCommande_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
                 if (isValidPoids(SaisirPoids.Text))
                 {
-                    if(validerCommande())
+                    if(validerCommande(SaisirCommande.Text))
                     {
                         SaisirPoids.Text = "";
                         SaisirCommande.Text = "";
@@ -315,14 +347,27 @@ namespace CashphotoWPF
             TestConnexionBDD(null, null);
 
             _commandes = getCommandesDateToday();
-            CommandesList.ItemsSource = _commandes;
+            DatagGridPrep.ItemsSource = _commandes;
             
+        }
+
+        private void ModificationActived(object sender, EventArgs e)
+        {
+            DatagGridPrep.IsReadOnly = false;
+        }
+
+        private void ModificationDesactived(object sender, EventArgs e)
+        {
+            DatagGridPrep.IsReadOnly = true;
         }
 
         private void rechercheCommande_TextChanged(object sender, EventArgs e) 
         {
-            _commandes = getCommandesRecherche(RechercherCommande1.Text);
-            CommandesList.ItemsSource = _commandes;
+            if(RechercherCommande1.Text.Equals(""))
+                _commandes = getCommandesDateToday();
+            else
+                _commandes = getCommandesRecherche(RechercherCommande1.Text);
+            DatagGridPrep.ItemsSource = _commandes;
         }
 
         private List<Commande> getCommandesRecherche(string numCmd)
@@ -758,6 +803,32 @@ namespace CashphotoWPF
                     }
                 }
             }
+        }
+
+        private void dataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        {
+            Constante constante = Constante.GetConstante();
+
+            Commande cmdDataGrid = e.Row.DataContext as Commande;         
+            
+            int idCommandeDataGrid = cmdDataGrid.IdCommande;
+            string numCommandeDataGrid = cmdDataGrid.NumCommande;
+            double poidsCommandeDataGrid = cmdDataGrid.Poids;
+
+            Commande commandeBDD = constante.cashphotoBDD.Commandes.Where(commande => commande.IdCommande == idCommandeDataGrid).FirstOrDefault();
+
+            //Check aussi les rows
+            if(!commandeExist(numCommandeDataGrid))
+            {
+
+            }
+            commandeBDD.NumCommande = numCommandeDataGrid;
+            commandeBDD.Poids = poidsCommandeDataGrid;
+
+            constante.cashphotoBDD.SaveChanges();
+
+            DatagGridPrep.ItemsSource = getCommandesDateToday();
+                            
         }
     }
 }

@@ -18,11 +18,11 @@
                     <RowDefinition Height="237*"/>
                 </Grid.RowDefinitions>
 
-                <DataGrid Name="CommandesList" Grid.Column="0" Margin="75,109,90,29" Grid.Row="1" AutoGenerateColumns="False" ColumnWidth="*">
+                <DataGrid Name="DatagGridPrep" RowEditEnding="dataGrid_RowEditEnding"  SelectionChanged="dataGrid_SelectionChanged" Grid.Column="0" Margin="75,109,90,29" Grid.Row="1" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True">
 
                     <DataGrid.Resources>
                         <Style TargetType="DataGridColumnHeader">
-                            
+
                             <Setter Property="HorizontalContentAlignment" Value="Center" />
                         </Style>
                         <Style TargetType="DataGridCell">
@@ -35,13 +35,15 @@
                             </Setter>
                         </Style>
                     </DataGrid.Resources>
-                    
+
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Numéro de Commande" Binding="{Binding NumCommande}" />
-                        <DataGridTextColumn Header="Poids" Binding="{Binding Poids}" />
-                        <DataGridTextColumn Header="Date" Binding="{Binding Date}" />
+                        <DataGridTextColumn Header="Numéro de Commande" Binding="{Binding NumCommande, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Poids" Binding="{Binding Poids, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Date" Binding="{Binding Date, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </DataGrid.Columns>
                 </DataGrid>
+
+
 
                 <Label Content="Base de données" Grid.Row="0" Grid.Column="1" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0" Height="34" Width="151" />
                 <WrapPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" Height="32" Width="208" Margin="0,85,0,0">
@@ -56,7 +58,7 @@
 
                 <WrapPanel Grid.RowSpan="2" VerticalAlignment="Top" Margin="75,100,0,0" Height="32">
                     <Label Content="Entrer le poids du colis :" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Width="270"/>
-                    <TextBox x:Name="SaisirPoids" TextChanged="ActivationBoutonValider" KeyDown="SaisiPoids_KeyDown" IsEnabled="False" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Width="249"/>
+                    <TextBox x:Name="SaisirPoids" TextChanged="ActivationBoutonValider" KeyDown="EnregistrerCommande_KeyDown" IsEnabled="False" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Width="249"/>
                     <Button x:Name="ValiderCommandeBouton" Click="EnregistrerCommande_Click" IsEnabled="False" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Valider" Width="60" Height="32" FontSize="12" Margin="50,0,0,0"/>
                 </WrapPanel>
 
@@ -65,20 +67,21 @@
                     <Label x:Name="PrepCommandeLabel" Content="" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" Width="404" />
                 </WrapPanel>
 
-                <WrapPanel Grid.RowSpan="2" VerticalAlignment="Top" Margin="75,240,0,0" Height="32">
-                    <Label Content="Rechercher une commande" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Width="270"/>
-                    <TextBox x:Name="RechercherCommande1" TextChanged="rechercheCommande_TextChanged" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Width="249"/>
+                <WrapPanel VerticalAlignment="Top" Margin="75,46,48,0" Height="32" Grid.Row="1">
+                    <Label Content="Rechercher une commande :" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Width="240"/>
+                    <TextBox x:Name="RechercherCommande1" TextChanged="rechercheCommande_TextChanged" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Width="231"/>
+                    <CheckBox Content="Activer modification" Margin="20,0,5,0" Checked="ModificationActived" Unchecked="ModificationDesactived" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </WrapPanel>
-                
+
                 <Label Content="Dernier colis validé" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" Margin="0,10,0,0" Height="34" Width="171" />
 
                 <Label Content="Numéro commande :" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,80,0,0" Height="34" Width="178" />
-                <TextBox x:Name="NumCommandeRecap" LostFocus="Recap_LostFocus" FocusableChanged="Recap_FocusableChanged" BorderThickness="0" MouseDoubleClick="ModifierRecap" Cursor="Arrow" Focusable="False" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,85,30,0" Width="185" Height="30" />
+                <TextBox x:Name="NumCommandeRecap" TextChanged="ActiverBoutonRecap" LostFocus="Recap_LostFocus" FocusableChanged="Recap_FocusableChanged" BorderThickness="0" MouseDoubleClick="ModifierRecap" Cursor="Arrow" Focusable="False" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,85,30,0" Width="185" Height="30" />
 
                 <Label Content="Poids du colis :" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,120,0,0" Height="34" Width="127" />
-                <TextBox x:Name="PoidsRecap" LostFocus="Recap_LostFocus" FocusableChanged="Recap_FocusableChanged" BorderThickness="0" MouseDoubleClick="ModifierRecap" Grid.Row="1" Grid.Column="1" Cursor="Arrow" Focusable="False" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,125,30,0" Width="185" Height="30" />
+                <TextBox x:Name="PoidsRecap" TextChanged="ActiverBoutonRecap" LostFocus="Recap_LostFocus" FocusableChanged="Recap_FocusableChanged" BorderThickness="0" MouseDoubleClick="ModifierRecap" Grid.Row="1" Grid.Column="1" Cursor="Arrow" Focusable="False" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,125,30,0" Width="185" Height="30" />
 
-                <Button x:Name="ValiderRecapBouton" Click="ValiderRecap" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" Content="Valider les modifications" Width="154" Height="32" FontSize="12" Margin="0,176,0,0"/>
+                <Button x:Name="ValiderRecapBouton" Click="ValiderRecap" IsEnabled="False" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" Content="Valider les modifications" Width="154" Height="32" FontSize="12" Margin="0,176,0,0"/>
             </Grid>
         </TabItem>
         <TabItem x:Name="Expedition" Header="Expédition" FontSize="18" Margin="356,-2,-512,0" VerticalAlignment="Center" HorizontalAlignment="Stretch">

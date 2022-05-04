@@ -826,6 +826,10 @@ namespace CashphotoWPF
             //La commande modifiée que l'on récupère avec la ligne du DataGrid séléctionnée
             Commande cmdDataGrid = e.Row.DataContext as Commande;
 
+            if(e.Column.Header.Equals("Numéro de commande"))
+            {
+                System.Diagnostics.Debug.WriteLine("YA");
+            }
             int idCommandeDataGrid = cmdDataGrid.IdCommande;
             string numCommandeDataGrid = cmdDataGrid.NumCommande;
             double poidsCommandeDataGrid = cmdDataGrid.Poids;
@@ -837,37 +841,33 @@ namespace CashphotoWPF
             //L'utilisateur a unqiuement modifié le poids.
             System.Diagnostics.Debug.WriteLine("1 / " + poidsCommandeDataGrid.ToString());
             System.Diagnostics.Debug.WriteLine("2 / " + numCommandeDataGrid);
-            if (commandeBDD.NumCommande.Equals(numCommandeDataGrid))
+            if (commandeBDD.NumCommande.Equals(numCommandeDataGrid) && isValidPoids(poidsCommandeDataGrid.ToString()))
             {
-                if(isValidPoids(poidsCommandeDataGrid.ToString()))
-                {
-                    commandeBDD.Poids = poidsCommandeDataGrid;
-                    AfficherTestDataGrid(true);
-                }
-                else
-                    AfficherTestDataGrid(false);
+                System.Diagnostics.Debug.WriteLine("A ");
+                System.Diagnostics.Debug.WriteLine("A DT"+ numCommandeDataGrid);
+                System.Diagnostics.Debug.WriteLine("A BDD "+ commandeBDD.NumCommande);
+                commandeBDD.Poids = poidsCommandeDataGrid;
+                AfficherTestDataGrid(true);
+
+                constante.cashphotoBDD.SaveChanges();
+                
+            }
+            else if (isValidNumCommande(numCommandeDataGrid) &&
+                    !commandeExist(numCommandeDataGrid) &&
+                    isValidPoids(poidsCommandeDataGrid.ToString()))
+            {
+                System.Diagnostics.Debug.WriteLine("D ");
+                commandeBDD.Poids = poidsCommandeDataGrid;
+                commandeBDD.NumCommande = numCommandeDataGrid;
+                AfficherTestDataGrid(true);
+
+                constante.cashphotoBDD.SaveChanges();
             }
             else
-            {
-                if (isValidNumCommande(numCommandeDataGrid))
-                {
-                    if (!commandeExist(numCommandeDataGrid) && isValidPoids(poidsCommandeDataGrid.ToString()))
-                    {
-                        commandeBDD.Poids = poidsCommandeDataGrid;
-                        commandeBDD.NumCommande = numCommandeDataGrid;
-                        AfficherTestDataGrid(true);
-                    }
-                    else
-                        AfficherTestDataGrid(false);
-                }
-                else
-                    AfficherTestDataGrid(false);
-            }
-
-            constante.cashphotoBDD.SaveChanges();
+                AfficherTestDataGrid(false);
 
             DatagGridPrep.ItemsSource = getCommandesDateToday();
-                            
+
         }
 
     }

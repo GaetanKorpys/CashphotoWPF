@@ -23,6 +23,7 @@ using System.Text.RegularExpressions;
 using CashphotoWPF.BDD;
 using Cursors = System.Windows.Input.Cursors;
 using System.Collections.ObjectModel;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace CashphotoWPF
 {
@@ -55,8 +56,7 @@ namespace CashphotoWPF
 
         private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Commande productItem = (Commande)DatagGridPrep.SelectedItem; //Datagrid bound with ProductItem 
-            System.Diagnostics.Debug.WriteLine(productItem.NumCommande);
+            //Commande commande = (Commande)DatagGridPrep.SelectedItem; 
         }
 
         private void ModifierRecap(object sender, MouseButtonEventArgs e)
@@ -120,6 +120,20 @@ namespace CashphotoWPF
             {
                 DisplayTempMessage(PrepCommandeLabel, "La commande existe déjà.");
                 DisplayTempEllipse(LedEnregistrementCommande, 255, 0, 0);
+            }
+        }
+
+        private void AfficherTestDataGrid(bool status)
+        {
+            if (status)
+            {
+                DisplayTempMessage(LabelDataGrid, "Modification OK.");
+                DisplayTempEllipse(LedDataGrid, 0, 255, 0);
+            }
+            else
+            {
+                DisplayTempMessage(LabelDataGrid, "Modification impossible.");
+                DisplayTempEllipse(LedDataGrid, 255, 0, 0);
             }
         }
 
@@ -805,30 +819,56 @@ namespace CashphotoWPF
             }
         }
 
-        private void dataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        private void dataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
             Constante constante = Constante.GetConstante();
 
-            Commande cmdDataGrid = e.Row.DataContext as Commande;         
-            
+            //La commande modifiée que l'on récupère avec la ligne du DataGrid séléctionnée
+            Commande cmdDataGrid = e.Row.DataContext as Commande;
+
             int idCommandeDataGrid = cmdDataGrid.IdCommande;
             string numCommandeDataGrid = cmdDataGrid.NumCommande;
             double poidsCommandeDataGrid = cmdDataGrid.Poids;
 
+            //On récupère la commande de la BDD avec l'ID (pas le numéro de commande).
             Commande commandeBDD = constante.cashphotoBDD.Commandes.Where(commande => commande.IdCommande == idCommandeDataGrid).FirstOrDefault();
 
-            //Check aussi les rows
-            if(!commandeExist(numCommandeDataGrid))
+            //Le numéro de commande n'est pas modifié.
+            //L'utilisateur a unqiuement modifié le poids.
+            System.Diagnostics.Debug.WriteLine("1 / " + poidsCommandeDataGrid.ToString());
+            System.Diagnostics.Debug.WriteLine("2 / " + numCommandeDataGrid);
+            if (commandeBDD.NumCommande.Equals(numCommandeDataGrid))
             {
-
+                if(isValidPoids(poidsCommandeDataGrid.ToString()))
+                {
+                    commandeBDD.Poids = poidsCommandeDataGrid;
+                    AfficherTestDataGrid(true);
+                }
+                else
+                    AfficherTestDataGrid(false);
             }
-            commandeBDD.NumCommande = numCommandeDataGrid;
-            commandeBDD.Poids = poidsCommandeDataGrid;
+            else
+            {
+                if (isValidNumCommande(numCommandeDataGrid))
+                {
+                    if (!commandeExist(numCommandeDataGrid) && isValidPoids(poidsCommandeDataGrid.ToString()))
+                    {
+                        commandeBDD.Poids = poidsCommandeDataGrid;
+                        commandeBDD.NumCommande = numCommandeDataGrid;
+                        AfficherTestDataGrid(true);
+                    }
+                    else
+                        AfficherTestDataGrid(false);
+                }
+                else
+                    AfficherTestDataGrid(false);
+            }
 
             constante.cashphotoBDD.SaveChanges();
 
             DatagGridPrep.ItemsSource = getCommandesDateToday();
                             
         }
+
     }
 }

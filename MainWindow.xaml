@@ -18,7 +18,7 @@
                     <RowDefinition Height="237*"/>
                 </Grid.RowDefinitions>
 
-                <DataGrid Name="DatagGridPrep" RowEditEnding="dataGrid_RowEditEnding"  SelectionChanged="dataGrid_SelectionChanged" Grid.Column="0" Margin="75,109,90,29" Grid.Row="1" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True">
+                <DataGrid Name="DatagGridPrep" CellEditEnding="dataGrid_CellEditEnding"  SelectionChanged="dataGrid_SelectionChanged" Grid.Column="0" Margin="75,109,90,97" Grid.Row="1" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True">
 
                     <DataGrid.Resources>
                         <Style TargetType="DataGridColumnHeader">
@@ -37,13 +37,16 @@
                     </DataGrid.Resources>
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Numéro de Commande" Binding="{Binding NumCommande, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Numéro de commande" Binding="{Binding NumCommande, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         <DataGridTextColumn Header="Poids" Binding="{Binding Poids, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         <DataGridTextColumn Header="Date" Binding="{Binding Date, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </DataGrid.Columns>
                 </DataGrid>
 
-
+                <WrapPanel Grid.RowSpan="2" VerticalAlignment="Bottom" Margin="75,0,0,35">
+                    <Ellipse x:Name="LedDataGrid" Height="25" Width="25" Canvas.Left="10" Canvas.Top="25" Margin="0,0,10,0"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Label x:Name="LabelDataGrid" Content="" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" Width="404" />
+                </WrapPanel>
 
                 <Label Content="Base de données" Grid.Row="0" Grid.Column="1" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0" Height="34" Width="151" />
                 <WrapPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" Height="32" Width="208" Margin="0,85,0,0">

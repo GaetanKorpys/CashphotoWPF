@@ -33,14 +33,72 @@ namespace CashphotoWPF
     public partial class MainWindow : Window
     {
         public List<Commande> _commandes { get; set; }
+        public Commande _commande { get; set; }
 
+
+        #region Window
+
+        /// <summary>
+        /// Construction de la fenêtre.
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
+        }
 
+        /// <summary>
+        /// Opérations à effectuer après avoir chargé la fenêtre principale.
+        /// </summary>
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
             chargementLancement();
         }
 
+        /// <summary>
+        /// Exécute plusieurs fonctions au lancement de l'application :
+        ///     - Maj des constantes
+        ///     - Création de la BDD
+        ///     - Test de connexion à la BDD
+        ///     - Affichage dans la fenêtre ...
+        /// </summary>
+        private void chargementLancement()
+        {
+            //Maj des constantes qui ne sont pas chargées depuis le fichier de config.
+            Constante constante = Constante.GetConstante();
+            constante.BDDOK = false; //On suppose que la BDD n'est pas connectée, on modifie cette valeur lors du test de connexion.
+
+            //On charge le fichier de config pour initiliser le reste des constantes dans la classe Constante
+            FichierConfig config = FichierConfig.GetInstance();
+            config.charger();
+
+            //Affichage des données dans le menu Configuartion de la fenêtre principale
+            chargerConfiguration();
+
+            //Choix du menu à afficher lors de l'ouvrture de la fenêtre, paramétré via le fichier de config.
+            //Poste 1 = Préparation, Poste 2 = Exépdition
+            TabControl.SelectedIndex = constante.indexTabItem;
+
+
+            //Le Poste de Préparation utilise une balance connectée pour renseigner le poids directement de la balance au proagramme.
+            //Le software de la balance doit être obligatoirment lancée.
+            if (constante.indexTabItem == 0)
+                ExecuteAsAdmin(GetCheminAppliBalance());
+
+            CreationBDD();
+
+            TestConnexionBDD_Click(null, null);
+
+            //Chargement du DataGrid
+            //On affiche les commandes traitées ce jour.
+            _commandes = getCommandesDateToday();
+            DatagGridPrep.ItemsSource = _commandes;
+
+        }
+
+        /// <summary>
+        /// Opérations à effectuer après avoir fermé la fenêtre.
+        /// On cherche uniqument à fermer le software de la balance connectée.
+        /// </summary>
         private void MainWindow_Closed(object sender, EventArgs e)
         {
             if (ProgramIsRunning(GetCheminAppliBalance()))
@@ -52,11 +110,136 @@ namespace CashphotoWPF
            
         }
 
-      
+        #endregion
+
+        #region ToolBox
+        /// <summary>
+        /// Exéxute l'application situé à l'emplacement fileName avec les droits administarteur.
+        /// <paramref name="fileName"/>
+        /// </summary>
+        private void ExecuteAsAdmin(string fileName)
+        {
+            Process proc = new Process();
+            //proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            proc.StartInfo.FileName = fileName;
+            proc.StartInfo.UseShellExecute = true;
+            proc.StartInfo.Verb = "runas";
+            proc.Start();
+        }
+
+        /// <summary>
+        /// Renvoie le chemin de l'application .exe de la balance connectée.
+        /// </summary>
+        private string GetCheminAppliBalance()
+        {
+            string chemin = Directory.GetParent(System.Reflection.Assembly.GetExecutingAssembly().Location).ToString();
+            chemin += "\\";
+            chemin += "activation_V3.01.exe";
+            return chemin;
+        }
+        #endregion
+
+        #region BDD
+        /// <summary>
+        /// Affichage le résultat du test de la connexion à la BDD.
+        /// Utilise la fonction TestConnexionBDD().
+        /// </summary>
+        private void TestConnexionBDD_Click(object sender, EventArgs e)
+        {
+            Constante constante = Constante.GetConstante();
+            constante.BDDOK = TestConnexionBDD();
+            AfficherTestBDD();
+        }
+
+        /// <summary>
+        /// Affiche le résultat du test de la connexion à la BDD.
+        /// </summary>
+        private void AfficherTestBDD()
+        {
+            Constante constante = Constante.GetConstante();
+            SolidColorBrush mySolidColorBrush = new SolidColorBrush();
+            if (constante.BDDOK)
+            {
+                mySolidColorBrush.Color = Color.FromRgb(0, 255, 0);
+                LabelTestBDDPrep.Content = "Connexion OK";
+                LabelTestBDDExpe.Content = "Connexion OK";
+                DisplayTempMessage(ReponseBDD, "Connexion OK");
+            }
+            else
+            {
+                mySolidColorBrush.Color = Color.FromRgb(255, 0, 0);
+                LabelTestBDDPrep.Content = "Erreur connexion";
+                LabelTestBDDExpe.Content = "Erreur connexion";
+                ReponseBDD.Content = "Erreur connexion";
+            }
+            LedTestBDDPrep.Fill = mySolidColorBrush;
+            LedTestBDDExpe.Fill = mySolidColorBrush;
+        }
+
+        /// <summary>
+        /// Création de la BDD.
+        /// </summary>
+        private void CreationBDD()
+        {
+            Constante constante = Constante.GetConstante();
+            constante.cashphotoBDD = new CashphotoBDD();
+        }
+
+        /// <summary>
+        /// Test de connexion à la BDD.
+        /// </summary>
+        private bool TestConnexionBDD()
+        {
+            Constante constante = Constante.GetConstante();
+            if (constante.cashphotoBDD.Database.CanConnect())
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Test si l'IP IpAddress est correct.
+        /// <paramref name="IpAddress"/>
+        /// </summary>
+        private bool IsValidIPAddress(string IpAddress)
+        {
+            Regex validIpV4AddressRegex = new Regex(@"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$", RegexOptions.IgnoreCase);
+
+            return validIpV4AddressRegex.IsMatch(IpAddress.Trim());
+
+        }
+
+        /// <summary>
+        /// Affiche si l'IP est validé ou non.
+        /// Si oui, met à jour l'IP (maj de la variable dans la classe Constante).
+        /// </summary>
+        private void setBDDIP(string IP)
+        {
+            Constante constante = Constante.GetConstante();
+
+            if (IsValidIPAddress(IP))
+            {
+                constante.BDDIP = IP;
+                DisplayTempMessage(ReponseBDD, "Adresse IP validée.");
+            }
+            else
+            {
+                ReponseBDD.Content = "Veuillez saisir une adresse IP valide.";
+            }
+
+        }
+        #endregion
 
         private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //Commande commande = (Commande)DatagGridPrep.SelectedItem; 
+            Commande commande = (Commande)DatagGridPrep.SelectedItem;
+            if(commande != null)
+            {
+                _commande = commande;
+                ActualiserRecapEnregistrementCommande(commande.NumCommande);
+            }
+            
         }
 
         private void ModifierRecap(object sender, MouseButtonEventArgs e)
@@ -98,12 +281,23 @@ namespace CashphotoWPF
             }
         }
 
-        private void ActualiserRecapEnregistrementCommande()
+        private void ActualiserRecapEnregistrementCommande(string? numCommande)
         {
             Constante constante = Constante.GetConstante();
-            string numCommande, poids;
-            numCommande = constante.cashphotoBDD.Commandes.OrderByDescending(p => p.IdCommande).FirstOrDefault().NumCommande;
-            poids = constante.cashphotoBDD.Commandes.OrderByDescending(p => p.IdCommande).FirstOrDefault().Poids.ToString();
+            string poids;
+
+            //Pas de paramètres, alors on affiche le récap de la dernière commande enregistrée.
+            if (numCommande == null)
+            {
+                numCommande = constante.cashphotoBDD.Commandes.OrderByDescending(p => p.IdCommande).FirstOrDefault().NumCommande;
+                poids = constante.cashphotoBDD.Commandes.OrderByDescending(p => p.IdCommande).FirstOrDefault().Poids.ToString();
+            }
+            else
+            {
+                numCommande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == numCommande).FirstOrDefault().NumCommande;
+                poids = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == numCommande).FirstOrDefault().Poids.ToString();
+            }
+
             poids = poids.Replace(",", ".");
             NumCommandeRecap.Text = numCommande;
             PoidsRecap.Text = poids;
@@ -123,18 +317,19 @@ namespace CashphotoWPF
             }
         }
 
-        private void AfficherTestDataGrid(bool status)
+        private void AfficherTestRecap(bool status)
         {
-            if (status)
+            if(status)
             {
-                DisplayTempMessage(LabelDataGrid, "Modification OK.");
-                DisplayTempEllipse(LedDataGrid, 0, 255, 0);
+                DisplayTempMessage(RecapLabel, "Modification OK.");
+                DisplayTempEllipse(LedEnregistrementRecap, 0, 255, 0);
             }
             else
             {
-                DisplayTempMessage(LabelDataGrid, "Modification impossible.");
-                DisplayTempEllipse(LedDataGrid, 255, 0, 0);
+                DisplayTempMessage(RecapLabel, "La commande existe déjà.");
+                DisplayTempEllipse(LedEnregistrementRecap, 255, 0, 0);
             }
+
         }
 
         private bool commandeExist(string numCommande)
@@ -148,33 +343,24 @@ namespace CashphotoWPF
         }
            
 
-        private bool validerCommande(string numCommande)
+        private Commande validerCommande(string numCommande)
         {
             Constante constante = Constante.GetConstante();
 
-            if (!commandeExist(numCommande))
-            {
-                Commande commande = new Commande();
-                commande.NumCommande = SaisirCommande.Text;
-                System.Diagnostics.Debug.WriteLine("Poids :" + SaisirPoids.Text);
-                
-                double poids = double.Parse(SaisirPoids.Text, CultureInfo.InvariantCulture);
-                commande.Poids = poids;
-                commande.Date = DateTime.Now;
-                commande.Prepare = true;
-                commande.Expedie = false;
+            Commande commande = new Commande();
+            commande.NumCommande = SaisirCommande.Text;
+            System.Diagnostics.Debug.WriteLine("Poids :" + SaisirPoids.Text);
 
-                constante.cashphotoBDD.Add(commande);
-                constante.cashphotoBDD.SaveChanges();
+            double poids = double.Parse(SaisirPoids.Text, CultureInfo.InvariantCulture);
+            commande.Poids = poids;
+            commande.Date = DateTime.Now;
+            commande.Prepare = true;
+            commande.Expedie = false;
 
-                //Rechargement du Datagrid
-                _commandes = getCommandesDateToday();
-                DatagGridPrep.ItemsSource = _commandes;
+            constante.cashphotoBDD.Add(commande);
+            constante.cashphotoBDD.SaveChanges();
 
-                return true;
-            }
-            else
-                return false;
+            return commande;
         }
 
         private void ActivationBoutonValider(object sender, EventArgs e)
@@ -188,9 +374,8 @@ namespace CashphotoWPF
             }
         }
 
-        private void ActiverBoutonRecap(object sender, EventArgs e)
+        private void ActiverBoutonRecap(object sender, TextChangedEventArgs e)
         {
-           System.Diagnostics.Debug.WriteLine("Test " + NumCommandeRecap.Text +" "+ PoidsRecap.Text);
            if(isValidNumCommande(NumCommandeRecap.Text) && isValidPoids(PoidsRecap.Text))
                 ValiderRecapBouton.IsEnabled = true;
            else
@@ -199,15 +384,20 @@ namespace CashphotoWPF
 
         private void EnregistrerCommande_Click(object sender, RoutedEventArgs e)
         {
-            if(validerCommande(SaisirCommande.Text))
+            if(!commandeExist(SaisirCommande.Text))
             {
+                _commande = validerCommande(SaisirCommande.Text);
                 SaisirPoids.Text = "";
                 SaisirCommande.Text = "";
                 SaisirCommande.IsEnabled = true;
                 SaisirCommande.Focus();
                 SaisirPoids.IsEnabled = false;
                 AfficherTestEnregistrementCommande(true);
-                ActualiserRecapEnregistrementCommande();
+                ActualiserRecapEnregistrementCommande(null);
+
+                //Rechargement du Datagrid
+                _commandes = getCommandesDateToday();
+                DatagGridPrep.ItemsSource = _commandes;
             }
             else
             {
@@ -266,15 +456,20 @@ namespace CashphotoWPF
             {
                 if (isValidPoids(SaisirPoids.Text))
                 {
-                    if(validerCommande(SaisirCommande.Text))
+                    if(!commandeExist(SaisirCommande.Text))
                     {
+                        _commande = validerCommande(SaisirCommande.Text);
                         SaisirPoids.Text = "";
                         SaisirCommande.Text = "";
                         SaisirCommande.IsEnabled = true;
                         SaisirCommande.Focus();
                         SaisirPoids.IsEnabled = false;
                         AfficherTestEnregistrementCommande(true);
-                        ActualiserRecapEnregistrementCommande();
+                        ActualiserRecapEnregistrementCommande(null);
+
+                        //Rechargement du Datagrid
+                        _commandes = getCommandesDateToday();
+                        DatagGridPrep.ItemsSource = _commandes;
                     }
                     else
                     {
@@ -331,39 +526,6 @@ namespace CashphotoWPF
             return isRunning;
         }
 
-
-        /// <summary>
-        /// Exécute plusieurs fonctions au lancement de l'application :
-        ///     - Maj des constantes
-        ///     - Test BDD
-        ///     - Affichage dans la fenêtre ...
-        /// </summary>
-        private void chargementLancement()
-        {
-            //Maj des constantes au lancement
-            Constante constante = Constante.GetConstante();
-            constante.BDDOK = false; //On suppose que la BDD n'est pas connectée, on modifie cette valeur lors du test de connexion.
-            
-            //On charge le fichier de config pour initiliser les constantes dans la classe Constante
-            FichierConfig config = FichierConfig.GetInstance();
-            config.charger();
-            //Affichage dans le menu Configuartion
-            chargerConfiguration();
-
-            //L'utilisateur atterit sur le menu chargé dpuis le fichier de config | Poste 1 = Préparation, Poste 2 = Exépdition
-            TabControl.SelectedIndex = constante.indexTabItem;
-
-            if (constante.indexTabItem == 0)
-                ExecuteAsAdmin(GetCheminAppliBalance());
-            
-            CreationBDD();
-
-            TestConnexionBDD(null, null);
-
-            _commandes = getCommandesDateToday();
-            DatagGridPrep.ItemsSource = _commandes;
-            
-        }
 
         private void ModificationActived(object sender, EventArgs e)
         {
@@ -422,24 +584,6 @@ namespace CashphotoWPF
             return commandes;
         }
 
-        private string GetCheminAppliBalance()
-        {
-            string chemin = Directory.GetParent(System.Reflection.Assembly.GetExecutingAssembly().Location).ToString();
-            chemin += "\\";
-            chemin += "activation_V3.01.exe";
-            return chemin;
-        }
-
-        private void ExecuteAsAdmin(string fileName)
-        {
-            Process proc = new Process();
-            proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            proc.StartInfo.FileName = fileName;
-            proc.StartInfo.UseShellExecute = true;
-            proc.StartInfo.Verb = "runas";
-            proc.Start();
-        }
-
         private void DisplayTempMessage(System.Windows.Controls.Label label, string message)
         {
             label.Content = message; //affichage du message
@@ -461,75 +605,7 @@ namespace CashphotoWPF
             ellipse.Fill = mySolidColorBrush;
         }
 
-        private void TestConnexionBDD(object sender, EventArgs e)
-        {
-            Constante constante = Constante.GetConstante();
-            constante.BDDOK = ConnexionBDD();
-            AfficherTestBDD();
-        }
-
-        private void AfficherTestBDD()
-        {
-            Constante constante = Constante.GetConstante();
-            SolidColorBrush mySolidColorBrush = new SolidColorBrush();
-            if (constante.BDDOK)
-            {
-                mySolidColorBrush.Color = Color.FromRgb(0, 255, 0);
-                LabelTestBDDPrep.Content = "Connexion OK";
-                LabelTestBDDExpe.Content = "Connexion OK";
-                DisplayTempMessage(ReponseBDD, "Connexion OK");
-            }
-            else
-            {
-                mySolidColorBrush.Color = Color.FromRgb(255, 0, 0);
-                LabelTestBDDPrep.Content = "Erreur connexion";
-                LabelTestBDDExpe.Content = "Erreur connexion";
-                ReponseBDD.Content = "Erreur connexion";
-            }
-            LedTestBDDPrep.Fill = mySolidColorBrush;
-            LedTestBDDExpe.Fill = mySolidColorBrush;
-        }
-
-        private void CreationBDD()
-        {
-            Constante constante = Constante.GetConstante();
-            constante.cashphotoBDD = new CashphotoBDD();
-           
-        }
-
-        private bool ConnexionBDD()
-        {
-            Constante constante = Constante.GetConstante();
-            if(constante.cashphotoBDD.Database.CanConnect())
-            {
-                return true;
-            }          
-            return false;
-        }
-
-        private bool IsValidIPAddress(string IpAddress)
-        {
-            Regex validIpV4AddressRegex = new Regex(@"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]).){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$", RegexOptions.IgnoreCase);
-          
-            return validIpV4AddressRegex.IsMatch(IpAddress.Trim());
-            
-        }
-
-        private void setBDDIP(string IP)
-        {
-            Constante constante = Constante.GetConstante();
-
-            if(IsValidIPAddress(IP))
-            {
-                constante.BDDIP = IP;
-                DisplayTempMessage(ReponseBDD, "Adresse IP validée.");
-            }
-            else
-            {
-                ReponseBDD.Content = "Veuillez saisir une adresse IP valide.";
-            }
-            
-        }
+        
 
         /// <summary>
         /// Pour afficher les chemins et autres paramètres dans le menu Configuartion
@@ -612,14 +688,29 @@ namespace CashphotoWPF
 
         // -------------- Bouton --------------
 
-        private void ValiderRecap(object sender, EventArgs e)
+        private void ValiderRecap(object sender, RoutedEventArgs e)
         {
+
             Constante constante = Constante.GetConstante();
-            Commande commande = constante.cashphotoBDD.Commandes.OrderByDescending(p => p.IdCommande).FirstOrDefault();
-            commande.NumCommande = NumCommandeRecap.Text;
-            double poids = double.Parse(PoidsRecap.Text, CultureInfo.InvariantCulture);
-            commande.Poids = poids;
-            constante.cashphotoBDD.SaveChanges();
+            
+            Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.IdCommande == _commande.IdCommande).FirstOrDefault();
+
+            if(!commandeExist(NumCommandeRecap.Text))
+            {
+                commande.NumCommande = NumCommandeRecap.Text;
+                double poids = double.Parse(PoidsRecap.Text, CultureInfo.InvariantCulture);
+                commande.Poids = poids;
+
+                constante.cashphotoBDD.SaveChanges();
+                AfficherTestRecap(true);
+
+                //Rechargement du Datagrid
+                _commandes = getCommandesDateToday();
+                DatagGridPrep.ItemsSource = _commandes;
+            }
+            else
+                AfficherTestRecap(false);
+
         }
          
         private void effacerTextbox(object sender, EventArgs e)
@@ -819,56 +910,61 @@ namespace CashphotoWPF
             }
         }
 
-        private void dataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
-        {
-            Constante constante = Constante.GetConstante();
+        
 
-            //La commande modifiée que l'on récupère avec la ligne du DataGrid séléctionnée
-            Commande cmdDataGrid = e.Row.DataContext as Commande;
+        /*
+private void dataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+{
+   Constante constante = Constante.GetConstante();
 
-            if(e.Column.Header.Equals("Numéro de commande"))
-            {
-                System.Diagnostics.Debug.WriteLine("YA");
-            }
-            int idCommandeDataGrid = cmdDataGrid.IdCommande;
-            string numCommandeDataGrid = cmdDataGrid.NumCommande;
-            double poidsCommandeDataGrid = cmdDataGrid.Poids;
+   //La commande modifiée que l'on récupère avec la ligne du DataGrid séléctionnée
+   Commande cmdDataGrid = e.Row.DataContext as Commande;
 
-            //On récupère la commande de la BDD avec l'ID (pas le numéro de commande).
-            Commande commandeBDD = constante.cashphotoBDD.Commandes.Where(commande => commande.IdCommande == idCommandeDataGrid).FirstOrDefault();
+   System.Diagnostics.Debug.WriteLine("cell "+((TextBox)e.EditingElement).Text);
 
-            //Le numéro de commande n'est pas modifié.
-            //L'utilisateur a unqiuement modifié le poids.
-            System.Diagnostics.Debug.WriteLine("1 / " + poidsCommandeDataGrid.ToString());
-            System.Diagnostics.Debug.WriteLine("2 / " + numCommandeDataGrid);
-            if (commandeBDD.NumCommande.Equals(numCommandeDataGrid) && isValidPoids(poidsCommandeDataGrid.ToString()))
-            {
-                System.Diagnostics.Debug.WriteLine("A ");
-                System.Diagnostics.Debug.WriteLine("A DT"+ numCommandeDataGrid);
-                System.Diagnostics.Debug.WriteLine("A BDD "+ commandeBDD.NumCommande);
-                commandeBDD.Poids = poidsCommandeDataGrid;
-                AfficherTestDataGrid(true);
+   if (e.Column.Header.Equals("Numéro de commande"))
+   {
+       System.Diagnostics.Debug.WriteLine("YA");
+   }
+   int idCommandeDataGrid = cmdDataGrid.IdCommande;
+   string numCommandeDataGrid = cmdDataGrid.NumCommande;
+   double poidsCommandeDataGrid = cmdDataGrid.Poids;
 
-                constante.cashphotoBDD.SaveChanges();
-                
-            }
-            else if (isValidNumCommande(numCommandeDataGrid) &&
-                    !commandeExist(numCommandeDataGrid) &&
-                    isValidPoids(poidsCommandeDataGrid.ToString()))
-            {
-                System.Diagnostics.Debug.WriteLine("D ");
-                commandeBDD.Poids = poidsCommandeDataGrid;
-                commandeBDD.NumCommande = numCommandeDataGrid;
-                AfficherTestDataGrid(true);
+   //On récupère la commande de la BDD avec l'ID (pas le numéro de commande).
+   Commande commandeBDD = constante.cashphotoBDD.Commandes.Where(commande => commande.IdCommande == idCommandeDataGrid).FirstOrDefault();
 
-                constante.cashphotoBDD.SaveChanges();
-            }
-            else
-                AfficherTestDataGrid(false);
+   //Le numéro de commande n'est pas modifié.
+   //L'utilisateur a unqiuement modifié le poids.
+   System.Diagnostics.Debug.WriteLine("1 / " + poidsCommandeDataGrid.ToString());
+   System.Diagnostics.Debug.WriteLine("2 / " + numCommandeDataGrid);
+   if (commandeBDD.NumCommande.Equals(numCommandeDataGrid) && isValidPoids(poidsCommandeDataGrid.ToString()))
+   {
+       System.Diagnostics.Debug.WriteLine("A ");
+       System.Diagnostics.Debug.WriteLine("A DT"+ numCommandeDataGrid);
+       System.Diagnostics.Debug.WriteLine("A BDD "+ commandeBDD.NumCommande);
+       commandeBDD.Poids = poidsCommandeDataGrid;
+       AfficherTestDataGrid(true); 
 
-            DatagGridPrep.ItemsSource = getCommandesDateToday();
+       constante.cashphotoBDD.SaveChanges();
 
-        }
+   }
+   else if (isValidNumCommande(numCommandeDataGrid) &&
+           !commandeExist(numCommandeDataGrid) &&
+           isValidPoids(poidsCommandeDataGrid.ToString()))
+   {
+       System.Diagnostics.Debug.WriteLine("D ");
+       commandeBDD.Poids = poidsCommandeDataGrid;
+       commandeBDD.NumCommande = numCommandeDataGrid;
+       AfficherTestDataGrid(true);
 
+       constante.cashphotoBDD.SaveChanges();
+   }
+   else
+       AfficherTestDataGrid(false);
+
+   DatagGridPrep.ItemsSource = getCommandesDateToday();
+
+}
+*/
     }
 }

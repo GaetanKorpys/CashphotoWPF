@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CashphotoWPF"
         Title="Cashphoto" Height="720" Width="1280" Background="White"
-        Closed="MainWindow_Closed">
+        Closed="MainWindow_Closed"
+        Loaded="MainWindow_Loaded">
+        
     <TabControl x:Name="TabControl" SelectionChanged="GestionTabItem">
         <TabItem x:Name="Preparation" Header="Préparation" FontSize="18" Margin="99,-2,-228,0" HorizontalAlignment="Stretch" VerticalAlignment="Center">
             <Grid>
@@ -18,7 +20,7 @@
                     <RowDefinition Height="237*"/>
                 </Grid.RowDefinitions>
 
-                <DataGrid Name="DatagGridPrep" CellEditEnding="dataGrid_CellEditEnding"  SelectionChanged="dataGrid_SelectionChanged" Grid.Column="0" Margin="75,109,90,97" Grid.Row="1" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True">
+                <DataGrid Name="DatagGridPrep" SelectionChanged="dataGrid_SelectionChanged" Grid.Column="0" Margin="75,109,90,97" Grid.Row="1" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True">
 
                     <DataGrid.Resources>
                         <Style TargetType="DataGridColumnHeader">
@@ -66,17 +68,16 @@
                 </WrapPanel>
 
                 <WrapPanel Grid.RowSpan="2" VerticalAlignment="Top" Margin="75,143,0,0">
-                    <Ellipse x:Name="LedEnregistrementCommande" Height="25" Width="25" Canvas.Left="10" Canvas.Top="25" Margin="0,0,10,0"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Ellipse x:Name="LedEnregistrementCommande" Height="25" Width="25" Canvas.Left="10" Canvas.Top="25" Margin="70,0,10,0"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <Label x:Name="PrepCommandeLabel" Content="" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" Width="404" />
                 </WrapPanel>
 
                 <WrapPanel VerticalAlignment="Top" Margin="75,46,48,0" Height="32" Grid.Row="1">
                     <Label Content="Rechercher une commande :" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Width="240"/>
                     <TextBox x:Name="RechercherCommande1" TextChanged="rechercheCommande_TextChanged" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Width="231"/>
-                    <CheckBox Content="Activer modification" Margin="20,0,5,0" Checked="ModificationActived" Unchecked="ModificationDesactived" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </WrapPanel>
 
-                <Label Content="Dernier colis validé" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" Margin="0,10,0,0" Height="34" Width="171" />
+                <Label Content="Récapitulatif de la commande" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" Margin="0,10,0,0" Height="34" Width="269" />
 
                 <Label Content="Numéro commande :" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,80,0,0" Height="34" Width="178" />
                 <TextBox x:Name="NumCommandeRecap" TextChanged="ActiverBoutonRecap" LostFocus="Recap_LostFocus" FocusableChanged="Recap_FocusableChanged" BorderThickness="0" MouseDoubleClick="ModifierRecap" Cursor="Arrow" Focusable="False" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,85,30,0" Width="185" Height="30" />
@@ -85,6 +86,12 @@
                 <TextBox x:Name="PoidsRecap" TextChanged="ActiverBoutonRecap" LostFocus="Recap_LostFocus" FocusableChanged="Recap_FocusableChanged" BorderThickness="0" MouseDoubleClick="ModifierRecap" Grid.Row="1" Grid.Column="1" Cursor="Arrow" Focusable="False" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,125,30,0" Width="185" Height="30" />
 
                 <Button x:Name="ValiderRecapBouton" Click="ValiderRecap" IsEnabled="False" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" Content="Valider les modifications" Width="154" Height="32" FontSize="12" Margin="0,176,0,0"/>
+
+                <WrapPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" Margin="0,220,0,0" HorizontalAlignment="Center">
+                    <Ellipse x:Name="LedEnregistrementRecap" Height="25" Width="25" Canvas.Left="10" Canvas.Top="25" Margin="80,0,10,0"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Label x:Name="RecapLabel" Content="" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Width="290" Margin="10,0,0,0" />
+                </WrapPanel>
+
             </Grid>
         </TabItem>
         <TabItem x:Name="Expedition" Header="Expédition" FontSize="18" Margin="356,-2,-512,0" VerticalAlignment="Center" HorizontalAlignment="Stretch">
@@ -286,7 +293,7 @@
                         <TextBox x:Name="BDDAdresseTextBox" KeyDown="ValiderIP"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="144" MaxLines="1" Padding="5,4,4,4" Margin="20,0,0,0"  />
                         <Button x:Name="ModifierBDDIPButton" Click="ValiderIP" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Valider" Height="25"  FontSize="12" Width="56" Margin="20,0,0,0"/>
                     </WrapPanel>
-                    <Button x:Name="TestConnexionBDDButton" Click="TestConnexionBDD" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Tester la connexion" Height="25" FontSize="12" Width="132" Margin="75,10,0,0"/>
+                    <Button x:Name="TestConnexionBDDButton" Click="TestConnexionBDD_Click" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Tester la connexion" Height="25" FontSize="12" Width="132" Margin="75,10,0,0"/>
                     <Label x:Name="ReponseBDD" Grid.Row="3" Content="" VerticalAlignment="Top" HorizontalAlignment="Left" Height="29" FontSize="14" Width="265" Margin="245,4,0,0" />
                 </Grid>
                 <Grid Grid.Row="2" Grid.Column="1" Margin="0,1,0,0">

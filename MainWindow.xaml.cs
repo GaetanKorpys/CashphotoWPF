@@ -783,7 +783,21 @@ namespace CashphotoWPF
             //On utilise _commande
             Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.IdCommande == _commande.IdCommande).FirstOrDefault();
 
-            if (!commandeExist(NumCommandeRecap.Text))
+            //L'utilisateur ne modifie pas le numéro de commande
+            //Alors pas besoin de vérifier s'il est valide ou si une commande existe déjà.
+            if(commande.NumCommande == NumCommandeRecap.Text)
+            {
+                double poids = double.Parse(PoidsRecap.Text, CultureInfo.InvariantCulture);
+                commande.Poids = poids;
+
+                constante.cashphotoBDD.SaveChanges();
+                AfficherTestRecap(true);
+
+                //Rechargement du Datagrid
+                _commandes = getCommandesDateToday();
+                DatagGridPrep.ItemsSource = _commandes;
+            }
+            else if (!commandeExist(NumCommandeRecap.Text))
             {
                 commande.NumCommande = NumCommandeRecap.Text;
                 double poids = double.Parse(PoidsRecap.Text, CultureInfo.InvariantCulture);
@@ -796,6 +810,7 @@ namespace CashphotoWPF
                 _commandes = getCommandesDateToday();
                 DatagGridPrep.ItemsSource = _commandes;
             }
+
             else
                 AfficherTestRecap(false);
 

@@ -58,7 +58,7 @@
 
                 <WrapPanel Grid.RowSpan="2" VerticalAlignment="Top" Margin="75,50,0,0" Height="31">
                     <Label Content="Entrer le numéro de commande :" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Width="270"/>
-                    <TextBox x:Name="SaisirCommande" KeyDown="SaisiNumCommande_KeyDown" IsEnabled="True" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Width="249"/>
+                    <TextBox x:Name="SaisirCommande" GotFocus="BloquerFocusPoids" KeyDown="SaisiNumCommande_KeyDown" IsEnabled="True" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Width="249"/>
                 </WrapPanel>
 
                 <WrapPanel Grid.RowSpan="2" VerticalAlignment="Top" Margin="75,100,0,0" Height="32">

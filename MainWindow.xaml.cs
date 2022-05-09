@@ -855,6 +855,14 @@ namespace CashphotoWPF
         }
 
         /// <summary>
+        /// Le TextBox du poids n'est plus Enabled lorsque l'utilisateur clique sur le TextBox numéro de commande. 
+        /// </summary>
+        private void BloquerFocusPoids(object sender, RoutedEventArgs e)
+        {
+            SaisirPoids.IsEnabled = false;
+        }
+
+        /// <summary>
         /// On traite la commande si elle n'existe pas dans la BDD.
         /// Les vérifications concernant le numéro de commande et le poids sont effectués préalablement.
         /// Si la commande est bien une nouvelle commande on effectue plusieurs opérations :

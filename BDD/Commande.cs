@@ -14,7 +14,7 @@ namespace CashphotoWPF.BDD
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IdCommande { get; set; }
         public string NumCommande { get; set; }
-        public double Poids { get; set; }
+        public double? Poids { get; set; }
         public string? NomClientFacturation { get; set; }
         public string? NomClientLivraison { get; set; }
         public string? TelClientFacturation { get; set; }
@@ -28,8 +28,9 @@ namespace CashphotoWPF.BDD
         public string? Adresse3 { get; set; }
         public string? Site { get; set; }
         public DateTime Date { get; set; }
-        public bool Prepare { get; set; }
-        public bool Expedie { get; set; }
+        public bool Preparer { get; set; }
+        public bool Expedier { get; set; }
+        public bool Completer { get; set; }
         public string? NumeroSuivi { get; set; }
     }
 }

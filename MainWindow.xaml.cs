@@ -176,8 +176,9 @@ namespace CashphotoWPF
             double poidsD = double.Parse(poids, CultureInfo.InvariantCulture);
             commande.Poids = poidsD;
             commande.Date = DateTime.Now;
-            commande.Prepare = true;
-            commande.Expedie = false;
+            commande.Preparer = true;
+            commande.Expedier = false;
+            commande.Completer = false;
 
             constante.cashphotoBDD.Add(commande);
             constante.cashphotoBDD.SaveChanges();
@@ -1014,11 +1015,11 @@ namespace CashphotoWPF
                 commandesTable = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande.Contains(numCmd));
                 if (constante.commandeExpedie)
                 {
-                    commandesTable = commandesTable.Where(commande => commande.Expedie == true);
+                    commandesTable = commandesTable.Where(commande => commande.Expedier == true);
                 }
                 else
                 {
-                    commandesTable = commandesTable.Where(commande => commande.Expedie == false);
+                    commandesTable = commandesTable.Where(commande => commande.Expedier == false);
                 }
                 commandesTable = commandesTable.OrderByDescending(commande => commande.Date);
                 commandes = commandesTable.ToList();

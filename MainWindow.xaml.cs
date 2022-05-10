@@ -45,6 +45,8 @@ namespace CashphotoWPF
         //ou qu'il séléctionne une ligne dans le DataGrid.
         private Commande _commande { get; set; }
 
+        private RechercheEnBoucle _rechercheEnBoucle;
+
 
         #region Window
 
@@ -62,6 +64,8 @@ namespace CashphotoWPF
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             chargementLancement();
+            _rechercheEnBoucle = new RechercheEnBoucle(this);
+            
         }
 
         /// <summary>
@@ -116,6 +120,7 @@ namespace CashphotoWPF
                 killProcessBalance();
             }
                 
+            _rechercheEnBoucle.StopRecherche();
             Close();
            
         }
@@ -1048,7 +1053,18 @@ namespace CashphotoWPF
         #endregion
 
         #region Expédition
+        public void ImporterCommandes() 
+        {
+            Importation importation = new Importation();
 
+            int nbcommandes = importation.ImportCommandes();
+            if (nbcommandes != 0)
+            {
+                string import = nbcommandes + " commande(s) importée(s). " + Regex.Replace(System.DateTime.Now.TimeOfDay.ToString(), "\\.\\d+$", "");
+                DisplayTempMessage(NbCommandeImport, import);
+            }
+            
+        }
         #endregion
 
         /// <summary>

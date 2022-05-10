@@ -13,6 +13,7 @@ namespace CashphotoWPF.BDD
     {
         public CashphotoBDD()
         {
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 

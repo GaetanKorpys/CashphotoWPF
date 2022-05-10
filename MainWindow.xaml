@@ -97,9 +97,9 @@
         <TabItem x:Name="Expedition" Header="Expédition" FontSize="18" Margin="356,-2,-512,0" VerticalAlignment="Center" HorizontalAlignment="Stretch">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="857*"/>
-                    <ColumnDefinition Width="184*"/>
-                    <ColumnDefinition Width="233*"/>
+                    <ColumnDefinition Width="61*"/>
+                    <ColumnDefinition Width="30*"/>
+
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="128*"/>
@@ -116,12 +116,19 @@
                     <TextBox Grid.Row="0" Grid.Column="1" x:Name="RechercherCommande" Width="217" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <CheckBox Grid.Column="2" Content="Commandes déjà expédiées" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
-                <WrapPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,9,0,0">
+
+                <Label Content="Base de données" Grid.Row="0" Grid.Column="1" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0" Height="34" Width="150" />
+                <WrapPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" Height="32" Width="208" Margin="0,85,0,0">
+                    <Ellipse x:Name="LedTestBDDExpe" Height="25" Width="25" Fill="Red" Canvas.Left="10" Canvas.Top="25" Margin="0,0,10,0"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Label x:Name="LabelTestBDDExpe" Content="" FontSize="20" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Visibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Center" Width="167" Height="38"/>
+                </WrapPanel>
+
+                <WrapPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0" Height="30" Width="746">
                     <Button Content="Envoyer commande" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Height="30" Width="190" Margin="0,0,40,0"/>
                     <Button Content="Modifier poids commande" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Height="30" Width="248"/>
                     <Button Content="Rechercher commande" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40,0,0,0" FontWeight="Bold" Height="30" Width="228"/>
                 </WrapPanel>
-                <WrapPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,443,0,0" Grid.RowSpan="2">
+                <WrapPanel Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top">
                     <WrapPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <Label FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center">Transporteur :</Label>
                         <RadioButton GroupName="sex" HorizontalAlignment="Stretch" VerticalAlignment="Center">GLS</RadioButton>
@@ -129,11 +136,8 @@
                     </WrapPanel>
                     <Label x:Name="ExpediteurLabel" Grid.Column="1" Content="COLIPOSTE" Margin="50,0,5,5" FontSize="36" FontWeight="Normal" FontFamily="Bahnschrift SemiBold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Bottom" Background="#FFFB8E59" Height="91" HorizontalAlignment="Center"/>
                 </WrapPanel>
-                <WrapPanel Grid.Column="1" VerticalAlignment="Center" Grid.ColumnSpan="2">
-                    <Ellipse x:Name="LedTestBDDExpe" Height="25" Width="25" Fill="Red" Canvas.Left="10" Canvas.Top="25" Margin="45,20,20,20"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <Label x:Name="LabelTestBDDExpe" Content="" FontSize="20" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Visibility="Visible" HorizontalAlignment="Center" VerticalAlignment="Center" Width="288"/>
-                </WrapPanel>
-                <Grid Grid.Column="1" Grid.ColumnSpan="2" Margin="0,128,0,0" Grid.RowSpan="2">
+
+                <Grid Grid.Column="1" Margin="0,128,0,0" Grid.RowSpan="2">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="1*"/>
@@ -163,22 +167,61 @@
                     <TextBox x:Name="PaysLivraisonTextBox" HorizontalAlignment="Stretch" Grid.Row="10" Text="Pays" Background="Transparent" BorderThickness="0" IsReadOnly="True" TextWrapping="Wrap" VerticalAlignment="Stretch" TextAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="18" Visibility="Hidden"/>
                     <TextBox x:Name="EmailCommande" HorizontalAlignment="Stretch" Grid.Row="11" Text="Adresse e-mail" Background="Transparent" BorderThickness="0" IsReadOnly="True" TextWrapping="Wrap" VerticalAlignment="Stretch" TextAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="18" Visibility="Hidden"/>
                 </Grid>
-                <UniformGrid Grid.Column="0" Columns="1" Rows="2" Margin="0,128,0,0" Grid.RowSpan="2">
-                    <DataGrid
-                                SelectedValue="{Binding SelectedRowDatagrid}" 
-                                Name="datagrid"
-                                FontSize="18"
-                                IsReadOnly="True"
-                                SelectionMode="Single"
-                                VerticalAlignment="Top"/>
-                    <DataGrid
-                                SelectedValue="{Binding SelectedRowDatagrid}" 
-                                x:Name="datagriditem"
-                                FontSize="14"
-                                IsReadOnly="True"
-                                VerticalAlignment="Top"/>
-                </UniformGrid>
-                <Label x:Name="NbCommandeImport" Content="" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="40,0,0,10" />
+
+                <DataGrid Name="DatagGridExpe" SelectionChanged="dataGrid_SelectionChanged" Grid.Column="0" Margin="20,128,40,237" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True" Grid.RowSpan="2">
+
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridColumnHeader">
+
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="DataGridCell">
+                                        <ContentPresenter HorizontalAlignment="Center" />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.Resources>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Numéro de commande" Binding="{Binding NumCommande, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Poids" Binding="{Binding Poids, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Date" Binding="{Binding Date, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Nom" Binding="{Binding NomClientFacturation, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <DataGrid Name="DatagGridArticle" SelectionChanged="dataGrid_SelectionChanged" Grid.Column="0" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True" Grid.Row="1" VerticalAlignment="Center" Height="172" Margin="20,170,40,0">
+
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridColumnHeader">
+
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        </Style>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="DataGridCell">
+                                        <ContentPresenter HorizontalAlignment="Center" />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.Resources>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Code" Binding="{Binding NumCommande, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Nom" Binding="{Binding Poids, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Quantite" Binding="{Binding Date, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Prix TTC" Binding="{Binding NomClientFacturation, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+
+                <Label x:Name="NbCommandeImport" Content="" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="40,0,0,10" Height="34" Width="10" />
             </Grid>
         </TabItem>
         <TabItem x:Name="Configuration"  Header="Configuration" FontSize="18" Margin="629,-1,-766,0" VerticalAlignment="Top">

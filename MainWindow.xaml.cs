@@ -64,7 +64,7 @@ namespace CashphotoWPF
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             chargementLancement();
-            _rechercheEnBoucle = new RechercheEnBoucle(this);
+            
             
         }
 
@@ -97,6 +97,12 @@ namespace CashphotoWPF
             //Le software de la balance doit être obligatoirment lancée.
             if (constante.indexTabItem == 0)
                 ExecuteAsAdmin(GetCheminAppliBalance());
+            else if (constante.indexTabItem == 1)
+            {
+                CreerDossier();
+                _rechercheEnBoucle = new RechercheEnBoucle(this);
+            }
+                
 
             CreationBDD();
 
@@ -128,6 +134,48 @@ namespace CashphotoWPF
         #endregion
 
         #region ToolBox
+
+        /// <summary>
+        /// Création des dossier (pour l'import et l'export) s'ils n'existent pas.
+        /// </summary>
+        private void CreerDossier()
+        {
+            Constante constante = Constante.GetConstante();
+            System.Diagnostics.Debug.WriteLine("Dir " + constante.commandeAmazon);
+            //Les dossiers d'import
+            if(!Directory.Exists(constante.commandeAmazon))
+                Directory.CreateDirectory(constante.commandeAmazon);
+            if (!Directory.Exists(constante.commandeCashphoto))
+                Directory.CreateDirectory(constante.commandeCashphoto);
+            if (!Directory.Exists(constante.numeroSuiviColiposte))
+                Directory.CreateDirectory(constante.numeroSuiviColiposte);
+
+            //Les dossiers d'export
+            if (!Directory.Exists(constante.numeroSuiviAmazon))
+                Directory.CreateDirectory(constante.numeroSuiviAmazon);
+            if (!Directory.Exists(constante.numeroSuiviCashphoto))
+                Directory.CreateDirectory(constante.numeroSuiviCashphoto);
+
+            if (!Directory.Exists(constante.commandeParsePourGLS))
+                Directory.CreateDirectory(constante.commandeParsePourGLS);
+            if (!Directory.Exists(constante.commandeParsePourColiposte))
+                Directory.CreateDirectory(constante.commandeParsePourColiposte);
+
+            //Les dossiers de backup
+            if (!Directory.Exists(constante.backupCommandeAmazon))
+                Directory.CreateDirectory(constante.backupCommandeAmazon);
+            if (!Directory.Exists(constante.backupCommandeCashphoto))
+                Directory.CreateDirectory(constante.backupCommandeCashphoto);
+            if (!Directory.Exists(constante.backupNumeroSuiviAmazon))
+                Directory.CreateDirectory(constante.backupNumeroSuiviCashphoto);
+            if (!Directory.Exists(constante.backupCommandeTransporteurGLS))
+                Directory.CreateDirectory(constante.backupCommandeTransporteurGLS);
+            if (!Directory.Exists(constante.backupCommandeTransporteurColiposte))
+                Directory.CreateDirectory(constante.backupCommandeTransporteurColiposte);
+        }   
+
+
+
         /// <summary>
         /// Exéxute l'application situé à l'emplacement fileName avec les droits administarteur.
         /// <paramref name="fileName"/>
@@ -428,6 +476,69 @@ namespace CashphotoWPF
             }
 
         }
+
+        /// <summary>
+        /// Recherche les commandes dans la BDD ayant un numéro de commande correspondant avec celui dans la barre de recherche. 
+        /// </summary>
+        /// <param name="numCmd">Le numéro de la commande (pas forcement complet) à rechercher, celui entré dans la barre de recherche.</param>
+        /// <returns>Une liste de commande</returns>
+        private List<Commande> getCommandesRecherche(string numCmd)
+        {
+            List<Commande> commandes = new List<Commande>();
+            Constante constante = Constante.GetConstante();
+            IQueryable<Commande> commandesTable;
+
+            if (constante.BDDOK)
+            {
+                commandesTable = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande.Contains(numCmd));
+                if (constante.commandeExpedie)
+                {
+                    commandesTable = commandesTable.Where(commande => commande.Expedier == true);
+                }
+                else
+                {
+                    commandesTable = commandesTable.Where(commande => commande.Expedier == false);
+                }
+                commandesTable = commandesTable.OrderByDescending(commande => commande.Date);
+                commandes = commandesTable.ToList();
+            }
+            return commandes;
+        }
+
+        /// <summary>
+        /// Recherche les commandes dans la BDD qui ont pour date la date d'aujourd'hui.
+        /// </summary>
+        /// <returns>Une liste de commande</returns>
+        private List<Commande> getCommandesDateToday()
+        {
+            List<Commande> commandes = new List<Commande>();
+            Constante constante = Constante.GetConstante();
+            IQueryable<Commande> commandesTable;
+
+            if (constante.BDDOK)
+            {
+                commandesTable = constante.cashphotoBDD.Commandes.Where(commande => commande.Date.Date == DateTime.Today);
+                commandesTable = commandesTable.OrderByDescending(commande => commande.Date);
+                commandes = commandesTable.ToList();
+            }
+            return commandes;
+        }
+
+        private List<Article> getArticlesFromCommande(string numCommande)
+        {
+            List<Article> articles = new List<Article>();
+            Constante constante = Constante.GetConstante();
+            IQueryable<Article> articlesTable;
+
+            if (constante.BDDOK)
+            {
+                articlesTable = constante.cashphotoBDD.Articles.Where(article => article.NumCommande == numCommande);
+
+                articles = articlesTable.ToList();
+            }
+            return articles;
+        }
+        
         #endregion
 
         #region Configuration
@@ -988,6 +1099,7 @@ namespace CashphotoWPF
             {
                 _commande = commande;
                 ActualiserRecapEnregistrementCommande(commande.NumCommande);
+                ActualiserDataGridArticle(commande.NumCommande);
             }
         }
 
@@ -1004,55 +1116,16 @@ namespace CashphotoWPF
             DatagGridPrep.ItemsSource = _commandes;
         }
 
-        /// <summary>
-        /// Recherche les commandes dans la BDD ayant un numéro de commande correspondant avec celui dans la barre de recherche. 
-        /// </summary>
-        /// <param name="numCmd">Le numéro de la commande (pas forcement complet) à rechercher, celui entré dans la barre de recherche.</param>
-        /// <returns>Une liste de commande</returns>
-        private List<Commande> getCommandesRecherche(string numCmd)
-        {
-            List<Commande> commandes = new List<Commande>();
-            Constante constante = Constante.GetConstante();
-            IQueryable<Commande> commandesTable;
-
-            if (constante.BDDOK)
-            {
-                commandesTable = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande.Contains(numCmd));
-                if (constante.commandeExpedie)
-                {
-                    commandesTable = commandesTable.Where(commande => commande.Expedier == true);
-                }
-                else
-                {
-                    commandesTable = commandesTable.Where(commande => commande.Expedier == false);
-                }
-                commandesTable = commandesTable.OrderByDescending(commande => commande.Date);
-                commandes = commandesTable.ToList();
-            }
-            return commandes;
-        }
-
-        /// <summary>
-        /// Recherche les commandes dans la BDD qui ont pour date la date d'aujourd'hui.
-        /// </summary>
-        /// <returns>Une liste de commande</returns>
-        private List<Commande> getCommandesDateToday()
-        {
-            List<Commande> commandes = new List<Commande>();
-            Constante constante = Constante.GetConstante();
-            IQueryable<Commande> commandesTable;
-
-            if (constante.BDDOK)
-            {
-                commandesTable = constante.cashphotoBDD.Commandes.Where(commande => commande.Date.Date == DateTime.Today);
-                commandesTable = commandesTable.OrderByDescending(commande => commande.Date);
-                commandes = commandesTable.ToList();
-            }
-            return commandes;
-        }
+        
         #endregion
 
         #region Expédition
+
+        private void ActualiserDataGridArticle(string numCommande)
+        {
+            DatagGridArticle.ItemsSource = getArticlesFromCommande(numCommande);
+        }
+
         public void ImporterCommandes() 
         {
             Importation importation = new Importation();

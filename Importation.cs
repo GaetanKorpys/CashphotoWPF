@@ -123,11 +123,15 @@ namespace CashphotoWPF
                                 
                         }
 
+                       
+
                         line = streamReader.ReadLine();
                         line = line.Replace("\"", "");
                         fileDataField = line.Split(delimiter);
-                        System.Diagnostics.Debug.WriteLine("Article " + fileDataField);
-                        AddArticleCashphoto(fileDataField, numCommande);
+
+                        exist = constante.cashphotoBDD.Articles.Where(article => article.NumCommande == numCommande && article.NomArticle == fileDataField[1]).Count();
+                        if (exist == 0)
+                            AddArticleCashphoto(fileDataField, numCommande);
                     }
 
                     streamReader.Close();

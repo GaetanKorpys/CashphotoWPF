@@ -239,6 +239,13 @@ namespace CashphotoWPF
             return commande;
         }
 
+        private Commande CompleterCommande(Commande commande, string poids)
+        {
+            commande.Poids = double.Parse(poids, CultureInfo.InvariantCulture);
+            commande.Preparer = true;
+            return commande;
+        }
+
         /// <summary>
         /// Test si un numéro de commande est valide.
         /// Les regex sont importés via le fichier de config.
@@ -251,7 +258,6 @@ namespace CashphotoWPF
             Regex numCommandeCashphoto = new Regex(constante.regexCommandeCashphoto);
             if (numCommandeAmazon.IsMatch(numCommande) || numCommandeCashphoto.IsMatch(numCommande))
             {
-                System.Diagnostics.Debug.WriteLine("OK");
                 return true;
             }
 
@@ -759,6 +765,11 @@ namespace CashphotoWPF
             email.Content = constante.email;
             tel.Content = constante.telephone;
 
+            if (constante.transporteur == Transporteur.Transporteurs.Coliposte)
+                Coliposte.IsChecked = true;
+            else
+                GLS.IsChecked = true;
+
             if (constante.fichierConfigExist)
             {
                 CheminFichierConfig.Content = constante.cheminFichierConfig;
@@ -1009,12 +1020,33 @@ namespace CashphotoWPF
             }
             else
             {
-                SaisirPoids.Text = "";
-                SaisirCommande.Text = "";
-                SaisirCommande.IsEnabled = true;
-                SaisirCommande.Focus();
-                SaisirPoids.IsEnabled = false;
-                AfficherTestEnregistrementCommande(false);
+                Constante constante = Constante.GetConstante();
+                Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == SaisirCommande.Text).First();
+
+                if (commande.Preparer == false)
+                {
+                    _commande = CompleterCommande(commande, SaisirPoids.Text);
+                    SaisirPoids.Text = "";
+                    SaisirCommande.Text = "";
+                    SaisirCommande.IsEnabled = true;
+                    SaisirCommande.Focus();
+                    SaisirPoids.IsEnabled = false;
+                    AfficherTestEnregistrementCommande(true);
+                    ActualiserRecapEnregistrementCommande(null);
+
+                    //Rechargement du Datagrid
+                    _commandes = getCommandesDateToday();
+                    DataGridPrep.ItemsSource = _commandes;
+                }
+                else
+                {
+                    SaisirPoids.Text = "";
+                    SaisirCommande.Text = "";
+                    SaisirCommande.IsEnabled = true;
+                    SaisirCommande.Focus();
+                    SaisirPoids.IsEnabled = false;
+                    AfficherTestEnregistrementCommande(false);
+                }
             }
         }
 
@@ -1054,12 +1086,33 @@ namespace CashphotoWPF
                     }
                     else
                     {
-                        SaisirPoids.Text = "";
-                        SaisirCommande.Text = "";
-                        SaisirCommande.IsEnabled = true;
-                        SaisirCommande.Focus();
-                        SaisirPoids.IsEnabled = false;
-                        AfficherTestEnregistrementCommande(false);
+                        Constante constante = Constante.GetConstante();
+                        Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == SaisirCommande.Text).First();
+
+                        if (commande.Preparer == false)
+                        {
+                            _commande = CompleterCommande(commande, SaisirPoids.Text);
+                            SaisirPoids.Text = "";
+                            SaisirCommande.Text = "";
+                            SaisirCommande.IsEnabled = true;
+                            SaisirCommande.Focus();
+                            SaisirPoids.IsEnabled = false;
+                            AfficherTestEnregistrementCommande(true);
+                            ActualiserRecapEnregistrementCommande(null);
+
+                            //Rechargement du Datagrid
+                            _commandes = getCommandesDateToday();
+                            DataGridPrep.ItemsSource = _commandes;
+                        }
+                        else
+                        {
+                            SaisirPoids.Text = "";
+                            SaisirCommande.Text = "";
+                            SaisirCommande.IsEnabled = true;
+                            SaisirCommande.Focus();
+                            SaisirPoids.IsEnabled = false;
+                            AfficherTestEnregistrementCommande(false);
+                        }
                     }
                 }
                 else
@@ -1142,10 +1195,25 @@ namespace CashphotoWPF
             
         }
 
-        
+
         #endregion
 
         #region Expédition
+
+        private void ModifierTransporteur(object sender, RoutedEventArgs e)
+        {
+            Constante constante = Constante.GetConstante();
+            if(sender.Equals(GLS))
+            {
+                constante.transporteur = Transporteur.Transporteurs.GLS;
+                ExpediteurLabel.Content = "GLS";
+            }
+            else if (sender.Equals(Coliposte))
+            {
+                constante.transporteur = Transporteur.Transporteurs.Coliposte;
+                ExpediteurLabel.Content = "Coliposte";
+            }
+        }
 
         private void ActualiserRecapExpe(string numCommande)
         {

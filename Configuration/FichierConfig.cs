@@ -130,7 +130,7 @@ namespace CashphotoWPF.Configuration
 
                 Enum.TryParse(reader.ReadLine(), out Transporteur.Transporteurs transporteurs); //On convertit la string en type Enum
                 transporteur.setTransporteur(transporteurs);
-                constante.mode = modeSuiviColiposte.getMode();
+                constante.transporteur = transporteur.getTransporteur();
 
                 int.TryParse(reader.ReadLine(), out int res);
                 constante.indexTabItem = res;

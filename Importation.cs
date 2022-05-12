@@ -14,9 +14,13 @@ namespace CashphotoWPF
     {
         public int ImportCommandes()
         {
+            Constante constante = Constante.GetConstante();
             int changements = 0;
-            changements += ImportFromAmazon();
-            changements += ImportFromCashphoto();
+            if (constante.BDDOK)
+            {
+                changements += ImportFromAmazon();
+                changements += ImportFromCashphoto();
+            }
             return changements;
         }
 
@@ -50,7 +54,7 @@ namespace CashphotoWPF
 
                         if (exist == 0)
                         {
-                            CreerCommandeAmazon(fileDataField);
+                            CreerCommandeAmazon(fileDataField); 
                             import ++;
                         }
                             
@@ -60,12 +64,15 @@ namespace CashphotoWPF
                             if(!commande.Completer)
                             {
                                 CompleterCommandeAmazon(fileDataField);
-                                import ++;
                             }
                                 
                         }
-                            
-                        AddArticleAmazon(fileDataField);
+
+                        exist = constante.cashphotoBDD.Articles.Where(article => article.NumCommande == numCommande && article.NomArticle == fileDataField[8]).Count();
+                        if(exist == 0)
+                            AddArticleAmazon(fileDataField);
+
+
                     }
 
                     streamReader.Close();
@@ -88,13 +95,15 @@ namespace CashphotoWPF
                 if (File.Exists(data))
                 {
                     //System.Text.Encoding.GetEncoding(PrestashopEncodage)
-                    StreamReader streamReader = new StreamReader(data);
+                    StreamReader streamReader = new StreamReader(data, System.Text.Encoding.GetEncoding(1250));
                     if (streamReader.Peek() != -1)
                     {
                         string line = streamReader.ReadLine();
                         line = line.Replace("\"","");
                         string[] fileDataField = line.Split(delimiter);
-                        string numCommande = fileDataField[1];
+                        string numCommande = fileDataField[26].Substring(1);
+
+                        System.Diagnostics.Debug.WriteLine("J " + numCommande);
 
                         int exist = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == numCommande).Count();
                         if (exist == 0)
@@ -117,6 +126,7 @@ namespace CashphotoWPF
                         line = streamReader.ReadLine();
                         line = line.Replace("\"", "");
                         fileDataField = line.Split(delimiter);
+                        System.Diagnostics.Debug.WriteLine("Article " + fileDataField);
                         AddArticleCashphoto(fileDataField, numCommande);
                     }
 
@@ -274,7 +284,7 @@ namespace CashphotoWPF
 
             Article article = new Article();
             System.Diagnostics.Debug.WriteLine(Data[12]);
-            article.IdArticle = Data[1];
+            article.IdAmazon = Data[1];
             article.NumCommande = Data[0];
             article.NomArticle = Data[8];
             article.Prix = double.Parse(Data[11], System.Globalization.CultureInfo.InvariantCulture);
@@ -296,7 +306,7 @@ namespace CashphotoWPF
 
             article.NumCommande = numCommande;
             article.NomArticle = Data[1];
-            article.Prix = double.Parse(Data[4]);
+            article.Prix = double.Parse(Data[4], System.Globalization.CultureInfo.InvariantCulture);
             article.Quantite = int.Parse(Data[2]);
 
             constante.cashphotoBDD.Add(article);

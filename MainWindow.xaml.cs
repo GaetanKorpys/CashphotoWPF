@@ -111,7 +111,7 @@ namespace CashphotoWPF
             //Chargement du DataGrid
             //On affiche les commandes traitées ce jour.
             _commandes = getCommandesDateToday();
-            DatagGridPrep.ItemsSource = _commandes;
+            DataGridPrep.ItemsSource = _commandes;
 
         }
 
@@ -912,7 +912,7 @@ namespace CashphotoWPF
 
                 //Rechargement du Datagrid
                 _commandes = getCommandesDateToday();
-                DatagGridPrep.ItemsSource = _commandes;
+                DataGridPrep.ItemsSource = _commandes;
             }
             else if (!commandeExist(NumCommandeRecap.Text))
             {
@@ -925,7 +925,7 @@ namespace CashphotoWPF
 
                 //Rechargement du Datagrid
                 _commandes = getCommandesDateToday();
-                DatagGridPrep.ItemsSource = _commandes;
+                DataGridPrep.ItemsSource = _commandes;
             }
 
             else
@@ -1005,7 +1005,7 @@ namespace CashphotoWPF
 
                 //Rechargement du Datagrid
                 _commandes = getCommandesDateToday();
-                DatagGridPrep.ItemsSource = _commandes;
+                DataGridPrep.ItemsSource = _commandes;
             }
             else
             {
@@ -1050,7 +1050,7 @@ namespace CashphotoWPF
 
                         //Rechargement du Datagrid
                         _commandes = getCommandesDateToday();
-                        DatagGridPrep.ItemsSource = _commandes;
+                        DataGridPrep.ItemsSource = _commandes;
                     }
                     else
                     {
@@ -1094,12 +1094,25 @@ namespace CashphotoWPF
         /// </summary>
         private void dataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Commande commande = (Commande)DatagGridPrep.SelectedItem;
-            if (commande != null)
+            if(sender.Equals(DataGridPrep))
             {
-                _commande = commande;
-                ActualiserRecapEnregistrementCommande(commande.NumCommande);
-                ActualiserDataGridArticle(commande.NumCommande);
+                System.Diagnostics.Debug.WriteLine("DG");
+                Commande commande = (Commande)DataGridPrep.SelectedItem;
+                if (commande != null)
+                {
+                    _commande = commande;
+                    ActualiserRecapEnregistrementCommande(commande.NumCommande);
+                }
+            }
+            else if(sender.Equals(DataGridExpe))
+            {
+                Commande commande = (Commande)DataGridExpe.SelectedItem;
+                if (commande != null)
+                {
+                    _commande = commande;
+                    ActualiserDataGridArticle(commande.NumCommande);
+                    ActualiserRecapExpe(commande.NumCommande);
+                }
             }
         }
 
@@ -1107,19 +1120,50 @@ namespace CashphotoWPF
         /// Si la barre de recherche contient du texte, on affiche les commandes correspondantes.
         /// Sinon, si la barre de recherche est vide, on affiche les commandes qui ont été enregistré aujourd'hui.
         /// </summary>
-        private void rechercheCommande_TextChanged(object sender, EventArgs e)
+        private void rechercheCommande_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (RechercherCommande1.Text.Equals(""))
-                _commandes = getCommandesDateToday();
-            else
-                _commandes = getCommandesRecherche(RechercherCommande1.Text);
-            DatagGridPrep.ItemsSource = _commandes;
+            if(sender.Equals(RechercherCommande1))
+            {
+                System.Diagnostics.Debug.WriteLine("Recherche");
+                if (RechercherCommande1.Text.Equals(""))
+                    _commandes = getCommandesDateToday();
+                else
+                    _commandes = getCommandesRecherche(RechercherCommande1.Text);
+                DataGridPrep.ItemsSource = _commandes;
+            }
+            else if(sender.Equals(RechercherCommande2))
+            {
+                if (RechercherCommande2.Text.Equals(""))
+                    _commandes = getCommandesDateToday();
+                else
+                    _commandes = getCommandesRecherche(RechercherCommande2.Text);
+                DataGridExpe.ItemsSource = _commandes;
+            }
+            
         }
 
         
         #endregion
 
         #region Expédition
+
+        private void ActualiserRecapExpe(string numCommande)
+        {
+            Constante constante = Constante.GetConstante();
+            Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == numCommande).First();
+
+            NumCommandeRecapExpe.Content = commande.NumCommande;
+            PoidsCommandeRecapExpe.Content = commande.Poids;
+            DateCommandeRecapExpe.Content = commande.Date;
+            NomClientRecapExpe.Content = commande.NomClientLivraison;
+            TelClientRecapExpe.Content = commande.TelClientLivraison;
+            AdresseClientRecapExpe.Content = commande.Adresse1;
+            AdresseClient2RecapExpe.Content = commande.Adresse2;
+            AdresseClient3RecapExpe.Content = commande.Adresse3;
+            CodePostaleVilleRecapExpe.Content = commande.CodePostal + " - " + commande.Ville;
+            PaysRecapExpe.Content = commande.Pays;
+            EmailClientRecapExpe.Content = commande.Mail;
+        }
 
         private void ActualiserDataGridArticle(string numCommande)
         {
@@ -1157,7 +1201,7 @@ namespace CashphotoWPF
                 else if (Expedition.IsSelected)
                 {
                     constante.indexTabItem = 1;
-                    RechercherCommande.Focus();
+                    RechercherCommande2.Focus();
                 }
                 else if (Configuration.IsSelected)
                 {

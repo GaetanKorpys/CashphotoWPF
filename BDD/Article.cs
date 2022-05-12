@@ -11,9 +11,11 @@ namespace CashphotoWPF.BDD
     public class Article
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public string IdArticle { get; set; }
         public string NomArticle { get; set; }
         public string NumCommande { get; set; }
-        public string? IdArticle { get; set; }
+        public string? IdAmazon { get; set; }
         public double Prix { get; set; }
         public string? Sku { get; set; }
         public double? Taxe { get; set; }

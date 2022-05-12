@@ -20,7 +20,7 @@
                     <RowDefinition Height="237*"/>
                 </Grid.RowDefinitions>
 
-                <DataGrid Name="DatagGridPrep" SelectionChanged="dataGrid_SelectionChanged" Grid.Column="0" Margin="75,109,90,97" Grid.Row="1" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True">
+                <DataGrid Name="DataGridPrep" SelectionChanged="dataGrid_SelectionChanged" Grid.Column="0" Margin="75,109,90,97" Grid.Row="1" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True">
 
                     <DataGrid.Resources>
                         <Style TargetType="DataGridColumnHeader">
@@ -113,7 +113,7 @@
                         <ColumnDefinition Width="269*"/>
                     </Grid.ColumnDefinitions>
                     <Label Content="Rechercher une commande" VerticalAlignment="Center" HorizontalAlignment="Center" Height="33" Width="230" Margin="0,0,0,5"/>
-                    <TextBox Grid.Row="0" Grid.Column="1" x:Name="RechercherCommande" Width="217" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" x:Name="RechercherCommande2" TextChanged="rechercheCommande_TextChanged" Width="217" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <CheckBox Grid.Column="2" Content="Commandes déjà expédiées" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
 
@@ -137,38 +137,23 @@
                     <Label x:Name="ExpediteurLabel" Grid.Column="1" Content="COLIPOSTE" Margin="50,0,5,5" FontSize="36" FontWeight="Normal" FontFamily="Bahnschrift SemiBold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Bottom" Background="#FFFB8E59" Height="91" HorizontalAlignment="Center"/>
                 </WrapPanel>
 
-                <Grid Grid.Column="1" Margin="0,128,0,0" Grid.RowSpan="2">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                    </Grid.RowDefinitions>
-                    <TextBox Grid.Row="2" x:Name="DateCommandeTextBox" HorizontalAlignment="Stretch"  Text="Date de commande" Background="Transparent" BorderThickness="0" IsReadOnly="True" TextWrapping="Wrap" VerticalAlignment="Stretch" TextAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="18" Visibility="Hidden"/>
-                    <TextBox Grid.Row="0" x:Name="NumCommandeTextBox" HorizontalAlignment="Stretch"  Text="Numéro de commande" Background="Transparent" BorderThickness="0" IsReadOnly="True" TextWrapping="Wrap" VerticalAlignment="Stretch" TextAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="18" Visibility="Hidden"/>
-                    <TextBox Grid.Row="1" x:Name="PoidsCommande" HorizontalAlignment="Stretch"  Text="Poids" Background="Transparent" BorderThickness="0" IsReadOnly="True" TextWrapping="Wrap" VerticalAlignment="Stretch" TextAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="18" Visibility="Hidden"/>
-                    <Label x:Name="AdresseLivraisonLabel" Grid.Row="3" Content="Adresse de livraison :" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden"/>
-                    <TextBox x:Name="NomPrenomLivraisonTextBox" HorizontalAlignment="Stretch" Grid.Row="4" Text="NomPrenom" Background="Transparent" BorderThickness="0" IsReadOnly="True" TextWrapping="Wrap" VerticalAlignment="Stretch" TextAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="18" Visibility="Hidden"/>
-                    <TextBox x:Name="TelephoneLivraison" HorizontalAlignment="Stretch" Grid.Row="5" Text="Téléphone" Background="Transparent" BorderThickness="0" IsReadOnly="True" TextWrapping="Wrap" VerticalAlignment="Stretch" TextAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="18" Visibility="Hidden"/>
-                    <TextBox x:Name="AdresseLivraison1TextBox" HorizontalAlignment="Stretch" Grid.Row="6" Text="Adresse" Background="Transparent" BorderThickness="0" IsReadOnly="True" TextWrapping="Wrap" VerticalAlignment="Stretch" TextAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="18" Visibility="Hidden"/>
-                    <TextBox x:Name="AdresseLivraison2TextBox" HorizontalAlignment="Stretch" Grid.Row="7" Text="Adresse" Background="Transparent" BorderThickness="0" IsReadOnly="True" TextWrapping="Wrap" VerticalAlignment="Stretch" TextAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="18" Visibility="Hidden"/>
-                    <TextBox x:Name="AdresseLivraison3TextBox" HorizontalAlignment="Stretch" Grid.Row="8" Text="Adresse" Background="Transparent" BorderThickness="0" IsReadOnly="True" TextWrapping="Wrap" VerticalAlignment="Stretch" TextAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="18" Visibility="Hidden"/>
-                    <TextBox x:Name="CodePostalVilleLivraisonTextBox" HorizontalAlignment="Stretch" Grid.Row="9" Text="Code Postal - Ville" Background="Transparent" BorderThickness="0" IsReadOnly="True" TextWrapping="Wrap" VerticalAlignment="Stretch" TextAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="18" Visibility="Hidden"/>
-                    <TextBox x:Name="PaysLivraisonTextBox" HorizontalAlignment="Stretch" Grid.Row="10" Text="Pays" Background="Transparent" BorderThickness="0" IsReadOnly="True" TextWrapping="Wrap" VerticalAlignment="Stretch" TextAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="18" Visibility="Hidden"/>
-                    <TextBox x:Name="EmailCommande" HorizontalAlignment="Stretch" Grid.Row="11" Text="Adresse e-mail" Background="Transparent" BorderThickness="0" IsReadOnly="True" TextWrapping="Wrap" VerticalAlignment="Stretch" TextAlignment="Center" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="18" Visibility="Hidden"/>
-                </Grid>
 
-                <DataGrid Name="DatagGridExpe" SelectionChanged="dataGrid_SelectionChanged" Grid.Column="0" Margin="20,128,40,237" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True" Grid.RowSpan="2">
+
+
+                <Label x:Name="NumCommandeRecapExpe" Grid.Row="1" Grid.Column="1" Content="" VerticalAlignment="Center" Margin="0,0,0,320" HorizontalAlignment="Center"/>
+                <Label x:Name="PoidsCommandeRecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,260"/>
+                <Label x:Name="DateCommandeRecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,200"/>
+                <Label x:Name="NomClientRecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,100"/>
+                <Label x:Name="TelClientRecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,40"/>
+                <Label x:Name="AdresseClientRecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20,0,0"/>
+                <Label x:Name="AdresseClient2RecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,80,0,0"/>
+                <Label x:Name="AdresseClient3RecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,140,0,0"/>
+                <Label x:Name="CodePostaleVilleRecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,240,0,0"/>
+                <Label x:Name="PaysRecapExpe"  Content="" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,300,0,0"/>
+                <Label x:Name="EmailClientRecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,360,0,0"/>
+
+
+                <DataGrid Name="DataGridExpe"  SelectionChanged="dataGrid_SelectionChanged" Margin="20,30,20,0" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Top" Height="163" Grid.Row="1">
 
                     <DataGrid.Resources>
                         <Style TargetType="DataGridColumnHeader">
@@ -190,38 +175,24 @@
                         <DataGridTextColumn Header="Numéro de commande" Binding="{Binding NumCommande, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         <DataGridTextColumn Header="Poids" Binding="{Binding Poids, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         <DataGridTextColumn Header="Date" Binding="{Binding Date, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <DataGridTextColumn Header="Nom" Binding="{Binding NomClientFacturation, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Nom Client" Binding="{Binding NomClientLivraison, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </DataGrid.Columns>
                 </DataGrid>
 
-                <DataGrid Name="DatagGridArticle" SelectionChanged="dataGrid_SelectionChanged" Grid.Column="0" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True" Grid.Row="1" VerticalAlignment="Center" Height="172" Margin="20,170,40,0">
+                <DataGrid Name="DatagGridArticle" SelectionChanged="dataGrid_SelectionChanged" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Height="172" Margin="20,150,20,0">
 
-                    <DataGrid.Resources>
-                        <Style TargetType="DataGridColumnHeader">
 
-                            <Setter Property="HorizontalContentAlignment" Value="Center" />
-                        </Style>
-                        <Style TargetType="DataGridCell">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="DataGridCell">
-                                        <ContentPresenter HorizontalAlignment="Center" />
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGrid.Resources>
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Code" Binding="{Binding NumCommande, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <DataGridTextColumn Header="Nom" Binding="{Binding Poids, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <DataGridTextColumn Header="Quantite" Binding="{Binding Date, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <DataGridTextColumn Header="Prix TTC" Binding="{Binding NomClientFacturation, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Code" Binding="{Binding IdAmazon, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Article" Binding="{Binding NomArticle, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Quantite" Binding="{Binding Quantite, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Prix TTC" Binding="{Binding Prix, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </DataGrid.Columns>
                 </DataGrid>
 
 
-                <Label x:Name="NbCommandeImport" Content="" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="40,0,0,10" Height="34" Width="10" />
+                <Label x:Name="NbCommandeImport" Content="" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="40,0,0,10" Height="34" Width="282" />
             </Grid>
         </TabItem>
         <TabItem x:Name="Configuration"  Header="Configuration" FontSize="18" Margin="629,-1,-766,0" VerticalAlignment="Top">

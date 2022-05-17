@@ -13,11 +13,11 @@ C:\Cashphoto\dosserExport\commandeGLS\backup
 C:\Cashphoto\dosserExport\commandeColiposte\backup
 contact@cashphoto.com
 0382580623
-127.0.0.1
+192.168.1.39
 SansSignature
 Coliposte
 1
-Initial Catalog=CashphotoG;User ID=Gerald;Password=Gerald;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
+Initial Catalog=CashphotoWPF;User ID=Gerald;Password=Gerald;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
 Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=CashphotoLocal;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
 ^\d{3}-\d{7}-\d{7}$
 ^\d{5}$

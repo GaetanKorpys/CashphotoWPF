@@ -14,7 +14,7 @@ namespace CashphotoWPF.BDD
         public CashphotoBDD()
         {
             //Database.EnsureDeleted();
-            Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

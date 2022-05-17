@@ -30,7 +30,6 @@ namespace CashphotoWPF.BDD
         public DateTime Date { get; set; }
         public bool Preparer { get; set; }
         public bool Expedier { get; set; }
-        public bool Completer { get; set; }
         public string? NumeroSuivi { get; set; }
     }
 }

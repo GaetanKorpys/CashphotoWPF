@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\Users\Gaetan\source\repos\CashphotoWPF\App.xaml
-4-2021008660
+6420850585
 
-20-957728357
-237886892058
-BoiteDeDialogue\ConfigurationDialog.xaml;BoiteDeDialogue\Email.xaml;BoiteDeDialogue\Telephone.xaml;MainWindow.xaml;
+23-439234818
+237514507468
+BoiteDeDialogue\ConfigurationDialog.xaml;BoiteDeDialogue\ConfirmationPoids.xaml;BoiteDeDialogue\Email.xaml;BoiteDeDialogue\Poids.xaml;BoiteDeDialogue\Telephone.xaml;MainWindow.xaml;
 
 False
 

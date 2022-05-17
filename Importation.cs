@@ -12,6 +12,12 @@ namespace CashphotoWPF
 {
     internal class Importation
     {
+        private MainWindow _app;
+
+        public Importation(MainWindow app)
+        {
+            _app = app;
+        }
         public int ImportCommandes()
         {
             Constante constante = Constante.GetConstante();
@@ -61,7 +67,7 @@ namespace CashphotoWPF
                         else
                         {
                             Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == numCommande).First();
-                            if(!commande.Completer)
+                            if(!_app.isCompleteCommande(commande) && commande.Preparer == true)
                             {
                                 CompleterCommandeAmazon(fileDataField);
                             }
@@ -115,7 +121,7 @@ namespace CashphotoWPF
                         else
                         {
                             Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == numCommande).First();
-                            if (!commande.Completer)
+                            if (!_app.isCompleteCommande(commande) && commande.Preparer == true)
                             {
                                 CompleterCommandeCashphoto(fileDataField);
                                 import++;
@@ -196,7 +202,6 @@ namespace CashphotoWPF
             commande.Adresse2 = Data[18];
             commande.Adresse3 = Data[19];
             commande.Site = "Amazon";
-            commande.Completer = true;
 
             constante.cashphotoBDD.SaveChanges();
         }
@@ -224,7 +229,6 @@ namespace CashphotoWPF
             commande.Date = DateTime.Now;
             commande.Preparer = false;
             commande.Expedier = false;
-            commande.Completer = false;
    
             constante.cashphotoBDD.Commandes.Add(commande);
             constante.cashphotoBDD.SaveChanges();
@@ -248,7 +252,6 @@ namespace CashphotoWPF
             commande.Adresse2 = Data[4];
             commande.Adresse3 = Data[5];
             commande.Site = "Cashphoto";
-            commande.Completer = true;
 
             constante.cashphotoBDD.SaveChanges();
         }
@@ -276,7 +279,6 @@ namespace CashphotoWPF
             commande.Date = DateTime.Now;
             commande.Preparer = false;
             commande.Expedier = false;
-            commande.Completer = false;
 
             constante.cashphotoBDD.Commandes.Add(commande);
             constante.cashphotoBDD.SaveChanges();

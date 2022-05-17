@@ -114,7 +114,7 @@
                     </Grid.ColumnDefinitions>
                     <Label Content="Rechercher une commande" VerticalAlignment="Center" HorizontalAlignment="Center" Height="33" Width="230" Margin="0,0,0,5"/>
                     <TextBox Grid.Row="0" Grid.Column="1" x:Name="RechercherCommande2" TextChanged="rechercheCommande_TextChanged" Width="217" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <CheckBox Grid.Column="2" Content="Commandes déjà expédiées" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <CheckBox x:Name="Expedier_CheckBox" Checked="CommandeExpedier_CheckBox" Grid.Column="2" Content="Commandes déjà expédiées" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Grid>
 
                 <Label Content="Base de données" Grid.Row="0" Grid.Column="1" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0" Height="34" Width="150" />
@@ -124,8 +124,8 @@
                 </WrapPanel>
 
             
-                <Button Content="Expedier commande" Grid.Row="2" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" Height="30" Width="190" Margin="35,0,0,30"/>
-                <Button Content="Modifier poids commande" Grid.Row="2" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Height="30" Width="248" Margin="0,0,100,30"/>
+                <Button Content="Expedier commande" Click="ExpedierCommande_Click" Grid.Row="2" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" Height="30" Width="190" Margin="35,0,0,30"/>
+                <Button Content="Modifier poids commande" Click="ModifierPoids_Click" Grid.Row="2" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Height="30" Width="248" Margin="0,0,100,30"/>
                 <Button Content="Rechercher commande Amazon" Grid.Row="2" FontSize="18" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold" Height="30" Width="296" Margin="0,0,30,30"/>
                 
                 <WrapPanel Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top">
@@ -192,7 +192,7 @@
                 </DataGrid>
 
 
-                <Label x:Name="NbCommandeImport" Content="" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="90,0,0,10" />
+                <Label x:Name="Message" Content="" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="90,0,0,10" />
             </Grid>
         </TabItem>
         <TabItem x:Name="Configuration"  Header="Configuration" FontSize="18" Margin="629,-1,-766,0" VerticalAlignment="Top">

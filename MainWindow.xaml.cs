@@ -108,10 +108,11 @@ namespace CashphotoWPF
 
             TestConnexionBDD_Click(null, null);
 
-            //Chargement du DataGrid
+            //Chargement des DataGrid
             //On affiche les commandes traitées ce jour.
-            _commandes = getCommandesDateToday();
+            _commandes = getCommandesDateToday(false);
             DataGridPrep.ItemsSource = _commandes;
+            DataGridExpe.ItemsSource = _commandes;
 
         }
 
@@ -231,7 +232,7 @@ namespace CashphotoWPF
             commande.Date = DateTime.Now;
             commande.Preparer = true;
             commande.Expedier = false;
-            commande.Completer = false;
+           
 
             constante.cashphotoBDD.Add(commande);
             constante.cashphotoBDD.SaveChanges();
@@ -241,9 +242,22 @@ namespace CashphotoWPF
 
         private Commande CompleterCommande(Commande commande, string poids)
         {
+            Constante constante = Constante.GetConstante();
+
             commande.Poids = double.Parse(poids, CultureInfo.InvariantCulture);
             commande.Preparer = true;
+
+            constante.cashphotoBDD.SaveChanges();
+
             return commande;
+        }
+
+
+        public bool isCompleteCommande(Commande commande)
+        {
+            if (commande.NumCommande != null && commande.Poids != null && commande.NomClientLivraison != null)
+                return true;
+            return false;
         }
 
         /// <summary>
@@ -265,11 +279,12 @@ namespace CashphotoWPF
 
         }
 
+
         /// <summary>
         /// Test si un poids est valide.
         /// <paramref name="poids"/>
         /// </summary>
-        private bool isValidPoids(string poids)
+        public bool isValidPoids(string poids)
         {
             string pattern = "^\\d{1,2}(\\.\\d{1,3})?$"; //Ex: 23.344 ou 34 
             Regex poidsRegex = new Regex(pattern);
@@ -488,7 +503,7 @@ namespace CashphotoWPF
         /// </summary>
         /// <param name="numCmd">Le numéro de la commande (pas forcement complet) à rechercher, celui entré dans la barre de recherche.</param>
         /// <returns>Une liste de commande</returns>
-        private List<Commande> getCommandesRecherche(string numCmd)
+        private List<Commande> getCommandesRecherche(string numCmd, bool expedier)
         {
             List<Commande> commandes = new List<Commande>();
             Constante constante = Constante.GetConstante();
@@ -496,15 +511,7 @@ namespace CashphotoWPF
 
             if (constante.BDDOK)
             {
-                commandesTable = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande.Contains(numCmd));
-                if (constante.commandeExpedie)
-                {
-                    commandesTable = commandesTable.Where(commande => commande.Expedier == true);
-                }
-                else
-                {
-                    commandesTable = commandesTable.Where(commande => commande.Expedier == false);
-                }
+                commandesTable = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande.Contains(numCmd) && commande.Expedier == expedier);
                 commandesTable = commandesTable.OrderByDescending(commande => commande.Date);
                 commandes = commandesTable.ToList();
             }
@@ -515,7 +522,7 @@ namespace CashphotoWPF
         /// Recherche les commandes dans la BDD qui ont pour date la date d'aujourd'hui.
         /// </summary>
         /// <returns>Une liste de commande</returns>
-        private List<Commande> getCommandesDateToday()
+        private List<Commande> getCommandesDateToday(bool expedier)
         {
             List<Commande> commandes = new List<Commande>();
             Constante constante = Constante.GetConstante();
@@ -523,7 +530,7 @@ namespace CashphotoWPF
 
             if (constante.BDDOK)
             {
-                commandesTable = constante.cashphotoBDD.Commandes.Where(commande => commande.Date.Date == DateTime.Today);
+                commandesTable = constante.cashphotoBDD.Commandes.Where(commande => commande.Date.Date == DateTime.Today && commande.Expedier == expedier);
                 commandesTable = commandesTable.OrderByDescending(commande => commande.Date);
                 commandes = commandesTable.ToList();
             }
@@ -910,6 +917,8 @@ namespace CashphotoWPF
 
             //On utilise _commande
             Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.IdCommande == _commande.IdCommande).FirstOrDefault();
+            if (commande == _commande)
+                System.Diagnostics.Debug.WriteLine("SIii");
 
             //L'utilisateur ne modifie pas le numéro de commande
             //Alors pas besoin de vérifier s'il est valide ou si une commande existe déjà.
@@ -917,13 +926,15 @@ namespace CashphotoWPF
             {
                 double poids = double.Parse(PoidsRecap.Text, CultureInfo.InvariantCulture);
                 commande.Poids = poids;
+                commande.Preparer = true;
 
                 constante.cashphotoBDD.SaveChanges();
                 AfficherTestRecap(true);
 
-                //Rechargement du Datagrid
-                _commandes = getCommandesDateToday();
+                //Rechargement des Datagrid
+                _commandes = getCommandesDateToday(false);
                 DataGridPrep.ItemsSource = _commandes;
+                DataGridExpe.ItemsSource = _commandes;
             }
             else if (!commandeExist(NumCommandeRecap.Text))
             {
@@ -934,9 +945,10 @@ namespace CashphotoWPF
                 constante.cashphotoBDD.SaveChanges();
                 AfficherTestRecap(true);
 
-                //Rechargement du Datagrid
-                _commandes = getCommandesDateToday();
+                //Rechargement des Datagrid
+                _commandes = getCommandesDateToday(false);
                 DataGridPrep.ItemsSource = _commandes;
+                DataGridExpe.ItemsSource = _commandes;
             }
 
             else
@@ -1015,7 +1027,10 @@ namespace CashphotoWPF
                 ActualiserRecapEnregistrementCommande(null);
 
                 //Rechargement du Datagrid
-                _commandes = getCommandesDateToday();
+                if((bool)Expedier_CheckBox.IsChecked)
+                    _commandes = getCommandesDateToday(true);
+                else
+                    _commandes = getCommandesDateToday(false);
                 DataGridPrep.ItemsSource = _commandes;
             }
             else
@@ -1035,7 +1050,10 @@ namespace CashphotoWPF
                     ActualiserRecapEnregistrementCommande(null);
 
                     //Rechargement du Datagrid
-                    _commandes = getCommandesDateToday();
+                    if ((bool)Expedier_CheckBox.IsChecked)
+                        _commandes = getCommandesDateToday(true);
+                    else
+                        _commandes = getCommandesDateToday(false);
                     DataGridPrep.ItemsSource = _commandes;
                 }
                 else
@@ -1081,7 +1099,10 @@ namespace CashphotoWPF
                         ActualiserRecapEnregistrementCommande(null);
 
                         //Rechargement du Datagrid
-                        _commandes = getCommandesDateToday();
+                        if ((bool)Expedier_CheckBox.IsChecked)
+                            _commandes = getCommandesDateToday(true);
+                        else
+                            _commandes = getCommandesDateToday(false);
                         DataGridPrep.ItemsSource = _commandes;
                     }
                     else
@@ -1098,10 +1119,13 @@ namespace CashphotoWPF
                             SaisirCommande.Focus();
                             SaisirPoids.IsEnabled = false;
                             AfficherTestEnregistrementCommande(true);
-                            ActualiserRecapEnregistrementCommande(null);
+                            ActualiserRecapEnregistrementCommande(null);                         
 
                             //Rechargement du Datagrid
-                            _commandes = getCommandesDateToday();
+                            if ((bool)Expedier_CheckBox.IsChecked)
+                                _commandes = getCommandesDateToday(true);
+                            else
+                                _commandes = getCommandesDateToday(false);
                             DataGridPrep.ItemsSource = _commandes;
                         }
                         else
@@ -1149,7 +1173,7 @@ namespace CashphotoWPF
         {
             if(sender.Equals(DataGridPrep))
             {
-                System.Diagnostics.Debug.WriteLine("DG");
+       
                 Commande commande = (Commande)DataGridPrep.SelectedItem;
                 if (commande != null)
                 {
@@ -1175,22 +1199,40 @@ namespace CashphotoWPF
         /// </summary>
         private void rechercheCommande_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if(sender.Equals(RechercherCommande1))
+            if (sender.Equals(RechercherCommande1))
             {
-                System.Diagnostics.Debug.WriteLine("Recherche");
                 if (RechercherCommande1.Text.Equals(""))
-                    _commandes = getCommandesDateToday();
+                    _commandes = getCommandesDateToday(false);
                 else
-                    _commandes = getCommandesRecherche(RechercherCommande1.Text);
+                    _commandes = getCommandesRecherche(RechercherCommande1.Text, false);
                 DataGridPrep.ItemsSource = _commandes;
+
+                if (DataGridPrep.Items.Count == 1)
+                {
+                    _commande = DataGridPrep.Items[0] as Commande;
+                    ActualiserRecapEnregistrementCommande(_commande.NumCommande);
+                }
             }
             else if(sender.Equals(RechercherCommande2))
             {
-                if (RechercherCommande2.Text.Equals(""))
-                    _commandes = getCommandesDateToday();
+                bool expedier;
+                if ((bool)Expedier_CheckBox.IsChecked)
+                    expedier = true;
                 else
-                    _commandes = getCommandesRecherche(RechercherCommande2.Text);
+                    expedier = false;
+                System.Diagnostics.Debug.WriteLine(expedier);
+
+                if (RechercherCommande2.Text.Equals(""))
+                    _commandes = getCommandesDateToday(expedier);
+                else
+                    _commandes = getCommandesRecherche(RechercherCommande2.Text, expedier);
                 DataGridExpe.ItemsSource = _commandes;
+
+                if (DataGridExpe.Items.Count == 1)
+                {
+                    _commande = DataGridExpe.Items[0] as Commande;
+                    ActualiserRecapExpe(_commande.NumCommande);
+                }
             }
             
         }
@@ -1199,6 +1241,79 @@ namespace CashphotoWPF
         #endregion
 
         #region Expédition
+
+        private void CommandeExpedier_CheckBox(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("D");
+        }
+
+        private void ModifierPoids_Click(object sender, RoutedEventArgs e)
+        {
+            Constante constante = Constante.GetConstante();
+
+            if(_commande != null)
+            {
+                Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == _commande.NumCommande).First();
+
+                Poids poidsDialog = new Poids(this);
+                if (poidsDialog.ShowDialog() == true)
+                {
+                    commande.Poids = double.Parse(poidsDialog.InputTextBox.Text, CultureInfo.InvariantCulture);
+                    commande.Preparer = true;
+                    constante.cashphotoBDD.SaveChanges();
+
+                    DisplayTempMessage(Message, "Modification du poids validée.");
+                }
+            }
+            
+        }
+
+        private void ExpedierCommande_Click(object sender, RoutedEventArgs e)
+        {
+             
+            if(_commande != null)
+            {
+                Constante constante = Constante.GetConstante();
+                Expedition expedition = new Expedition();
+                string export = "";
+                Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == _commande.NumCommande).First();
+
+                if (commande.Expedier)
+                    export = "La commande est déjà expédiée.";
+
+                else
+                {
+                    if (isCompleteCommande(commande) && commande.Preparer)
+                    {
+
+                        commande.Expedier = true;
+
+                        constante.cashphotoBDD.SaveChanges();
+
+                        expedition.ExpedierCommande(commande);
+                        export = "La commande de " + commande.NomClientLivraison + " est expédiée.";
+                    }
+                    else if (isCompleteCommande(commande) && commande.Preparer == false)
+                    {
+                        ConfirmationPoids confirmationPoids = new ConfirmationPoids(this);
+                        if (confirmationPoids.ShowDialog() == true)
+                        {
+                            commande.Expedier = true;
+                            commande.Poids = double.Parse(confirmationPoids.InputTextBox.Text, CultureInfo.InvariantCulture);
+
+                            constante.cashphotoBDD.SaveChanges();
+
+                            expedition.ExpedierCommande(commande);
+                            export = "La commande de " + commande.NomClientLivraison + " est expédiée.";
+                        }
+                    }
+                    else
+                        export = "La commande ne peut pas être expédiée.";
+                }
+                DisplayTempMessage(Message, export);          
+            }
+        }
+
 
         private void ModifierTransporteur(object sender, RoutedEventArgs e)
         {
@@ -1240,13 +1355,13 @@ namespace CashphotoWPF
 
         public void ImporterCommandes() 
         {
-            Importation importation = new Importation();
+            Importation importation = new Importation(this);
 
             int nbcommandes = importation.ImportCommandes();
             if (nbcommandes != 0)
             {
                 string import = nbcommandes + " commande(s) importée(s). " + Regex.Replace(System.DateTime.Now.TimeOfDay.ToString(), "\\.\\d+$", "");
-                DisplayTempMessage(NbCommandeImport, import);
+                DisplayTempMessage(Message, import);
             }
             
         }

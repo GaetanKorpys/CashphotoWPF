@@ -12,6 +12,12 @@
     <Compile Update="BoiteDeDialogue\ConfigurationDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="BoiteDeDialogue\ConfirmationPoids.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="BoiteDeDialogue\Poids.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="BoiteDeDialogue\Telephone.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -20,7 +26,13 @@
     <Page Update="BoiteDeDialogue\ConfigurationDialog.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="BoiteDeDialogue\ConfirmationPoids.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="BoiteDeDialogue\Email.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="BoiteDeDialogue\Poids.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="BoiteDeDialogue\Telephone.xaml">

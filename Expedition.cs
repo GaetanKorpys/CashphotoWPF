@@ -24,9 +24,10 @@ namespace CashphotoWPF
         {
             Constante constante = Constante.GetConstante();
             string separateur = ";";
-          
+            string line;
 
-            string line = separateur + commande.NumCommande + separateur + commande.NomClientLivraison + separateur;
+
+            line = separateur + commande.NumCommande + separateur + commande.NomClientLivraison + separateur;
             line += commande.Adresse1 + separateur + commande.Adresse2 + separateur + commande.Adresse3 + separateur;
             line += commande.CodePostal + separateur + commande.Ville + separateur + commande.Pays + separateur + (commande.Poids * 1000).ToString() + separateur;
             line += "0" + separateur + "N" + separateur + commande.TelClientLivraison + separateur + commande.Mail + separateur + separateur + separateur + separateur + separateur;
@@ -36,7 +37,18 @@ namespace CashphotoWPF
             //line.Replace("\n", "");
 
 
-            ExportCSV(line, constante.commandeParsePourColiposte, commande, Transporteur.Transporteurs.Coliposte);
+            ExportCSV(line, constante.commandeParsePourColiposte, commande, Transporteur.Transporteurs.Coliposte, false);
+
+            if(commande.Poids2 != null)
+            {
+                line = separateur + commande.NumCommande + separateur + commande.NomClientLivraison + separateur;
+                line += commande.Adresse1 + separateur + commande.Adresse2 + separateur + commande.Adresse3 + separateur;
+                line += commande.CodePostal + separateur + commande.Ville + separateur + commande.Pays + separateur + (commande.Poids2 * 1000).ToString() + separateur; //Poids2
+                line += "0" + separateur + "N" + separateur + commande.TelClientLivraison + separateur + commande.Mail + separateur + separateur + separateur + separateur + separateur;
+                line += commande.TelClientLivraison + separateur + separateur + separateur + separateur + "Cashphoto.com" + separateur + separateur + separateur + "1" + separateur + commande.NumCommande;
+
+                ExportCSV(line, constante.commandeParsePourColiposte, commande, Transporteur.Transporteurs.Coliposte, true);
+            }
             
         }
 
@@ -57,13 +69,31 @@ namespace CashphotoWPF
             //line.Replace("\r", "");
             //line.Replace("\n", "");
             
-            ExportCSV(line, constante.commandeParsePourGLS, commande, Transporteur.Transporteurs.GLS);
+            ExportCSV(line, constante.commandeParsePourGLS, commande, Transporteur.Transporteurs.GLS, false);
+
+            if(commande.Poids2 != null)
+            {
+                line = commande.NumCommande + separateur + separateur + separateur;
+                line += commande.NomClientLivraison + separateur + "2502657001" + separateur + "18" + separateur + separateur + "1" + separateur;
+                line += commande.Poids2.ToString() + separateur + separateur + separateur; //Poids2
+                line += commande.NumCommande + separateur + commande.NomClientLivraison + separateur + separateur; //FixeNumTel
+                line += commande.TelClientLivraison + separateur + separateur + commande.Mail + separateur;
+                line += commande.Adresse1 + separateur + commande.Adresse2 + separateur + commande.Adresse3 + separateur;
+                line += commande.Pays + separateur + commande.CodePostal + separateur + commande.Ville + separateur + separateur + separateur + separateur;
+                line += "SODEX FAGOT-THIL SAS" + separateur + "13 rue De Gaulle" + separateur + separateur + "FR" + separateur + "57290" + separateur + "Seremange Erzange" + separateur + separateur;
+
+                ExportCSV(line, constante.commandeParsePourGLS, commande, Transporteur.Transporteurs.GLS, true);
+            }
             
         }
 
-        private void ExportCSV(string line, string path, Commande commande, Transporteur.Transporteurs transporteurs)
+        private void ExportCSV(string line, string path, Commande commande, Transporteur.Transporteurs transporteurs, bool secondColis)
         {
-            string completepath = path + "\\" + commande.NumCommande + "_" + commande.NomClientLivraison + ".csv";
+            string completepath;
+            if (secondColis == false)
+                completepath = path + "\\" + commande.NumCommande + "_" + commande.NomClientLivraison + ".csv";
+            else
+                completepath = path + "\\" + commande.NumCommande + "_" + commande.NomClientLivraison + "_" + "secondColis" + ".csv";
             //sauvegarderDansHistorique(commande.IdCommande.ToString(), commande.NomLivr.ToString(), commande.Site.ToString(), typecolis);
             Encoding enc;
             if (transporteurs.Equals(Transporteur.Transporteurs.GLS))

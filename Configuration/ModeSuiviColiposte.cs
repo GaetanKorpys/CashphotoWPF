@@ -42,10 +42,10 @@ namespace CashphotoWPF.Configuration
             return _mode;
         }
 
-        public string getString()
+        public string getString(ModeSuiviColiposte_LST mode)
         {
             string modestring;
-            switch (_mode)
+            switch (mode)
             {
                 case ModeSuiviColiposte_LST.ExpertInternational:
                     modestring = "COLISSIMO EXPERT INTERNATIONAL";

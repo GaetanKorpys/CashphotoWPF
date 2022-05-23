@@ -6,21 +6,73 @@
         xmlns:local="clr-namespace:CashphotoWPF"
         Title="Cashphoto" Height="720" Width="1280" Background="White"
         Closed="MainWindow_Closed"
-        Loaded="MainWindow_Loaded">
+        Loaded="MainWindow_Loaded"
+        MinWidth="1280"
+        MinHeight="720">
 
     <TabControl x:Name="TabControl" SelectionChanged="GestionTabItem_SelectionChanged">
-        <TabItem x:Name="Preparation" Header="Préparation" FontSize="18" Margin="99,-2,-228,0" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+        <TabItem x:Name="Preparation" Header="Préparation"  FontSize="18" Margin="99,-2,-228,0" HorizontalAlignment="Stretch" VerticalAlignment="Center">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="9*"/>
                     <ColumnDefinition Width="5*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="97*"/>
-                    <RowDefinition Height="237*"/>
+                    <RowDefinition Height="145*"/>
+                    <RowDefinition Height="224*"/>
+                    <RowDefinition Height="299*"/>
                 </Grid.RowDefinitions>
 
-                <DataGrid Name="DataGridPrep" SelectionChanged="dataGrid_SelectionChanged" Grid.Column="0" Margin="75,109,90,97" Grid.Row="1" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True">
+                <WrapPanel VerticalAlignment="Top" Margin="75,32,0,0" Height="31">
+                    <Label Content="Entrer le numéro de commande :" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Width="255"/>
+                    <TextBox x:Name="SaisirCommande" GotFocus="SaisirCommande_GotFocus" KeyDown="SaisiNumCommande_KeyDown" IsEnabled="True" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Width="249"/>
+                    <CheckBox x:Name="ColisSupplementaire_CheckBox" Grid.Column="2" Content="Colis suppplémentaire" Margin="20,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </WrapPanel>
+
+                <WrapPanel VerticalAlignment="Top" Margin="75,72,0,0" Height="32">
+                    <Label Content="Entrer le poids du colis :" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Width="255"/>
+                    <TextBox x:Name="SaisirPoids" GotFocus="SaisirPoids_GotFocus" TextChanged="ActivationBoutonValider" KeyDown="EnregistrerCommande_KeyDown" IsEnabled="False" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Width="249"/>
+                    <Button x:Name="ValiderCommandeBouton" Click="EnregistrerCommande_Click" IsEnabled="False" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Valider" Width="60" Height="32" FontSize="12" Margin="50,0,0,0"/>
+                </WrapPanel>
+
+                <Button x:Name="Bouton9" Click="Key9_Click" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50" Margin="0,0,20,200" FontSize="48">
+                    <Label Content="9" HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="40" FontWeight="Normal" Margin="5,0,0,0" FontSize="48"/>
+                </Button>
+                <Button x:Name="Bouton8" Click="Key8_Click" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50" Margin="0,0,140,200">
+                    <Label Content="8" HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="40" FontSize="48" Margin="5,0,0,0"/>
+                </Button>
+                <Button x:Name="Bouton7" Click="Key7_Click" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50" Margin="0,0,260,200">
+                    <Label Content="7" HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="40" Margin="5,0,0,0" FontSize="48"/>
+                </Button>
+                <Button x:Name="Bouton6" Click="Key6_Click" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50" Margin="0,0,20,80">
+                    <Label Content="6" HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="40" FontWeight="Normal" Margin="5,0,0,0" FontSize="48"/>
+                </Button>
+                <Button x:Name="Bouton5" Click="Key5_Click" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50" Margin="0,0,140,80">
+                    <Label Content="5" HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="40" FontWeight="Normal" Margin="5,0,0,0" FontSize="48"/>
+                </Button>
+                <Button x:Name="Bouton4" Click="Key4_Click" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50" Margin="0,0,260,80">
+                    <Label Content="4" HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="40" FontWeight="Normal" Margin="5,0,0,0" FontSize="48"/>
+                </Button>
+                <Button x:Name="Bouton3" Click="Key3_Click" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50" Margin="0,40,20,0">
+                    <Label Content="3" HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="40" FontWeight="Normal" Margin="5,0,0,0" FontSize="48"/>
+                </Button>
+                <Button x:Name="Bouton2" Click="Key2_Click" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50" Margin="0,40,140,0">
+                    <Label Content="2" HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="40" FontWeight="Normal" Margin="5,0,0,0" FontSize="48"/>
+                </Button>
+                <Button x:Name="Bouton1" Click="Key1_Click" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50" Margin="0,40,260,0">
+                    <Label Content="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="40" FontWeight="Normal" Margin="5,0,0,0" FontSize="48"/>
+                </Button>
+                <Button x:Name="Bouton0" Click="Key0_Click" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50" Margin="0,160,260,0">
+                    <Label Content="0" HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="40" FontWeight="Normal" Margin="5,0,0,0" FontSize="48"/>
+                </Button>
+                <Button x:Name="BoutonDot" Click="KeyDot_Click" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50" Margin="0,160,140,0">
+                    <Label Content="." HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="20" FontWeight="Normal" FontSize="48"/>
+                </Button>
+                <Button x:Name="BoutonDelete" Click="KeyDelete_Click" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="150" Margin="80,160,0,0">
+                    <Image Source="Images\delete.png" Height="32" Width="35" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Button>
+                <Button x:Name="BoutonEnter" Click="KeyEnter_Click" Content="Entrée" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="170" Width="86" Margin="140,0,0,80" FontWeight="Bold" />
+                <DataGrid Name="DataGridPrep" SelectionChanged="dataGrid_SelectionChanged" Grid.Column="0" Margin="75,109,90,97" Grid.Row="1" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True" Grid.RowSpan="2">
 
                     <DataGrid.Resources>
                         <Style TargetType="DataGridColumnHeader">
@@ -45,7 +97,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
 
-                <WrapPanel Grid.RowSpan="2" VerticalAlignment="Bottom" Margin="75,0,0,35">
+                <WrapPanel VerticalAlignment="Bottom" Margin="75,0,0,35" Height="31" Grid.Row="2">
                     <Ellipse x:Name="LedDataGrid" Height="25" Width="25" Canvas.Left="10" Canvas.Top="25" Margin="0,0,10,0"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <Label x:Name="LabelDataGrid" Content="" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" Width="404" />
                 </WrapPanel>
@@ -56,38 +108,29 @@
                     <Label x:Name="LabelTestBDDPrep" Content="" FontSize="20" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Visibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Center" Width="167" Height="38"/>
                 </WrapPanel>
 
-                <WrapPanel Grid.RowSpan="2" VerticalAlignment="Top" Margin="75,50,0,0" Height="31">
-                    <Label Content="Entrer le numéro de commande :" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Width="270"/>
-                    <TextBox x:Name="SaisirCommande" GotFocus="BloquerFocusPoids" KeyDown="SaisiNumCommande_KeyDown" IsEnabled="True" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Width="249"/>
-                </WrapPanel>
 
-                <WrapPanel Grid.RowSpan="2" VerticalAlignment="Top" Margin="75,100,0,0" Height="32">
-                    <Label Content="Entrer le poids du colis :" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Width="270"/>
-                    <TextBox x:Name="SaisirPoids" TextChanged="ActivationBoutonValider" KeyDown="EnregistrerCommande_KeyDown" IsEnabled="False" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Width="249"/>
-                    <Button x:Name="ValiderCommandeBouton" Click="EnregistrerCommande_Click" IsEnabled="False" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Valider" Width="60" Height="32" FontSize="12" Margin="50,0,0,0"/>
-                </WrapPanel>
 
-                <WrapPanel Grid.RowSpan="2" VerticalAlignment="Top" Margin="75,143,0,0">
+                <WrapPanel VerticalAlignment="Top" Margin="75,107,0,0" Height="31" Grid.Row="0">
                     <Ellipse x:Name="LedEnregistrementCommande" Height="25" Width="25" Canvas.Left="10" Canvas.Top="25" Margin="70,0,10,0"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <Label x:Name="PrepCommandeLabel" Content="" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0" Width="404" />
                 </WrapPanel>
 
                 <WrapPanel VerticalAlignment="Top" Margin="75,46,48,0" Height="32" Grid.Row="1">
                     <Label Content="Rechercher une commande :" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Width="240"/>
-                    <TextBox x:Name="RechercherCommande1" TextChanged="rechercheCommande_TextChanged" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Width="231"/>
+                    <TextBox x:Name="RechercherCommande1" GotFocus="RechercherCommande1_GotFocus" TextChanged="rechercheCommande_TextChanged" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Width="231"/>
                 </WrapPanel>
 
                 <Label Content="Récapitulatif de la commande" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" Margin="0,10,0,0" Height="34" Width="269" />
 
-                <Label Content="Numéro commande :" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,80,0,0" Height="34" Width="178" />
-                <TextBox x:Name="NumCommandeRecap" TextChanged="ActiverBoutonRecap" LostFocus="Recap_LostFocus" FocusableChanged="Recap_FocusableChanged" BorderThickness="0" MouseDoubleClick="ModifierRecap" Cursor="Arrow" Focusable="False" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,85,30,0" Width="185" Height="30" />
+                <Label Content="Numéro commande :" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,170,75" Height="34" Width="178" />
+                <TextBox x:Name="NumCommandeRecap" TextChanged="ActiverBoutonRecap" GotFocus="Recap_GotFocus" LostFocus="Recap_LostFocus" FocusableChanged="Recap_FocusableChanged" BorderThickness="0" MouseDoubleClick="ModifierRecap" Cursor="Arrow" Focusable="False" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="210,0,0,70" Width="185" Height="30" />
 
-                <Label Content="Poids du colis :" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,120,0,0" Height="34" Width="127" />
-                <TextBox x:Name="PoidsRecap" TextChanged="ActiverBoutonRecap" LostFocus="Recap_LostFocus" FocusableChanged="Recap_FocusableChanged" BorderThickness="0" MouseDoubleClick="ModifierRecap" Grid.Row="1" Grid.Column="1" Cursor="Arrow" Focusable="False" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,125,30,0" Width="185" Height="30" />
+                <Label Content="Poids du colis :" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,220,5" Height="34" Width="127" />
+                <TextBox x:Name="PoidsRecap" TextChanged="ActiverBoutonRecap" GotFocus="Recap_GotFocus" LostFocus="Recap_LostFocus" FocusableChanged="Recap_FocusableChanged" BorderThickness="0" MouseDoubleClick="ModifierRecap" Grid.Row="1" Grid.Column="1" Cursor="Arrow" Focusable="False" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="210,0,0,0" Width="185" Height="30" />
 
-                <Button x:Name="ValiderRecapBouton" Click="ValiderRecap" IsEnabled="False" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" Content="Valider les modifications" Width="154" Height="32" FontSize="12" Margin="0,176,0,0"/>
+                <Button x:Name="ValiderRecapBouton" Click="ValiderRecap" IsEnabled="False" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Valider les modifications" Width="154" Height="32" FontSize="12" Margin="0,90,0,0"/>
 
-                <WrapPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" Margin="0,220,0,0" HorizontalAlignment="Center">
+                <WrapPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Top" Margin="0,186,0,0" HorizontalAlignment="Center" Height="31" Width="415">
                     <Ellipse x:Name="LedEnregistrementRecap" Height="25" Width="25" Canvas.Left="10" Canvas.Top="25" Margin="80,0,10,0"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <Label x:Name="RecapLabel" Content="" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Width="290" Margin="10,0,0,0" />
                 </WrapPanel>
@@ -123,11 +166,11 @@
                     <Label x:Name="LabelTestBDDExpe" Content="" FontSize="20" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Visibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Center" Width="167" Height="38"/>
                 </WrapPanel>
 
-            
+
                 <Button Content="Expedier commande" Click="ExpedierCommande_Click" Grid.Row="2" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" Height="30" Width="190" Margin="35,0,0,30"/>
                 <Button Content="Modifier poids commande" Click="ModifierPoids_Click" Grid.Row="2" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Height="30" Width="248" Margin="0,0,100,30"/>
-                <Button Content="Rechercher commande Amazon" Grid.Row="2" FontSize="18" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold" Height="30" Width="296" Margin="0,0,30,30"/>
-                
+                <Button x:Name="AmazonPageBouton" Content="Rechercher commande Amazon" Grid.Row="2" FontSize="18" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold" Height="30" Width="296" Margin="0,0,30,30"/>
+
                 <WrapPanel Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top">
                     <WrapPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <Label FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center">Transporteur :</Label>

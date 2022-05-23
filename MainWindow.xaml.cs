@@ -24,6 +24,7 @@ using CashphotoWPF.BDD;
 using Cursors = System.Windows.Input.Cursors;
 using System.Collections.ObjectModel;
 using TextBox = System.Windows.Controls.TextBox;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace CashphotoWPF
 {
@@ -47,6 +48,7 @@ namespace CashphotoWPF
 
         private RechercheEnBoucle _rechercheEnBoucle;
 
+        private TextBox _focusedTextBox { get; set; }
 
         #region Window
 
@@ -240,11 +242,15 @@ namespace CashphotoWPF
             return commande;
         }
 
-        private Commande CompleterCommande(Commande commande, string poids)
+        private Commande CompleterCommande(Commande commande, string poids, bool secondColis)
         {
             Constante constante = Constante.GetConstante();
 
-            commande.Poids = double.Parse(poids, CultureInfo.InvariantCulture);
+            if(secondColis)
+                commande.Poids2 = double.Parse(poids, CultureInfo.InvariantCulture);
+            else
+                commande.Poids = double.Parse(poids, CultureInfo.InvariantCulture);
+
             commande.Preparer = true;
 
             constante.cashphotoBDD.SaveChanges();
@@ -443,6 +449,7 @@ namespace CashphotoWPF
             LedTestBDDPrep.Fill = mySolidColorBrush;
             LedTestBDDExpe.Fill = mySolidColorBrush;
         }
+
 
         /// <summary>
         /// Création de la BDD.
@@ -828,6 +835,18 @@ namespace CashphotoWPF
             }
         }
 
+        private void Recap_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender.Equals(NumCommandeRecap))
+            {
+                _focusedTextBox = NumCommandeRecap;
+            }
+            else if (sender.Equals(PoidsRecap))
+            {
+                _focusedTextBox = PoidsRecap;
+            }
+        }
+
         /// <summary>
         /// Si le champ est focusable alors le curseur est la barre verticale utilisé lors de l'écriture.
         /// Sinon le curseur reste la flèche.
@@ -915,45 +934,45 @@ namespace CashphotoWPF
 
             Constante constante = Constante.GetConstante();
 
-            //On utilise _commande
-            Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.IdCommande == _commande.IdCommande).FirstOrDefault();
-            if (commande == _commande)
-                System.Diagnostics.Debug.WriteLine("SIii");
-
-            //L'utilisateur ne modifie pas le numéro de commande
-            //Alors pas besoin de vérifier s'il est valide ou si une commande existe déjà.
-            if(commande.NumCommande == NumCommandeRecap.Text)
+            if(_commande != null)
             {
-                double poids = double.Parse(PoidsRecap.Text, CultureInfo.InvariantCulture);
-                commande.Poids = poids;
-                commande.Preparer = true;
+                //On utilise _commande
+                Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.IdCommande == _commande.IdCommande).FirstOrDefault();
 
-                constante.cashphotoBDD.SaveChanges();
-                AfficherTestRecap(true);
+                //L'utilisateur ne modifie pas le numéro de commande
+                //Alors pas besoin de vérifier s'il est valide ou si une commande existe déjà.
+                if (commande.NumCommande == NumCommandeRecap.Text)
+                {
+                    double poids = double.Parse(PoidsRecap.Text, CultureInfo.InvariantCulture);
+                    commande.Poids = poids;
+                    commande.Preparer = true;
 
-                //Rechargement des Datagrid
-                _commandes = getCommandesDateToday(false);
-                DataGridPrep.ItemsSource = _commandes;
-                DataGridExpe.ItemsSource = _commandes;
+                    constante.cashphotoBDD.SaveChanges();
+                    AfficherTestRecap(true);
+
+                    //Rechargement des Datagrid
+                    _commandes = getCommandesDateToday(false);
+                    DataGridPrep.ItemsSource = _commandes;
+                    DataGridExpe.ItemsSource = _commandes;
+                }
+                else if (!commandeExist(NumCommandeRecap.Text))
+                {
+                    commande.NumCommande = NumCommandeRecap.Text;
+                    double poids = double.Parse(PoidsRecap.Text, CultureInfo.InvariantCulture);
+                    commande.Poids = poids;
+
+                    constante.cashphotoBDD.SaveChanges();
+                    AfficherTestRecap(true);
+
+                    //Rechargement des Datagrid
+                    _commandes = getCommandesDateToday(false);
+                    DataGridPrep.ItemsSource = _commandes;
+                    DataGridExpe.ItemsSource = _commandes;
+                }
+
+                else
+                    AfficherTestRecap(false);
             }
-            else if (!commandeExist(NumCommandeRecap.Text))
-            {
-                commande.NumCommande = NumCommandeRecap.Text;
-                double poids = double.Parse(PoidsRecap.Text, CultureInfo.InvariantCulture);
-                commande.Poids = poids;
-
-                constante.cashphotoBDD.SaveChanges();
-                AfficherTestRecap(true);
-
-                //Rechargement des Datagrid
-                _commandes = getCommandesDateToday(false);
-                DataGridPrep.ItemsSource = _commandes;
-                DataGridExpe.ItemsSource = _commandes;
-            }
-
-            else
-                AfficherTestRecap(false);
-
         }
 
         //-------------ZONE ENREGISTREMENT-------------
@@ -997,9 +1016,21 @@ namespace CashphotoWPF
         /// <summary>
         /// Le TextBox du poids n'est plus Enabled lorsque l'utilisateur clique sur le TextBox numéro de commande. 
         /// </summary>
-        private void BloquerFocusPoids(object sender, RoutedEventArgs e)
+        private void SaisirCommande_GotFocus(object sender, RoutedEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine("Shee Focus");
             SaisirPoids.IsEnabled = false;
+            _focusedTextBox = SaisirCommande;
+        }
+
+        private void SaisirPoids_GotFocus(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox = SaisirPoids;
+        }
+
+        private void RechercherCommande1_GotFocus(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox = RechercherCommande1;
         }
 
         /// <summary>
@@ -1040,7 +1071,7 @@ namespace CashphotoWPF
 
                 if (commande.Preparer == false)
                 {
-                    _commande = CompleterCommande(commande, SaisirPoids.Text);
+                    _commande = CompleterCommande(commande, SaisirPoids.Text, false);
                     SaisirPoids.Text = "";
                     SaisirCommande.Text = "";
                     SaisirCommande.IsEnabled = true;
@@ -1055,6 +1086,10 @@ namespace CashphotoWPF
                     else
                         _commandes = getCommandesDateToday(false);
                     DataGridPrep.ItemsSource = _commandes;
+                }
+                else if((bool)ColisSupplementaire_CheckBox.IsChecked)
+                {
+
                 }
                 else
                 {
@@ -1110,9 +1145,28 @@ namespace CashphotoWPF
                         Constante constante = Constante.GetConstante();
                         Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == SaisirCommande.Text).First();
 
-                        if (commande.Preparer == false)
+                        if((bool)ColisSupplementaire_CheckBox.IsChecked)
                         {
-                            _commande = CompleterCommande(commande, SaisirPoids.Text);
+                            _commande = CompleterCommande(commande, SaisirPoids.Text, true);
+                            SaisirPoids.Text = "";
+                            SaisirCommande.Text = "";
+                            SaisirCommande.IsEnabled = true;
+                            SaisirCommande.Focus();
+                            SaisirPoids.IsEnabled = false;
+                            AfficherTestEnregistrementCommande(true);
+                            ActualiserRecapEnregistrementCommande(null);
+
+                            //Rechargement du Datagrid
+                            if ((bool)Expedier_CheckBox.IsChecked)
+                                _commandes = getCommandesDateToday(true);
+                            else
+                                _commandes = getCommandesDateToday(false);
+                            DataGridPrep.ItemsSource = _commandes;
+
+                        }
+                        else if (commande.Preparer == false)
+                        {
+                            _commande = CompleterCommande(commande, SaisirPoids.Text, false);
                             SaisirPoids.Text = "";
                             SaisirCommande.Text = "";
                             SaisirCommande.IsEnabled = true;
@@ -1164,6 +1218,83 @@ namespace CashphotoWPF
             }
         }
 
+        //-------------Clavier Virtuel-------------
+
+        private void Key0_Click(object sender, RoutedEventArgs e)
+        { 
+            _focusedTextBox.Text += "0";
+            _focusedTextBox.CaretIndex = _focusedTextBox.Text.Length;
+        }
+
+        private void Key1_Click(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox.Text += "1";
+            _focusedTextBox.CaretIndex = _focusedTextBox.Text.Length;
+        }
+
+        private void Key2_Click(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox.Text += "2";
+            _focusedTextBox.CaretIndex = _focusedTextBox.Text.Length;
+        }
+
+        private void Key3_Click(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox.Text += "3";
+            _focusedTextBox.CaretIndex = _focusedTextBox.Text.Length;
+        }
+
+        private void Key4_Click(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox.Text += "4";
+            _focusedTextBox.CaretIndex = _focusedTextBox.Text.Length;
+        }
+        private void Key5_Click(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox.Text += "5";
+            _focusedTextBox.CaretIndex = _focusedTextBox.Text.Length;
+        }
+
+        private void Key6_Click(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox.Text += "6";
+            _focusedTextBox.CaretIndex = _focusedTextBox.Text.Length;
+        }
+        private void Key7_Click(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox.Text += "7";
+            _focusedTextBox.CaretIndex = _focusedTextBox.Text.Length;
+        }
+        private void Key8_Click(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox.Text += "8";
+            _focusedTextBox.CaretIndex = _focusedTextBox.Text.Length;
+        }
+        private void Key9_Click(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox.Text += "9";
+            _focusedTextBox.CaretIndex = _focusedTextBox.Text.Length;
+        }
+
+        private void KeyDot_Click(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox.Text += ".";
+            _focusedTextBox.CaretIndex = _focusedTextBox.Text.Length;
+        }
+
+        private void KeyDelete_Click(object sender, RoutedEventArgs e)
+        {
+            //_focusedTextBox
+            var routedEvent = Keyboard.KeyDownEvent;
+            _focusedTextBox.RaiseEvent(new KeyEventArgs(Keyboard.PrimaryDevice,PresentationSource.FromVisual(_focusedTextBox),0,Key.Back){ RoutedEvent = routedEvent });
+
+        }
+
+        private void KeyEnter_Click(object sender, RoutedEventArgs e)
+        {
+            var routedEvent = Keyboard.KeyDownEvent;
+            _focusedTextBox.RaiseEvent(new KeyEventArgs(Keyboard.PrimaryDevice, PresentationSource.FromVisual(_focusedTextBox), 0, Key.Enter) { RoutedEvent = routedEvent });
+        }
         //-------------DataGrid-------------
 
         /// <summary>
@@ -1189,6 +1320,16 @@ namespace CashphotoWPF
                     _commande = commande;
                     ActualiserDataGridArticle(commande.NumCommande);
                     ActualiserRecapExpe(commande.NumCommande);
+
+                    if(commande.Site == "Cashphoto")
+                    {
+                        Coliposte.IsChecked = true;
+                        AmazonPageBouton.IsEnabled = false;
+                    }
+                    else
+                    {
+                        AmazonPageBouton.IsEnabled = true;
+                    }
                 }
             }
         }
@@ -1205,6 +1346,7 @@ namespace CashphotoWPF
                     _commandes = getCommandesDateToday(false);
                 else
                     _commandes = getCommandesRecherche(RechercherCommande1.Text, false);
+
                 DataGridPrep.ItemsSource = _commandes;
 
                 if (DataGridPrep.Items.Count == 1)
@@ -1220,18 +1362,30 @@ namespace CashphotoWPF
                     expedier = true;
                 else
                     expedier = false;
-                System.Diagnostics.Debug.WriteLine(expedier);
+                
 
                 if (RechercherCommande2.Text.Equals(""))
                     _commandes = getCommandesDateToday(expedier);
                 else
                     _commandes = getCommandesRecherche(RechercherCommande2.Text, expedier);
+
                 DataGridExpe.ItemsSource = _commandes;
 
                 if (DataGridExpe.Items.Count == 1)
                 {
                     _commande = DataGridExpe.Items[0] as Commande;
                     ActualiserRecapExpe(_commande.NumCommande);
+                    
+                    if (_commande.Site == "Cashphoto")
+                    {
+                        Coliposte.IsChecked = true;
+                        AmazonPageBouton.IsEnabled = false;
+                    }
+                    else
+                    {
+                        AmazonPageBouton.IsEnabled = true;
+                    }
+                        
                 }
             }
             
@@ -1275,6 +1429,8 @@ namespace CashphotoWPF
             {
                 Constante constante = Constante.GetConstante();
                 Expedition expedition = new Expedition();
+                Suivi suivi = new Suivi(this);
+
                 string export = "";
                 Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == _commande.NumCommande).First();
 
@@ -1291,6 +1447,10 @@ namespace CashphotoWPF
                         constante.cashphotoBDD.SaveChanges();
 
                         expedition.ExpedierCommande(commande);
+
+                        if (constante.transporteur == Transporteur.Transporteurs.Coliposte)
+                            suivi.createSuiviFromCommande(commande);
+
                         export = "La commande de " + commande.NomClientLivraison + " est expédiée.";
                     }
                     else if (isCompleteCommande(commande) && commande.Preparer == false)
@@ -1304,6 +1464,10 @@ namespace CashphotoWPF
                             constante.cashphotoBDD.SaveChanges();
 
                             expedition.ExpedierCommande(commande);
+
+                            if (constante.transporteur == Transporteur.Transporteurs.Coliposte)
+                                suivi.createSuiviFromCommande(commande);
+
                             export = "La commande de " + commande.NomClientLivraison + " est expédiée.";
                         }
                     }
@@ -1378,13 +1542,13 @@ namespace CashphotoWPF
                 Constante constante = Constante.GetConstante();
                 if (Preparation.IsSelected)
                 {
-                    constante.indexTabItem = 0;
-                    SaisirCommande.Focus();
+                    constante.indexTabItem = 0;     
+                    _focusedTextBox = SaisirCommande;
+
                 }
                 else if (Expedition.IsSelected)
                 {
                     constante.indexTabItem = 1;
-                    RechercherCommande2.Focus();
                 }
                 else if (Configuration.IsSelected)
                 {
@@ -1404,5 +1568,7 @@ namespace CashphotoWPF
                 }
             }
         }
+
+       
     }
 }

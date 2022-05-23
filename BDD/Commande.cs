@@ -15,6 +15,7 @@ namespace CashphotoWPF.BDD
         public int IdCommande { get; set; }
         public string NumCommande { get; set; }
         public double? Poids { get; set; }
+        public double? Poids2 { get; set; }
         public string? NomClientFacturation { get; set; }
         public string? NomClientLivraison { get; set; }
         public string? TelClientFacturation { get; set; }
@@ -31,5 +32,6 @@ namespace CashphotoWPF.BDD
         public bool Preparer { get; set; }
         public bool Expedier { get; set; }
         public string? NumeroSuivi { get; set; }
+        public string? NumeroSuivi2 { get; set; }
     }
 }

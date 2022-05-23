@@ -244,9 +244,8 @@ namespace CashphotoWPF
         private Commande CompleterCommande(Commande commande, string poids, bool secondColis)
         {
             Constante constante = Constante.GetConstante();
-            constante.cashphotoBDD = new CashphotoBDD();
 
-            Commande cmd = constante.cashphotoBDD.Commandes.Where(c => c == commande).First();
+            Commande cmd = constante.cashphotoBDD.Commandes.Where(c => c.NumCommande == commande.NumCommande).First();
 
             if (secondColis)
                 cmd.Poids2 = double.Parse(poids, CultureInfo.InvariantCulture);
@@ -520,7 +519,6 @@ namespace CashphotoWPF
             IQueryable<Commande> commandesTable;
 
             Constante constante = Constante.GetConstante();
-            constante.cashphotoBDD = new CashphotoBDD();
 
             if (constante.BDDOK)
             {
@@ -541,7 +539,6 @@ namespace CashphotoWPF
             IQueryable<Commande> commandesTable;
 
             Constante constante = Constante.GetConstante();
-            constante.cashphotoBDD = new CashphotoBDD();
 
             if (constante.BDDOK)
             {
@@ -558,7 +555,6 @@ namespace CashphotoWPF
             IQueryable<Article> articlesTable;
 
             Constante constante = Constante.GetConstante();
-            constante.cashphotoBDD = new CashphotoBDD();
          
             if (constante.BDDOK)
             {
@@ -952,18 +948,17 @@ namespace CashphotoWPF
             if(_commande != null)
             {
                 Constante constante = Constante.GetConstante();
-                constante.cashphotoBDD = new CashphotoBDD();
 
                 //On utilise _commande
-                _commande = constante.cashphotoBDD.Commandes.Where(commande => commande == _commande).FirstOrDefault();
+                Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == _commande.NumCommande).FirstOrDefault();
 
                 //L'utilisateur ne modifie pas le numéro de commande
                 //Alors pas besoin de vérifier s'il est valide ou si une commande existe déjà.
-                if (_commande.NumCommande == NumCommandeRecap.Text)
+                if (commande.NumCommande == NumCommandeRecap.Text)
                 {
                     double poids = double.Parse(PoidsRecap.Text, CultureInfo.InvariantCulture);
-                    _commande.Poids = poids;
-                    _commande.Preparer = true;
+                    commande.Poids = poids;
+                    commande.Preparer = true;
 
                     constante.cashphotoBDD.SaveChanges();
                     AfficherTestRecap(true);
@@ -975,9 +970,9 @@ namespace CashphotoWPF
                 }
                 else if (!commandeExist(NumCommandeRecap.Text))
                 {
-                    _commande.NumCommande = NumCommandeRecap.Text;
+                    commande.NumCommande = NumCommandeRecap.Text;
                     double poids = double.Parse(PoidsRecap.Text, CultureInfo.InvariantCulture);
-                    _commande.Poids = poids;
+                    commande.Poids = poids;
 
                     constante.cashphotoBDD.SaveChanges();
                     AfficherTestRecap(true);
@@ -1431,7 +1426,6 @@ namespace CashphotoWPF
             if(_commande != null)
             {
                 Constante constante = Constante.GetConstante();
-                constante.cashphotoBDD = new CashphotoBDD();
 
                 Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == _commande.NumCommande).First();
 
@@ -1562,6 +1556,10 @@ namespace CashphotoWPF
             {
                 string import = nbcommandes + " commande(s) importée(s). " + Regex.Replace(System.DateTime.Now.TimeOfDay.ToString(), "\\.\\d+$", "");
                 DisplayTempMessage(Message, import);
+
+                _commandes = getCommandesDateToday(false);
+                DataGridExpe.ItemsSource = _commandes;
+
             }
             
         }

@@ -81,7 +81,6 @@ namespace CashphotoWPF.Configuration
 
         public void charger(string chemin)
         {
-            System.Diagnostics.Debug.WriteLine("chemin " + chemin);
 
             //Singleton contenant les constantes dans le code source
             Constante constante = Constante.GetConstante();
@@ -145,7 +144,6 @@ namespace CashphotoWPF.Configuration
             }
             catch(Exception e)
             {
-                System.Diagnostics.Debug.WriteLine(e.Message);
                 constante.fichierConfigExist=false;
                 //Ouverture d'une boite de dialogue pour indiquer le problème
                 System.Windows.MessageBox.Show("Erreur lors du chargement du fichier de configuration.\n", "Alert", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);

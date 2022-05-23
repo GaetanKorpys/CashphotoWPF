@@ -22,8 +22,6 @@ namespace CashphotoWPF.BDD
             Constante constante = Constante.GetConstante();
             string connectionString;
 
-            
-
             if (constante.BDDIP.Equals("127.0.0.1"))
             {
                 connectionString = constante.connectionStringLocal;
@@ -34,9 +32,9 @@ namespace CashphotoWPF.BDD
                 connectionString += constante.BDDIP;
                 connectionString += ";";
                 connectionString += constante.connectionString2;
-            } 
+            }
             optionsBuilder.UseSqlServer(connectionString);
-           
+                
         }
 
         public DbSet<Commande> Commandes { get; set; }

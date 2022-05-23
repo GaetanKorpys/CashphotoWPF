@@ -46,6 +46,7 @@ namespace CashphotoWPF
         //ou qu'il séléctionne une ligne dans le DataGrid.
         private Commande _commande { get; set; }
 
+
         private RechercheEnBoucle _rechercheEnBoucle;
 
         private TextBox _focusedTextBox { get; set; }
@@ -66,8 +67,6 @@ namespace CashphotoWPF
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             chargementLancement();
-            
-            
         }
 
         /// <summary>
@@ -83,6 +82,7 @@ namespace CashphotoWPF
             Constante constante = Constante.GetConstante();
             constante.BDDOK = false; //On suppose que la BDD n'est pas connectée, on modifie cette valeur lors du test de connexion.
 
+            
             //On charge le fichier de config pour initiliser le reste des constantes dans la classe Constante
             FichierConfig config = FichierConfig.GetInstance();
             config.charger();
@@ -104,18 +104,15 @@ namespace CashphotoWPF
                 CreerDossier();
                 _rechercheEnBoucle = new RechercheEnBoucle(this);
             }
-                
 
-            CreationBDD();
-
-            TestConnexionBDD_Click(null, null);
+            TestConnexionBDD();
 
             //Chargement des DataGrid
             //On affiche les commandes traitées ce jour.
             _commandes = getCommandesDateToday(false);
             DataGridPrep.ItemsSource = _commandes;
             DataGridExpe.ItemsSource = _commandes;
-
+            
         }
 
         /// <summary>
@@ -128,8 +125,10 @@ namespace CashphotoWPF
             {
                 killProcessBalance();
             }
-                
-            _rechercheEnBoucle.StopRecherche();
+
+            if(_rechercheEnBoucle != null)
+                _rechercheEnBoucle.StopRecherche();
+
             Close();
            
         }
@@ -245,17 +244,20 @@ namespace CashphotoWPF
         private Commande CompleterCommande(Commande commande, string poids, bool secondColis)
         {
             Constante constante = Constante.GetConstante();
+            constante.cashphotoBDD = new CashphotoBDD();
 
-            if(secondColis)
-                commande.Poids2 = double.Parse(poids, CultureInfo.InvariantCulture);
+            Commande cmd = constante.cashphotoBDD.Commandes.Where(c => c == commande).First();
+
+            if (secondColis)
+                cmd.Poids2 = double.Parse(poids, CultureInfo.InvariantCulture);
             else
-                commande.Poids = double.Parse(poids, CultureInfo.InvariantCulture);
+                cmd.Poids = double.Parse(poids, CultureInfo.InvariantCulture);
 
-            commande.Preparer = true;
+            cmd.Preparer = true;
 
             constante.cashphotoBDD.SaveChanges();
 
-            return commande;
+            return cmd;
         }
 
 
@@ -420,9 +422,7 @@ namespace CashphotoWPF
         /// </summary>
         private void TestConnexionBDD_Click(object sender, RoutedEventArgs e)
         {
-            Constante constante = Constante.GetConstante();
-            constante.BDDOK = TestConnexionBDD();
-            AfficherTestBDD();
+            TestConnexionBDD();
         }
 
         /// <summary>
@@ -463,14 +463,18 @@ namespace CashphotoWPF
         /// <summary>
         /// Test de connexion à la BDD.
         /// </summary>
-        private bool TestConnexionBDD()
+        private void TestConnexionBDD()
         {
             Constante constante = Constante.GetConstante();
+      
+            constante.cashphotoBDD = new CashphotoBDD();
+
             if (constante.cashphotoBDD.Database.CanConnect())
-            {
-                return true;
-            }
-            return false;
+                constante.BDDOK = true;                   
+            else
+                constante.BDDOK = false;
+
+            AfficherTestBDD();
         }
 
         /// <summary>
@@ -513,8 +517,10 @@ namespace CashphotoWPF
         private List<Commande> getCommandesRecherche(string numCmd, bool expedier)
         {
             List<Commande> commandes = new List<Commande>();
-            Constante constante = Constante.GetConstante();
             IQueryable<Commande> commandesTable;
+
+            Constante constante = Constante.GetConstante();
+            constante.cashphotoBDD = new CashphotoBDD();
 
             if (constante.BDDOK)
             {
@@ -532,8 +538,10 @@ namespace CashphotoWPF
         private List<Commande> getCommandesDateToday(bool expedier)
         {
             List<Commande> commandes = new List<Commande>();
-            Constante constante = Constante.GetConstante();
             IQueryable<Commande> commandesTable;
+
+            Constante constante = Constante.GetConstante();
+            constante.cashphotoBDD = new CashphotoBDD();
 
             if (constante.BDDOK)
             {
@@ -547,13 +555,14 @@ namespace CashphotoWPF
         private List<Article> getArticlesFromCommande(string numCommande)
         {
             List<Article> articles = new List<Article>();
-            Constante constante = Constante.GetConstante();
             IQueryable<Article> articlesTable;
 
+            Constante constante = Constante.GetConstante();
+            constante.cashphotoBDD = new CashphotoBDD();
+         
             if (constante.BDDOK)
             {
                 articlesTable = constante.cashphotoBDD.Articles.Where(article => article.NumCommande == numCommande);
-
                 articles = articlesTable.ToList();
             }
             return articles;
@@ -713,8 +722,9 @@ namespace CashphotoWPF
                 //BDD locale, l'utilisateur ne rentre donc pas d'adresse IP
                 //On valide directement dès que le bouton radio locale est choisi.
                 setBDDIP("127.0.0.1");
+
                 //Nouvelle BDD locale
-                CreationBDD();;
+                TestConnexionBDD();
 
             }
             else if (sender.Equals(BDDDistanteRadio))
@@ -731,8 +741,12 @@ namespace CashphotoWPF
         {
             if (e.Key == Key.Enter)
             {
+                
                 setBDDIP(BDDAdresseTextBox.Text);
-                CreationBDD();
+
+                //Test pour la nouvelle BDD
+                Constante constante = Constante.GetConstante();
+                TestConnexionBDD();;
             }
         }
 
@@ -742,7 +756,10 @@ namespace CashphotoWPF
         private void ValiderIP(object sender, EventArgs e)
         {
             setBDDIP(BDDAdresseTextBox.Text);
-            CreationBDD();
+
+            //Test pour la nouvelle BDD
+            Constante constante = Constante.GetConstante();
+            TestConnexionBDD();
         }
 
         /// <summary>
@@ -932,20 +949,21 @@ namespace CashphotoWPF
         private void ValiderRecap(object sender, RoutedEventArgs e)
         {
 
-            Constante constante = Constante.GetConstante();
-
             if(_commande != null)
             {
+                Constante constante = Constante.GetConstante();
+                constante.cashphotoBDD = new CashphotoBDD();
+
                 //On utilise _commande
-                Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.IdCommande == _commande.IdCommande).FirstOrDefault();
+                _commande = constante.cashphotoBDD.Commandes.Where(commande => commande == _commande).FirstOrDefault();
 
                 //L'utilisateur ne modifie pas le numéro de commande
                 //Alors pas besoin de vérifier s'il est valide ou si une commande existe déjà.
-                if (commande.NumCommande == NumCommandeRecap.Text)
+                if (_commande.NumCommande == NumCommandeRecap.Text)
                 {
                     double poids = double.Parse(PoidsRecap.Text, CultureInfo.InvariantCulture);
-                    commande.Poids = poids;
-                    commande.Preparer = true;
+                    _commande.Poids = poids;
+                    _commande.Preparer = true;
 
                     constante.cashphotoBDD.SaveChanges();
                     AfficherTestRecap(true);
@@ -957,9 +975,9 @@ namespace CashphotoWPF
                 }
                 else if (!commandeExist(NumCommandeRecap.Text))
                 {
-                    commande.NumCommande = NumCommandeRecap.Text;
+                    _commande.NumCommande = NumCommandeRecap.Text;
                     double poids = double.Parse(PoidsRecap.Text, CultureInfo.InvariantCulture);
-                    commande.Poids = poids;
+                    _commande.Poids = poids;
 
                     constante.cashphotoBDD.SaveChanges();
                     AfficherTestRecap(true);
@@ -1396,17 +1414,25 @@ namespace CashphotoWPF
 
         #region Expédition
 
-        private void CommandeExpedier_CheckBox(object sender, RoutedEventArgs e)
+        private void CommandeExpedier_Checked(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("D");
+            _commandes = getCommandesDateToday(true);
+            DataGridExpe.ItemsSource = _commandes;
+        }
+
+        private void CommandeExpedier_Unchecked(object sender, RoutedEventArgs e)
+        {
+            _commandes = getCommandesDateToday(false);
+            DataGridExpe.ItemsSource = _commandes;
         }
 
         private void ModifierPoids_Click(object sender, RoutedEventArgs e)
         {
-            Constante constante = Constante.GetConstante();
-
             if(_commande != null)
             {
+                Constante constante = Constante.GetConstante();
+                constante.cashphotoBDD = new CashphotoBDD();
+
                 Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == _commande.NumCommande).First();
 
                 Poids poidsDialog = new Poids(this);
@@ -1416,15 +1442,17 @@ namespace CashphotoWPF
                     commande.Preparer = true;
                     constante.cashphotoBDD.SaveChanges();
 
+                    _commandes = getCommandesDateToday((bool)Expedier_CheckBox.IsChecked);
+                    DataGridExpe.ItemsSource = _commandes;
+                    DataGridPrep.ItemsSource = _commandes;
+
                     DisplayTempMessage(Message, "Modification du poids validée.");
                 }
-            }
-            
+            }   
         }
 
         private void ExpedierCommande_Click(object sender, RoutedEventArgs e)
         {
-             
             if(_commande != null)
             {
                 Constante constante = Constante.GetConstante();
@@ -1451,6 +1479,10 @@ namespace CashphotoWPF
                         if (constante.transporteur == Transporteur.Transporteurs.Coliposte)
                             suivi.createSuiviFromCommande(commande);
 
+                        _commandes = getCommandesDateToday(false);
+                        DataGridExpe.ItemsSource = _commandes;
+                        DataGridPrep.ItemsSource = _commandes;
+
                         export = "La commande de " + commande.NomClientLivraison + " est expédiée.";
                     }
                     else if (isCompleteCommande(commande) && commande.Preparer == false)
@@ -1467,6 +1499,10 @@ namespace CashphotoWPF
 
                             if (constante.transporteur == Transporteur.Transporteurs.Coliposte)
                                 suivi.createSuiviFromCommande(commande);
+
+                            _commandes = getCommandesDateToday(false);
+                            DataGridExpe.ItemsSource = _commandes;
+                            DataGridPrep.ItemsSource = _commandes;
 
                             export = "La commande de " + commande.NomClientLivraison + " est expédiée.";
                         }

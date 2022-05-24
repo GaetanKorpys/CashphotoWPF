@@ -960,13 +960,14 @@ namespace CashphotoWPF
                     commande.Poids = poids;
                     commande.Preparer = true;
 
+                    constante.cashphotoBDD.Entry(commande).Reload();
                     constante.cashphotoBDD.SaveChanges();
                     AfficherTestRecap(true);
 
                     //Rechargement des Datagrid
                     _commandes = getCommandesDateToday(false);
-                    DataGridPrep.ItemsSource = _commandes;
-                    DataGridExpe.ItemsSource = _commandes;
+                    DataGridPrep.Items.Refresh();
+                    DataGridExpe.Items.Refresh();
                 }
                 else if (!commandeExist(NumCommandeRecap.Text))
                 {
@@ -979,8 +980,8 @@ namespace CashphotoWPF
 
                     //Rechargement des Datagrid
                     _commandes = getCommandesDateToday(false);
-                    DataGridPrep.ItemsSource = _commandes;
-                    DataGridExpe.ItemsSource = _commandes;
+                    DataGridPrep.Items.Refresh();
+                    DataGridExpe.Items.Refresh();
                 }
 
                 else

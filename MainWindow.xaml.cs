@@ -520,7 +520,6 @@ namespace CashphotoWPF
             IQueryable<Commande> commandesTable;
 
             Constante constante = Constante.GetConstante();
-            //constante.cashphotoBDD = new CashphotoBDD();
 
             if (constante.BDDOK)
             {
@@ -534,7 +533,6 @@ namespace CashphotoWPF
                 }
 
             }
-            //constante.cashphotoBDD.Dispose();
             return commandes;
         }
 
@@ -548,7 +546,6 @@ namespace CashphotoWPF
             IQueryable<Commande> commandesTable;
 
             Constante constante = Constante.GetConstante();
-            //constante.cashphotoBDD = new CashphotoBDD();
 
             if (constante.BDDOK)
             {
@@ -561,7 +558,6 @@ namespace CashphotoWPF
                     constante.cashphotoBDD.Entry(commande).Reload();
                 }
             }
-            //constante.cashphotoBDD.Dispose();
             return commandes;
         }
 
@@ -1349,6 +1345,9 @@ namespace CashphotoWPF
                 if (commande != null)
                 {
                     _commande = commande;
+
+                    RecapExpe_WrapPanel.Visibility = Visibility.Visible;
+
                     ActualiserDataGridArticle(commande.NumCommande);
                     ActualiserRecapExpe(commande.NumCommande);
 
@@ -1384,7 +1383,11 @@ namespace CashphotoWPF
                 {
                     _commande = DataGridPrep.Items[0] as Commande;
                     ActualiserRecapEnregistrementCommande(_commande.NumCommande);
+                    RecapExpe_WrapPanel.Visibility = Visibility.Visible;
                 }
+                else
+                    RecapExpe_WrapPanel.Visibility = Visibility.Hidden;
+
             }
             else if(sender.Equals(RechercherCommande2))
             {
@@ -1406,7 +1409,8 @@ namespace CashphotoWPF
                 {
                     _commande = DataGridExpe.Items[0] as Commande;
                     ActualiserRecapExpe(_commande.NumCommande);
-                    
+                    RecapExpe_WrapPanel.Visibility = Visibility.Visible;
+
                     if (_commande.Site == "Cashphoto")
                     {
                         Coliposte.IsChecked = true;
@@ -1416,8 +1420,9 @@ namespace CashphotoWPF
                     {
                         AmazonPageBouton.IsEnabled = true;
                     }
-                        
                 }
+                else
+                    RecapExpe_WrapPanel.Visibility = Visibility.Hidden;
             }
             
         }
@@ -1468,7 +1473,7 @@ namespace CashphotoWPF
             if(_commande != null)
             {
                 Constante constante = Constante.GetConstante();
-                Expedition expedition = new Expedition();
+                Expedition expedition = new Expedition(this);
                 Suivi suivi = new Suivi(this);
 
                 string export = "";
@@ -1489,6 +1494,7 @@ namespace CashphotoWPF
                         expedition.ExpedierCommande(commande);
 
                         if (constante.transporteur == Transporteur.Transporteurs.Coliposte)
+                            //Att 3s
                             suivi.createSuiviFromCommande(commande);
 
                         _commandes = getCommandesDateToday(false);
@@ -1510,6 +1516,7 @@ namespace CashphotoWPF
                             expedition.ExpedierCommande(commande);
 
                             if (constante.transporteur == Transporteur.Transporteurs.Coliposte)
+                                //Att 3s
                                 suivi.createSuiviFromCommande(commande);
 
                             _commandes = getCommandesDateToday(false);

@@ -9,6 +9,12 @@ namespace CashphotoWPF
 {
     internal class Expedition
     {
+        private MainWindow _app;
+        public Expedition(MainWindow app)
+        {
+            _app = app;
+        }
+
         public void ExpedierCommande(Commande commande)
         {
             Constante constante = Constante.GetConstante();
@@ -98,8 +104,8 @@ namespace CashphotoWPF
             Encoding enc;
             if (transporteurs.Equals(Transporteur.Transporteurs.GLS))
             {
-                line = RemoveDiacritics(line); //le logiciel GLS est faible face aux caractères spéciaux, on les retire
-                enc = Encoding.ASCII;    //en témoigne l'encodage préhistorique qu'on doit utiliser
+                line = RemoveDiacritics(line); //Le logiciel GLS est faible face aux caractères spéciaux
+                enc = Encoding.ASCII;    
             }
             else
             {

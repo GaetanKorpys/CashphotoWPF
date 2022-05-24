@@ -201,9 +201,9 @@ namespace CashphotoWPF
             }
             
 
-            row = c.NumCommande;
+            row = "EXPP"+c.NumCommande;
             row += delimiter;
-            row += "EXPP" + line[1];
+            row += line[1];
 
             sw.WriteLine(row);
 

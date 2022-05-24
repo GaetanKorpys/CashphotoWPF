@@ -188,6 +188,14 @@ namespace CashphotoWPF
         {
             Constante constante = Constante.GetConstante();
             string numCommande = Data[0];
+            if (Data[4].Equals(""))
+                Data[4] = constante.email;
+
+            if (Data[6].Equals(""))
+                Data[6] = constante.telephone;
+
+            if (Data[24].Equals(""))
+                Data[24] = constante.telephone;
 
             Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == numCommande).First();
             commande.NomClientFacturation = Data[5];
@@ -209,8 +217,15 @@ namespace CashphotoWPF
         private void CreerCommandeAmazon(string[] Data)
         {
             Constante constante = Constante.GetConstante();
-            string numCommande = Data[0];
 
+            if (Data[4].Equals(""))
+                Data[4] = constante.email;
+
+            if (Data[6].Equals(""))
+                Data[6] = constante.telephone;
+
+            if (Data[24].Equals(""))
+                Data[24] = constante.telephone;
 
             Commande commande = new Commande();
             commande.NumCommande = Data[0];
@@ -231,8 +246,6 @@ namespace CashphotoWPF
             commande.Expedier = false;
    
             constante.cashphotoBDD.Commandes.Add(commande);
-            int updates = constante.cashphotoBDD.SaveChanges();
-            System.Diagnostics.Debug.WriteLine("up "+updates);
 
         }
 
@@ -241,7 +254,14 @@ namespace CashphotoWPF
             Constante constante = Constante.GetConstante();
             string numCommande = Data[26].Substring(1);
 
-            System.Diagnostics.Debug.WriteLine(numCommande);
+            if (Data[13].Equals(""))
+                Data[13] = constante.email;
+
+            if (Data[12].Equals(""))
+                Data[12] = constante.telephone;
+
+            if (Data[18].Equals(""))
+                Data[18] = constante.telephone;
 
             Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == numCommande).First();
             commande.NomClientLivraison = Data[16] + " " + Data[2];
@@ -257,8 +277,8 @@ namespace CashphotoWPF
             commande.Site = "Cashphoto";
 
 
-            int updates = constante.cashphotoBDD.SaveChanges();
-            System.Diagnostics.Debug.WriteLine(updates);
+            constante.cashphotoBDD.SaveChanges();
+
         }
 
         private void CreerCommandeCashphoto(string[] Data)
@@ -266,6 +286,14 @@ namespace CashphotoWPF
             Constante constante = Constante.GetConstante();
             string numCommande = Data[26].Substring(1);
 
+            if (Data[13].Equals(""))
+                Data[13] = constante.email;
+
+            if (Data[12].Equals(""))
+                Data[12] = constante.telephone;
+
+            if (Data[18].Equals(""))
+                Data[18] = constante.telephone;
 
             Commande commande = new Commande();
             commande.NumCommande = numCommande;
@@ -286,8 +314,7 @@ namespace CashphotoWPF
             commande.Expedier = false;
 
             constante.cashphotoBDD.Commandes.Add(commande);
-            int updates = constante.cashphotoBDD.SaveChanges();
-            System.Diagnostics.Debug.WriteLine(updates);
+            constante.cashphotoBDD.SaveChanges();
 
         }
         private void AddArticleAmazon(string[] Data)

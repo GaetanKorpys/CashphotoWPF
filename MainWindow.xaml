@@ -185,7 +185,7 @@
 
 
 
-                <WrapPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center">
+                <WrapPanel x:Name="RecapExpe_WrapPanel" Visibility="Visible" Grid.Row="1" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center">
                     <Label x:Name="NumCommandeRecapExpe" Grid.Row="1" Grid.Column="1" Content="" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"/>
                     <Label x:Name="PoidsCommandeRecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0"/>
                     <Label x:Name="DateCommandeRecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0"/>
@@ -227,7 +227,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
 
-                <DataGrid Name="DatagGridArticle" SelectionChanged="dataGrid_SelectionChanged" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="30,225,20,0">
+                <DataGrid Name="DatagGridArticle" SelectionChanged="dataGrid_SelectionChanged" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="30,270,20,0">
 
 
 

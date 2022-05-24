@@ -146,8 +146,8 @@
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="128*"/>
-                    <RowDefinition Height="443*"/>
-                    <RowDefinition Height="97*"/>
+                    <RowDefinition Height="425*"/>
+                    <RowDefinition Height="115*"/>
                 </Grid.RowDefinitions>
                 <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Height="37" Width="838">
                     <Grid.ColumnDefinitions>
@@ -167,11 +167,11 @@
                 </WrapPanel>
 
 
-                <Button Content="Expedier commande" Click="ExpedierCommande_Click" Grid.Row="2" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" Height="30" Width="190" Margin="35,0,0,30"/>
-                <Button Content="Modifier poids commande" Click="ModifierPoids_Click" Grid.Row="2" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Height="30" Width="248" Margin="0,0,100,30"/>
-                <Button x:Name="AmazonPageBouton" Content="Rechercher commande Amazon" Grid.Row="2" FontSize="18" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold" Height="30" Width="296" Margin="0,0,30,30"/>
+                <Button Content="Expedier commande" Click="ExpedierCommande_Click" Grid.Row="2" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Height="30" Width="190" Margin="35,20,0,0"/>
+                <Button Content="Modifier poids commande" Click="ModifierPoids_Click" Grid.Row="2" FontSize="18" HorizontalAlignment="Left" VerticalAlignment="Top" FontWeight="Bold" Height="30" Width="248" Margin="253,20,0,0"/>
+                <Button x:Name="AmazonPageBouton" Content="Rechercher commande Amazon" Grid.Row="2" FontSize="18" HorizontalAlignment="Right" VerticalAlignment="Top" FontWeight="Bold" Height="30" Width="296" Margin="0,20,30,0"/>
 
-                <WrapPanel Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <WrapPanel Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" Height="96" Width="404">
                     <WrapPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <Label FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center">Transporteur :</Label>
                         <RadioButton x:Name="GLS" Checked="ModifierTransporteur" GroupName="Transporteur" HorizontalAlignment="Stretch" VerticalAlignment="Center">GLS</RadioButton>
@@ -183,20 +183,20 @@
 
 
 
-                <Label x:Name="NumCommandeRecapExpe" Grid.Row="1" Grid.Column="1" Content="" VerticalAlignment="Center" Margin="0,0,0,320" HorizontalAlignment="Center"/>
-                <Label x:Name="PoidsCommandeRecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,260"/>
-                <Label x:Name="DateCommandeRecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,200"/>
-                <Label x:Name="NomClientRecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,100"/>
-                <Label x:Name="TelClientRecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,40"/>
-                <Label x:Name="AdresseClientRecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20,0,0"/>
-                <Label x:Name="AdresseClient2RecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,80,0,0"/>
-                <Label x:Name="AdresseClient3RecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,140,0,0"/>
-                <Label x:Name="CodePostaleVilleRecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,240,0,0"/>
-                <Label x:Name="PaysRecapExpe"  Content="" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,300,0,0"/>
-                <Label x:Name="EmailClientRecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,360,0,0"/>
+                <Label x:Name="NumCommandeRecapExpe" Grid.Row="1" Grid.Column="1" Content="" VerticalAlignment="Center" HorizontalAlignment="Center" Height="34" Width="10"/>
+                <Label x:Name="PoidsCommandeRecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Height="34" Width="10"/>
+                <Label x:Name="DateCommandeRecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Height="34" Width="10"/>
+                <Label x:Name="NomClientRecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Height="34" Width="10"/>
+                <Label x:Name="TelClientRecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Height="34" Width="10"/>
+                <Label x:Name="AdresseClientRecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Height="34" Width="10"/>
+                <Label x:Name="AdresseClient2RecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Height="34" Width="10"/>
+                <Label x:Name="AdresseClient3RecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Height="34" Width="10"/>
+                <Label x:Name="CodePostaleVilleRecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Height="34" Width="10"/>
+                <Label x:Name="PaysRecapExpe"  Content="" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="34" Width="10"/>
+                <Label x:Name="EmailClientRecapExpe" Grid.Row="1" Grid.Column="1" Content="" HorizontalAlignment="Center" VerticalAlignment="Center" Height="34" Width="10"/>
 
 
-                <DataGrid Name="DataGridExpe"  SelectionChanged="dataGrid_SelectionChanged" Margin="20,30,20,0" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Top" Height="163" Grid.Row="1">
+                <DataGrid Name="DataGridExpe"  SelectionChanged="dataGrid_SelectionChanged" Margin="0,30,0,0" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Top" Height="163" Grid.Row="1" Width="814">
 
                     <DataGrid.Resources>
                         <Style TargetType="DataGridColumnHeader">
@@ -222,7 +222,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
 
-                <DataGrid Name="DatagGridArticle" SelectionChanged="dataGrid_SelectionChanged" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Height="172" Margin="20,180,20,0">
+                <DataGrid Name="DatagGridArticle" SelectionChanged="dataGrid_SelectionChanged" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center" Height="172" Margin="0,225,0,0" Width="814">
 
 
 
@@ -235,7 +235,7 @@
                 </DataGrid>
 
 
-                <Label x:Name="Message" Content="" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="90,0,0,10" />
+                <Label x:Name="Message" Content="" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="90,30,0,0" Height="34" Width="10" />
             </Grid>
         </TabItem>
         <TabItem x:Name="Configuration"  Header="Configuration" FontSize="18" Margin="629,-1,-766,0" VerticalAlignment="Top">

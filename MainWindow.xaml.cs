@@ -25,6 +25,7 @@ using Cursors = System.Windows.Input.Cursors;
 using System.Collections.ObjectModel;
 using TextBox = System.Windows.Controls.TextBox;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using Microsoft.EntityFrameworkCore;
 
 namespace CashphotoWPF
 {
@@ -519,13 +520,21 @@ namespace CashphotoWPF
             IQueryable<Commande> commandesTable;
 
             Constante constante = Constante.GetConstante();
+            //constante.cashphotoBDD = new CashphotoBDD();
 
             if (constante.BDDOK)
             {
                 commandesTable = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande.Contains(numCmd) && commande.Expedier == expedier);
                 commandesTable = commandesTable.OrderByDescending(commande => commande.Date);
                 commandes = commandesTable.ToList();
+
+                foreach (Commande commande in commandes)
+                {
+                    constante.cashphotoBDD.Entry(commande).Reload();
+                }
+
             }
+            //constante.cashphotoBDD.Dispose();
             return commandes;
         }
 
@@ -539,13 +548,20 @@ namespace CashphotoWPF
             IQueryable<Commande> commandesTable;
 
             Constante constante = Constante.GetConstante();
+            //constante.cashphotoBDD = new CashphotoBDD();
 
             if (constante.BDDOK)
             {
                 commandesTable = constante.cashphotoBDD.Commandes.Where(commande => commande.Date.Date == DateTime.Today && commande.Expedier == expedier);
                 commandesTable = commandesTable.OrderByDescending(commande => commande.Date);
                 commandes = commandesTable.ToList();
+
+                foreach (Commande commande in commandes)
+                {
+                    constante.cashphotoBDD.Entry(commande).Reload();
+                }
             }
+            //constante.cashphotoBDD.Dispose();
             return commandes;
         }
 
@@ -956,12 +972,13 @@ namespace CashphotoWPF
                 //Alors pas besoin de vérifier s'il est valide ou si une commande existe déjà.
                 if (commande.NumCommande == NumCommandeRecap.Text)
                 {
+                   
                     double poids = double.Parse(PoidsRecap.Text, CultureInfo.InvariantCulture);
                     commande.Poids = poids;
                     commande.Preparer = true;
 
-                    constante.cashphotoBDD.Entry(commande).Reload();
                     constante.cashphotoBDD.SaveChanges();
+                 
                     AfficherTestRecap(true);
 
                     //Rechargement des Datagrid

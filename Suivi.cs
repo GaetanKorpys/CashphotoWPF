@@ -55,6 +55,11 @@ namespace CashphotoWPF
                         fileRow = fileReader.ReadLine();
                         fileDataField = fileRow.Split(delimiter);
 
+                        if(!fileDataField[0].Contains("-"))
+                        {
+                            fileDataField[0] = fileDataField[0].Substring(4);;
+                        }
+
                         if (commande.NumCommande == fileDataField[0])
                         {
                             if (commande.Site == "Amazon")
@@ -108,7 +113,6 @@ namespace CashphotoWPF
             if(tab.Length > 0)
             {
                 lastFile = tab[0];
-                System.Diagnostics.Debug.WriteLine(lastFile);
 
                 if (!path.Equals(lastFile))                                                                                                   
                     File.Delete(tab[0]);
@@ -120,7 +124,6 @@ namespace CashphotoWPF
             if (new FileInfo(path).Length == 0)
             {
                 sw.WriteLine(entete);
-                System.Diagnostics.Debug.WriteLine("entete");
             }
                 
             
@@ -168,17 +171,22 @@ namespace CashphotoWPF
 
             string date = DateTime.Today.ToShortDateString().Replace("/", "_");
             string filename = "RetourNSuiviPrestashop" + "_" + date + ".csv";
-            string path = constante.numeroSuiviAmazon + "\\" + filename;
+            string path = constante.numeroSuiviCashphoto + "\\" + filename;
             string entete = "ReferenceExpedition;NumeroColis";
             string delimiter = ";";
             string row, lastFile;
             string[] tab;
 
+
+            Commande cmd = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == c.NumCommande).First();
+            cmd.NumeroSuivi = line[1];
+
+            constante.cashphotoBDD.SaveChanges();
+
             tab = Directory.GetFiles(constante.numeroSuiviCashphoto);
             if (tab.Length > 0)
             {
                 lastFile = tab[0];
-                System.Diagnostics.Debug.WriteLine(lastFile);
 
                 if (!path.Equals(lastFile))
                     File.Delete(tab[0]);
@@ -195,14 +203,11 @@ namespace CashphotoWPF
 
             row = c.NumCommande;
             row += delimiter;
-            row += line[1];
+            row += "EXPP" + line[1];
 
             sw.WriteLine(row);
 
-            Commande cmd = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == c.NumCommande).First();
-            cmd.NumeroSuivi = line[1];
-
-            constante.cashphotoBDD.SaveChanges();
+            sw.Close();
         }
     }
 }

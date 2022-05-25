@@ -138,6 +138,26 @@ namespace CashphotoWPF
 
         #region ToolBox
 
+        private string ToNumberAndDot(string s)
+        {
+            s = s.ToLower();
+
+            s = s.Replace("&", "1");
+            s = s.Replace("é", "2");
+            s = s.Replace("\"", "3");
+            s = s.Replace("\'", "4");
+            s = s.Replace("(", "5");
+            s = s.Replace("-", "6");
+            s = s.Replace("è", "7");
+            s = s.Replace("_", "8");
+            s = s.Replace("ç", "9");
+            s = s.Replace("à", "0");
+            s = s.Replace(";", ".");
+
+            System.Diagnostics.Debug.WriteLine("balance :" + s);
+            return s;
+        }
+
         /// <summary>
         /// Création des dossier (pour l'import et l'export) s'ils n'existent pas.
         /// </summary>
@@ -1033,6 +1053,9 @@ namespace CashphotoWPF
         {
             if (sender.Equals(SaisirPoids))
             {
+                string stringToUpper = ToNumberAndDot(SaisirPoids.Text);
+                SaisirPoids.CaretIndex = SaisirPoids.Text.Length;
+                SaisirPoids.Text = stringToUpper;
                 if (isValidPoids(SaisirPoids.Text))
                     ValiderCommandeBouton.IsEnabled = true;
                 else

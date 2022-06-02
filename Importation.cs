@@ -33,7 +33,7 @@ namespace CashphotoWPF
         private int ImportFromAmazon()
         {
             Constante constante = Constante.GetConstante();
-            Cor cor = Cor.getInstance();
+            //Cor cor = Cor.getInstance();
             
 
             List<string> FilesList = getAmazonFiles();
@@ -228,6 +228,7 @@ namespace CashphotoWPF
                 Data[24] = constante.telephone;
 
             Commande commande = new Commande();
+            commande.NbColis = 1;
             commande.NumCommande = Data[0];
             commande.NomClientFacturation = Data[5];
             commande.NomClientLivraison = Data[16];
@@ -296,6 +297,7 @@ namespace CashphotoWPF
                 Data[18] = constante.telephone;
 
             Commande commande = new Commande();
+            commande.NbColis = 1;
             commande.NumCommande = numCommande;
             commande.Poids = double.Parse(Data[9]) / 1000; //Poids approximatif
             commande.NomClientLivraison = Data[16] + " " + Data[2];

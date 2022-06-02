@@ -7,10 +7,31 @@
     <UseWPF>true</UseWPF>
 	<UseWindowsForms>true</UseWindowsForms>
 	<ApplicationManifest>app.manifest</ApplicationManifest>
+	<ApplicationIcon>Images\logo_new_cashphoto.ico</ApplicationIcon>
+	<PlatformTarget>AnyCPU</PlatformTarget>
+	<Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Images\delete.png" />
+    <None Remove="Images\logo_new_cashphoto.ico" />
+    <None Remove="Images\logo_new_cashphoto.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <COMReference Include="bpac">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>3</VersionMinor>
+      <VersionMajor>1</VersionMajor>
+      <Guid>90359d74-b7d9-467f-b938-3883f4cab582</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Images\logo_new_cashphoto.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +49,25 @@
 
   <ItemGroup>
     <Resource Include="Images\delete.png" />
+    <Resource Include="Images\logo_new_cashphoto.ico" />
+    <Resource Include="Images\logo_new_cashphoto.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

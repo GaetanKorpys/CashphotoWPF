@@ -15,27 +15,46 @@ namespace CashphotoWPF
             _app = app;
         }
 
-        public void ExpedierCommande(Commande commande)
+        public void ExpedierCommande(Commande commande, int NbColis)
         {
             Constante constante = Constante.GetConstante();
            
             if (constante.transporteur == Transporteur.Transporteurs.Coliposte)
-                ExpedierColiposte(commande);
+                ExpedierColiposte(commande, NbColis);
             else
-                ExpedierGLS(commande);
+                ExpedierGLS(commande, NbColis);
             
         }
 
-        private void ExpedierColiposte(Commande commande)
+        private void ExpedierColiposte(Commande commande, int NbColis)
         {
             Constante constante = Constante.GetConstante();
             string separateur = ";";
             string line;
+            string linePoids = "";
+
+            switch (NbColis)
+            {
+                case 1:
+                    linePoids = (commande.Poids*1000).ToString();
+                    break;
+                case 2:
+                    linePoids = (commande.Poids2*1000).ToString();
+                    break;
+                case 3:
+                    linePoids = (commande.Poids3*1000).ToString();
+                    break;
+                case 4:
+                    linePoids = (commande.Poids4*1000).ToString();
+                    break;
+                default:
+                    break;
+            }
 
 
             line = separateur + commande.NumCommande + separateur + commande.NomClientLivraison + separateur;
             line += commande.Adresse1 + separateur + commande.Adresse2 + separateur + commande.Adresse3 + separateur;
-            line += commande.CodePostal + separateur + commande.Ville + separateur + commande.Pays + separateur + (commande.Poids * 1000).ToString() + separateur;
+            line += commande.CodePostal + separateur + commande.Ville + separateur + commande.Pays + separateur + linePoids + separateur;
             line += "0" + separateur + "N" + separateur + commande.TelClientLivraison + separateur + commande.Mail + separateur + separateur + separateur + separateur + separateur;
             line += commande.TelClientLivraison + separateur + separateur + separateur + separateur + "Cashphoto.com" + separateur + separateur + separateur + "1" + separateur + commande.NumCommande;
             //line.Replace("/", "\\");
@@ -43,29 +62,49 @@ namespace CashphotoWPF
             //line.Replace("\n", "");
 
 
-            ExportCSV(line, constante.commandeParsePourColiposte, commande, Transporteur.Transporteurs.Coliposte, false);
+            ExportCSV(line, constante.commandeParsePourColiposte, commande, Transporteur.Transporteurs.Coliposte, NbColis);
 
-            if(commande.Poids2 != null)
-            {
-                line = separateur + commande.NumCommande + separateur + commande.NomClientLivraison + separateur;
-                line += commande.Adresse1 + separateur + commande.Adresse2 + separateur + commande.Adresse3 + separateur;
-                line += commande.CodePostal + separateur + commande.Ville + separateur + commande.Pays + separateur + (commande.Poids2 * 1000).ToString() + separateur; //Poids2
-                line += "0" + separateur + "N" + separateur + commande.TelClientLivraison + separateur + commande.Mail + separateur + separateur + separateur + separateur + separateur;
-                line += commande.TelClientLivraison + separateur + separateur + separateur + separateur + "Cashphoto.com" + separateur + separateur + separateur + "1" + separateur + commande.NumCommande;
+            //if(commande.Poids2 != null)
+            //{
+            //    line = separateur + commande.NumCommande + separateur + commande.NomClientLivraison + separateur;
+            //    line += commande.Adresse1 + separateur + commande.Adresse2 + separateur + commande.Adresse3 + separateur;
+            //    line += commande.CodePostal + separateur + commande.Ville + separateur + commande.Pays + separateur + (commande.Poids2 * 1000).ToString() + separateur; //Poids2
+            //    line += "0" + separateur + "N" + separateur + commande.TelClientLivraison + separateur + commande.Mail + separateur + separateur + separateur + separateur + separateur;
+            //    line += commande.TelClientLivraison + separateur + separateur + separateur + separateur + "Cashphoto.com" + separateur + separateur + separateur + "1" + separateur + commande.NumCommande;
 
-                ExportCSV(line, constante.commandeParsePourColiposte, commande, Transporteur.Transporteurs.Coliposte, true);
-            }
+            //    ExportCSV(line, constante.commandeParsePourColiposte, commande, Transporteur.Transporteurs.Coliposte, true);
+            //}
             
         }
 
-        private void ExpedierGLS(Commande commande)
+        private void ExpedierGLS(Commande commande, int NbColis)
         {
             Constante constante = Constante.GetConstante();
             string separateur = ";";
             string line;
+            string linePoids = "";
+
+            switch (NbColis)
+            {
+                case 1:
+                    linePoids = commande.Poids.ToString();
+                    break;
+                case 2:
+                    linePoids = commande.Poids2.ToString();
+                    break;
+                case 3:
+                    linePoids = commande.Poids3.ToString();
+                    break;
+                case 4:
+                    linePoids = commande.Poids4.ToString();
+                    break;
+                default:
+                    break;
+            }
+
             line = commande.NumCommande + separateur + separateur + separateur;
             line += commande.NomClientLivraison + separateur + "2502657001" + separateur + "18" + separateur + separateur + "1" + separateur;
-            line += commande.Poids.ToString() + separateur + separateur + separateur;
+            line += linePoids + separateur + separateur + separateur;
             line += commande.NumCommande + separateur + commande.NomClientLivraison + separateur + separateur; //FixeNumTel
             line += commande.TelClientLivraison + separateur + separateur + commande.Mail + separateur;
             line += commande.Adresse1 + separateur + commande.Adresse2 + separateur + commande.Adresse3 + separateur;
@@ -75,32 +114,29 @@ namespace CashphotoWPF
             //line.Replace("\r", "");
             //line.Replace("\n", "");
             
-            ExportCSV(line, constante.commandeParsePourGLS, commande, Transporteur.Transporteurs.GLS, false);
+            ExportCSV(line, constante.commandeParsePourGLS, commande, Transporteur.Transporteurs.GLS, NbColis);
 
-            if(commande.Poids2 != null)
-            {
-                line = commande.NumCommande + separateur + separateur + separateur;
-                line += commande.NomClientLivraison + separateur + "2502657001" + separateur + "18" + separateur + separateur + "1" + separateur;
-                line += commande.Poids2.ToString() + separateur + separateur + separateur; //Poids2
-                line += commande.NumCommande + separateur + commande.NomClientLivraison + separateur + separateur; //FixeNumTel
-                line += commande.TelClientLivraison + separateur + separateur + commande.Mail + separateur;
-                line += commande.Adresse1 + separateur + commande.Adresse2 + separateur + commande.Adresse3 + separateur;
-                line += commande.Pays + separateur + commande.CodePostal + separateur + commande.Ville + separateur + separateur + separateur + separateur;
-                line += "SODEX FAGOT-THIL SAS" + separateur + "13 rue De Gaulle" + separateur + separateur + "FR" + separateur + "57290" + separateur + "Seremange Erzange" + separateur + separateur;
+            //if(commande.Poids2 != null)
+            //{
+            //    line = commande.NumCommande + separateur + separateur + separateur;
+            //    line += commande.NomClientLivraison + separateur + "2502657001" + separateur + "18" + separateur + separateur + "1" + separateur;
+            //    line += commande.Poids2.ToString() + separateur + separateur + separateur; //Poids2
+            //    line += commande.NumCommande + separateur + commande.NomClientLivraison + separateur + separateur; //FixeNumTel
+            //    line += commande.TelClientLivraison + separateur + separateur + commande.Mail + separateur;
+            //    line += commande.Adresse1 + separateur + commande.Adresse2 + separateur + commande.Adresse3 + separateur;
+            //    line += commande.Pays + separateur + commande.CodePostal + separateur + commande.Ville + separateur + separateur + separateur + separateur;
+            //    line += "SODEX FAGOT-THIL SAS" + separateur + "13 rue De Gaulle" + separateur + separateur + "FR" + separateur + "57290" + separateur + "Seremange Erzange" + separateur + separateur;
 
-                ExportCSV(line, constante.commandeParsePourGLS, commande, Transporteur.Transporteurs.GLS, true);
-            }
+            //    ExportCSV(line, constante.commandeParsePourGLS, commande, Transporteur.Transporteurs.GLS, true);
+            //}
             
         }
 
-        private void ExportCSV(string line, string path, Commande commande, Transporteur.Transporteurs transporteurs, bool secondColis)
+        private void ExportCSV(string line, string path, Commande commande, Transporteur.Transporteurs transporteurs, int NbColis)
         {
-            string completepath;
-            if (secondColis == false)
-                completepath = path + "\\" + commande.NumCommande + "_" + commande.NomClientLivraison + ".csv";
-            else
-                completepath = path + "\\" + commande.NumCommande + "_" + commande.NomClientLivraison + "_" + "secondColis" + ".csv";
-            //sauvegarderDansHistorique(commande.IdCommande.ToString(), commande.NomLivr.ToString(), commande.Site.ToString(), typecolis);
+            string completepath = path + "\\" + commande.NumCommande + "_" + commande.NomClientLivraison + "_" + NbColis + ".csv";
+          
+            
             Encoding enc;
             if (transporteurs.Equals(Transporteur.Transporteurs.GLS))
             {

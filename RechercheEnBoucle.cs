@@ -17,10 +17,7 @@ namespace CashphotoWPF
             _app = app;
             _timer = new DispatcherTimer();
             _timer.Interval = new TimeSpan(0, 0, 0, 5);
-            //_timer.Tick += (Object o, EventArgs eargs) => { ImportCommandes(); };
-            //timer.Tick += (Object o, EventArgs eargs) => { refreshGrille();};
             _timer.Tick += new EventHandler(OnTimedEvent);
-            //_timer.AutoReset = true;
             _timer.Start();
         }
 
@@ -32,7 +29,6 @@ namespace CashphotoWPF
         public void StopRecherche()
         {
             _timer.Stop();
-            //_timer.Dispose();
         }
     }
 }

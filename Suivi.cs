@@ -86,7 +86,15 @@ namespace CashphotoWPF
 
 
             Commande cmd = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == c.NumCommande).First();
-            cmd.NumeroSuivi = line[1];
+
+            if (cmd.NumeroSuivi == null)
+                cmd.NumeroSuivi = line[1];
+            else if (cmd.NumeroSuivi2 == null)
+                cmd.NumeroSuivi2 = line[1];
+            else if (cmd.NumeroSuivi3 == null)
+                cmd.NumeroSuivi3 = line[1];
+            else if (cmd.NumeroSuivi4 == null)
+                cmd.NumeroSuivi4 = line[1];
 
             constante.cashphotoBDD.SaveChanges();
 
@@ -145,7 +153,7 @@ namespace CashphotoWPF
                 row += DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz") + delimiter;           //ship-date
                 row += "Colissimo" + delimiter;                                               //carrier-code
                 row += delimiter;                                                             //carrier-name
-                row += cmd.NumeroSuivi + delimiter;                                           //tracking-number
+                row += cmd.NumeroSuivi + delimiter;                                           //tracking-number | A modifier pour pouvoir gérer pls colis
                 row += modeSuiviColiposte.getString(constante.mode) + delimiter;              //ship-method
                 row += delimiter;                                                             //transparency_code
                 row += "SODEX FAGOT-THIL SAS" + delimiter;                                    //ship_from_address_name
@@ -179,7 +187,16 @@ namespace CashphotoWPF
 
 
             Commande cmd = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == c.NumCommande).First();
-            cmd.NumeroSuivi = line[1];
+
+            if(cmd.NumeroSuivi == null)
+                cmd.NumeroSuivi = line[1];
+            else if(cmd.NumeroSuivi2 == null)
+                cmd.NumeroSuivi2 = line[1];
+            else if(cmd.NumeroSuivi3 == null)
+                cmd.NumeroSuivi3 = line[1];
+            else if(cmd.NumeroSuivi4 == null)
+                cmd.NumeroSuivi4 = line[1];
+                
 
             constante.cashphotoBDD.SaveChanges();
 

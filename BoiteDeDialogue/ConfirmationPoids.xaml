@@ -17,7 +17,7 @@
             <RowDefinition Height="3*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <Label Content="Veuillez vérifier le poids du colis suivant :" Grid.Row="0" Grid.ColumnSpan="2" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,0"/>
+        <Label Content="Veuillez vérifier le poids du colis :" Grid.Row="0" Grid.ColumnSpan="2" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,0"/>
         <Label x:Name="NumCommande" Content="" Grid.Row="1" Grid.ColumnSpan="2" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,110" Grid.RowSpan="2" Width="277" HorizontalContentAlignment="Center"/>
         <TextBox x:Name="InputTextBox" Grid.Row="1" Grid.ColumnSpan="2" Width="200" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,20"/>
         <Label x:Name="ErreurPoids" Content="" Grid.Row="1" Grid.ColumnSpan="2" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Grid.RowSpan="2" Width="277" HorizontalContentAlignment="Center"/>

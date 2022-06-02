@@ -62,7 +62,6 @@ namespace CashphotoWPF.Configuration
         public bool BDDOK { get; set; } //Permet de controler l'état de la BDD
         public string cheminFichierConfig { get; set; }
         public CashphotoBDD cashphotoBDD { get; set; }
-        public bool commandeExpedie { get; set; }
-        public bool commandePrepare { get; set; }
+        public int nbCommandeBDD { get; set; } //Le nombre de commandes que l'on séléctionne dans la BDD ; Take(...)
     }
 }

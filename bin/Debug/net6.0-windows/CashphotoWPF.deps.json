@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v6.0": {
       "CashphotoWPF/1.0.0": {
         "dependencies": {
+          "BarCode": "2022.5.5918",
           "MahApps.Metro": "2.4.9",
           "MaterialDesignThemes": "4.4.0",
           "Microsoft-WindowsAPICodePack-Shell": "1.1.4",
@@ -21,6 +22,17 @@
         },
         "runtime": {
           "CashphotoWPF.dll": {}
+        }
+      },
+      "BarCode/2022.5.5918": {
+        "dependencies": {
+          "System.Drawing.Common": "5.0.2"
+        },
+        "runtime": {
+          "lib/netstandard2.0/IronBarCode.dll": {
+            "assemblyVersion": "2022.5.0.5918",
+            "fileVersion": "2022.5.0.5918"
+          }
         }
       },
       "ControlzEx/4.4.0": {
@@ -439,16 +451,16 @@
           }
         }
       },
-      "Microsoft.NETCore.Platforms/3.1.0": {},
+      "Microsoft.NETCore.Platforms/5.0.0": {},
       "Microsoft.Win32.Registry/4.7.0": {
         "dependencies": {
           "System.Security.AccessControl": "4.7.0",
           "System.Security.Principal.Windows": "4.7.0"
         }
       },
-      "Microsoft.Win32.SystemEvents/4.7.0": {
+      "Microsoft.Win32.SystemEvents/5.0.0": {
         "dependencies": {
-          "Microsoft.NETCore.Platforms": "3.1.0"
+          "Microsoft.NETCore.Platforms": "5.0.0"
         }
       },
       "Microsoft.Xaml.Behaviors.Wpf/1.1.19": {
@@ -488,10 +500,9 @@
           "System.Runtime.CompilerServices.Unsafe": "6.0.0"
         }
       },
-      "System.Drawing.Common/4.7.0": {
+      "System.Drawing.Common/5.0.2": {
         "dependencies": {
-          "Microsoft.NETCore.Platforms": "3.1.0",
-          "Microsoft.Win32.SystemEvents": "4.7.0"
+          "Microsoft.Win32.SystemEvents": "5.0.0"
         }
       },
       "System.IdentityModel.Tokens.Jwt/6.8.0": {
@@ -528,7 +539,7 @@
       "System.Runtime.CompilerServices.Unsafe/6.0.0": {},
       "System.Security.AccessControl/4.7.0": {
         "dependencies": {
-          "Microsoft.NETCore.Platforms": "3.1.0",
+          "Microsoft.NETCore.Platforms": "5.0.0",
           "System.Security.Principal.Windows": "4.7.0"
         }
       },
@@ -543,7 +554,7 @@
       "System.Security.Principal.Windows/4.7.0": {},
       "System.Text.Encoding.CodePages/4.7.0": {
         "dependencies": {
-          "Microsoft.NETCore.Platforms": "3.1.0"
+          "Microsoft.NETCore.Platforms": "5.0.0"
         }
       },
       "System.Text.Encodings.Web/6.0.0": {
@@ -559,7 +570,7 @@
       },
       "System.Windows.Extensions/4.7.0": {
         "dependencies": {
-          "System.Drawing.Common": "4.7.0"
+          "System.Drawing.Common": "5.0.2"
         }
       }
     }
@@ -569,6 +580,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "BarCode/2022.5.5918": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-9TpKBc5E+q/kErKUJexE1SmQ9qjRt8U86lLBPvjAyn+bglsAH1LGkMnbhNXvSbFmgmk/oULjMIAd7mtBs+b4Iw==",
+      "path": "barcode/2022.5.5918",
+      "hashPath": "barcode.2022.5.5918.nupkg.sha512"
     },
     "ControlzEx/4.4.0": {
       "type": "package",
@@ -815,12 +833,12 @@
       "path": "microsoft.identitymodel.tokens/6.8.0",
       "hashPath": "microsoft.identitymodel.tokens.6.8.0.nupkg.sha512"
     },
-    "Microsoft.NETCore.Platforms/3.1.0": {
+    "Microsoft.NETCore.Platforms/5.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-z7aeg8oHln2CuNulfhiLYxCVMPEwBl3rzicjvIX+4sUuCwvXw5oXQEtbiU2c0z4qYL5L3Kmx0mMA/+t/SbY67w==",
-      "path": "microsoft.netcore.platforms/3.1.0",
-      "hashPath": "microsoft.netcore.platforms.3.1.0.nupkg.sha512"
+      "sha512": "sha512-VyPlqzH2wavqquTcYpkIIAQ6WdenuKoFN0BdYBbCWsclXacSOHNQn66Gt4z5NBqEYW0FAPm5rlvki9ZiCij5xQ==",
+      "path": "microsoft.netcore.platforms/5.0.0",
+      "hashPath": "microsoft.netcore.platforms.5.0.0.nupkg.sha512"
     },
     "Microsoft.Win32.Registry/4.7.0": {
       "type": "package",
@@ -829,12 +847,12 @@
       "path": "microsoft.win32.registry/4.7.0",
       "hashPath": "microsoft.win32.registry.4.7.0.nupkg.sha512"
     },
-    "Microsoft.Win32.SystemEvents/4.7.0": {
+    "Microsoft.Win32.SystemEvents/5.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-mtVirZr++rq+XCDITMUdnETD59XoeMxSpLRIII7JRI6Yj0LEDiO1pPn0ktlnIj12Ix8bfvQqQDMMIF9wC98oCA==",
-      "path": "microsoft.win32.systemevents/4.7.0",
-      "hashPath": "microsoft.win32.systemevents.4.7.0.nupkg.sha512"
+      "sha512": "sha512-Bh6blKG8VAKvXiLe2L+sEsn62nc1Ij34MrNxepD2OCrS5cpCwQa9MeLyhVQPQ/R4Wlzwuy6wMK8hLb11QPDRsQ==",
+      "path": "microsoft.win32.systemevents/5.0.0",
+      "hashPath": "microsoft.win32.systemevents.5.0.0.nupkg.sha512"
     },
     "Microsoft.Xaml.Behaviors.Wpf/1.1.19": {
       "type": "package",
@@ -878,12 +896,12 @@
       "path": "system.diagnostics.diagnosticsource/6.0.0",
       "hashPath": "system.diagnostics.diagnosticsource.6.0.0.nupkg.sha512"
     },
-    "System.Drawing.Common/4.7.0": {
+    "System.Drawing.Common/5.0.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-v+XbyYHaZjDfn0ENmJEV1VYLgGgCTx1gnfOBcppowbpOAriglYgGCvFCPr2EEZyBvXlpxbEsTwkOlInl107ahA==",
-      "path": "system.drawing.common/4.7.0",
-      "hashPath": "system.drawing.common.4.7.0.nupkg.sha512"
+      "sha512": "sha512-rvr/M1WPf24ljpvvrVd74+NdjRUJu1bBkspkZcnzSZnmAUQWSvanlQ0k/hVHk+cHufZbZfu7vOh/vYc0q5Uu/A==",
+      "path": "system.drawing.common/5.0.2",
+      "hashPath": "system.drawing.common.5.0.2.nupkg.sha512"
     },
     "System.IdentityModel.Tokens.Jwt/6.8.0": {
       "type": "package",

@@ -80,3 +80,4 @@ C:\Users\Gaetan\source\repos\CashphotoWPF\obj\Debug\net6.0-windows\CashphotoWPF.
 C:\Users\Gaetan\source\repos\CashphotoWPF\obj\Debug\net6.0-windows\CashphotoWPF.csproj.GenerateResource.cache
 C:\Users\Gaetan\source\repos\CashphotoWPF\obj\Debug\net6.0-windows\Interop.bpac.dll
 C:\Users\Gaetan\source\repos\CashphotoWPF\obj\Debug\net6.0-windows\CashphotoWPF.csproj.ResolveComReference.cache
+C:\Users\Gaetan\source\repos\CashphotoWPF\bin\Debug\net6.0-windows\IronBarCode.dll

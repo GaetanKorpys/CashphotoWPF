@@ -1,6 +1,5 @@
 ﻿using CashphotoWPF.BDD;
 using CashphotoWPF.Configuration;
-using CashphotoWPF.COR;
 using System;
 using System.Collections.Generic;
 using System.IO;

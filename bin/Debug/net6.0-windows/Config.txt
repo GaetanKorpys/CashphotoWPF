@@ -13,7 +13,7 @@ C:\Cashphoto\dosserExport\commandeGLS\backup
 C:\Cashphoto\dosserExport\commandeColiposte\backup
 contact@cashphoto.com
 0382580623
-192.168.1.39
+127.0.0.1
 SansSignature
 Coliposte
 1

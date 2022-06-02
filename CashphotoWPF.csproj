@@ -35,6 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="BarCode" Version="2022.5.5918" />
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="MaterialDesignThemes" Version="4.4.0" />
     <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4" />

@@ -28,6 +28,8 @@ using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using Microsoft.EntityFrameworkCore;
 using System.Windows.Threading;
 using MahApps.Metro.Controls;
+using System.Drawing.Printing;
+using IronBarCode;
 
 namespace CashphotoWPF
 {
@@ -76,6 +78,32 @@ namespace CashphotoWPF
 
             //Etiquette et = new Etiquette();
             //et.DoPrint();
+
+            PrintDocument pd = new PrintDocument();
+            pd.PrinterSettings = new PrinterSettings
+            {
+                PrinterName = "Brother TD-2020"
+            };
+            pd.PrintPage += (sender, args) =>
+            {
+                System.Drawing.Image img = System.Drawing.Image.FromFile("téléchargement.png");
+                System.Drawing.Rectangle m = args.PageBounds ;
+
+                if ((double)img.Width / (double)img.Height > (double)m.Width / (double)m.Height) // image is wider
+                {
+                    m.Height = (int)((double)img.Height / (double)img.Width * (double)m.Width);
+                    System.Diagnostics.Debug.WriteLine("h " + m.Height+ " w "+ m.Width );
+                }
+                else
+                {
+                    m.Width = (int)((double)img.Width / (double)img.Height * (double)m.Height);
+                    System.Diagnostics.Debug.WriteLine("h " + m.Height + " w " + m.Width);
+                }
+                m.Width = 50;
+                m.Height = 50;
+                args.Graphics.DrawImage(img, m);
+            };
+            //pd.Print();
         }
 
         /// <summary>
@@ -153,6 +181,11 @@ namespace CashphotoWPF
         #endregion
 
         #region ToolBox
+
+        private void CreateQRCode(string numCommande)
+        {
+            QRCodeWriter.CreateQrCode(numCommande, 500, QRCodeWriter.QrErrorCorrectionLevel.Medium).SaveAsPng("C:\\Users\\Gaetan\\Desktop\\MyQR.png");
+        }
 
         private string ToNumberAndDot(string s)
         {
@@ -1193,6 +1226,7 @@ namespace CashphotoWPF
         /// </summary>
         private void EnregistrerCommande_Click(object sender, RoutedEventArgs e)
         {
+            CreateQRCode(SaisirCommande.Text);
             EnregistrementCommande();
 
             if ((bool)ColisSupplementaire_CheckBox.IsChecked)

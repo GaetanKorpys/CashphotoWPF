@@ -22,6 +22,7 @@ namespace CashphotoWPF
         {
             Constante constante = Constante.GetConstante();
             int changements = 0;
+            _app.TestConnexionBDD();
             if (constante.BDDOK)
             {
                 changements += ImportFromAmazon();
@@ -33,8 +34,6 @@ namespace CashphotoWPF
         private int ImportFromAmazon()
         {
             Constante constante = Constante.GetConstante();
-            //Cor cor = Cor.getInstance();
-            
 
             List<string> FilesList = getAmazonFiles();
             char delimiter = '\t';
@@ -108,8 +107,6 @@ namespace CashphotoWPF
                         line = line.Replace("\"","");
                         string[] fileDataField = line.Split(delimiter);
                         string numCommande = fileDataField[26].Substring(1);
-
-                        System.Diagnostics.Debug.WriteLine("J " + numCommande);
 
                         int exist = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == numCommande).Count();
                         if (exist == 0)
@@ -324,7 +321,6 @@ namespace CashphotoWPF
             Constante constante = Constante.GetConstante();
 
             Article article = new Article();
-            System.Diagnostics.Debug.WriteLine(Data[12]);
             article.IdAmazon = Data[1];
             article.NumCommande = Data[0];
             article.NomArticle = Data[8];

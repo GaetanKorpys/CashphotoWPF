@@ -4,7 +4,8 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:CashphotoWPF.BoiteDeDialogue"
-      mc:Ignorable="d" 
+      mc:Ignorable="d"
+      WindowStartupLocation="CenterScreen"
       Title="Confirmation du poids" Width="360" Height="240">
 
     <Grid>

@@ -35,8 +35,6 @@ namespace CashphotoWPF
             string filename;
             double hash;
 
-            System.Diagnostics.Debug.WriteLine("ON CHERCHE");
-
             tab = Directory.GetFiles(constante.numeroSuiviColiposte);
             if (tab.Length > 0)
             {
@@ -57,7 +55,6 @@ namespace CashphotoWPF
         private void StopRecherche()
         {
             _timer.Stop();
-            System.Diagnostics.Debug.WriteLine("stop");
         }
     }
 }

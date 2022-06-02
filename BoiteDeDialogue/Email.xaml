@@ -4,7 +4,9 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:CashphotoWPF.BoiteDeDialogue"
-      mc:Ignorable="d" 
+      xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"  
+      mc:Ignorable="d"
+      WindowStartupLocation="CenterScreen"  
       Title="Email" Width="360" Height="240">
 
     <Grid>

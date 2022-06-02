@@ -12,9 +12,9 @@ TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\Users\Gaetan\source\repos\CashphotoWPF\App.xaml
 6420850585
 11228489786
-30167063941
+25160613875
 238459379959
 BoiteDeDialogue\ConfigurationDialog.xaml;BoiteDeDialogue\ConfirmationPoids.xaml;BoiteDeDialogue\Email.xaml;BoiteDeDialogue\Poids.xaml;BoiteDeDialogue\Telephone.xaml;MainWindow.xaml;
 
-False
+True
 

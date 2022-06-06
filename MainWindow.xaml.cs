@@ -30,6 +30,9 @@ using System.Windows.Threading;
 using MahApps.Metro.Controls;
 using System.Drawing.Printing;
 using IronBarCode;
+using System.Drawing;
+using Brushes = System.Drawing.Brushes;
+using Color = System.Windows.Media.Color;
 
 namespace CashphotoWPF
 {
@@ -75,35 +78,6 @@ namespace CashphotoWPF
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             chargementLancement();
-
-            //Etiquette et = new Etiquette();
-            //et.DoPrint();
-
-            PrintDocument pd = new PrintDocument();
-            pd.PrinterSettings = new PrinterSettings
-            {
-                PrinterName = "Brother TD-2020"
-            };
-            pd.PrintPage += (sender, args) =>
-            {
-                System.Drawing.Image img = System.Drawing.Image.FromFile("téléchargement.png");
-                System.Drawing.Rectangle m = args.PageBounds ;
-
-                if ((double)img.Width / (double)img.Height > (double)m.Width / (double)m.Height) // image is wider
-                {
-                    m.Height = (int)((double)img.Height / (double)img.Width * (double)m.Width);
-                    System.Diagnostics.Debug.WriteLine("h " + m.Height+ " w "+ m.Width );
-                }
-                else
-                {
-                    m.Width = (int)((double)img.Width / (double)img.Height * (double)m.Height);
-                    System.Diagnostics.Debug.WriteLine("h " + m.Height + " w " + m.Width);
-                }
-                m.Width = 50;
-                m.Height = 50;
-                args.Graphics.DrawImage(img, m);
-            };
-            //pd.Print();
         }
 
         /// <summary>
@@ -182,9 +156,48 @@ namespace CashphotoWPF
 
         #region ToolBox
 
-        private void CreateQRCode(string numCommande)
+        private void PrintRecapIRL(Commande commande)
         {
-            QRCodeWriter.CreateQrCode(numCommande, 500, QRCodeWriter.QrErrorCorrectionLevel.Medium).SaveAsPng("C:\\Users\\Gaetan\\Desktop\\MyQR.png");
+            PrintDocument pd = new PrintDocument();
+
+            CreateQRCode(commande);
+
+            string nom = commande.NomClientLivraison;
+            if (nom == "")
+                nom = commande.NomClientFacturation;
+
+            pd.PrinterSettings = new PrinterSettings
+            {
+                PrinterName = "Brother TD-2020"
+            };
+            pd.PrintPage += (sender, args) =>
+            {
+                System.Drawing.Image img = System.Drawing.Image.FromFile(GetCheminQRCode());
+                System.Drawing.Rectangle m = args.PageBounds;
+
+                //if ((double)img.Width / (double)img.Height > (double)m.Width / (double)m.Height) // image is wider
+                //{
+                //    m.Height = (int)((double)img.Height / (double)img.Width * (double)m.Width);
+                //    System.Diagnostics.Debug.WriteLine("h " + m.Height + " w " + m.Width);
+                //}
+                //else
+                //{
+                //    m.Width = (int)((double)img.Width / (double)img.Height * (double)m.Height);
+                //    System.Diagnostics.Debug.WriteLine("h " + m.Height + " w " + m.Width);
+                //}
+                m.Width = 70;
+                m.Height = 70;
+                args.Graphics.DrawImage(img, m);
+                args.Graphics.DrawString(commande.NumCommande, new Font("Arial", 7), Brushes.Black, 75, 35);
+                args.Graphics.DrawString(nom, new Font("Arial", 8), Brushes.Black, 75, 0);
+            };
+            pd.Print();
+        }
+
+        private void CreateQRCode(Commande commande)
+        {
+            GeneratedBarcode QRCode = QRCodeWriter.CreateQrCode(commande.NumCommande, 800, QRCodeWriter.QrErrorCorrectionLevel.Medium);
+            QRCode.SaveAsPng(GetCheminQRCode());
         }
 
         private string ToNumberAndDot(string s)
@@ -259,6 +272,17 @@ namespace CashphotoWPF
             proc.StartInfo.UseShellExecute = true;
             proc.StartInfo.Verb = "runas";
             //proc.Start();
+        }
+
+        /// <summary>
+        /// Renvoie le chemin de l'application .exe de la balance connectée.
+        /// </summary>
+        private string GetCheminQRCode()
+        {
+            string chemin = Directory.GetParent(System.Reflection.Assembly.GetExecutingAssembly().Location).ToString();
+            chemin += "\\";
+            chemin += "QRCode.png";
+            return chemin;
         }
 
         /// <summary>
@@ -1101,6 +1125,8 @@ namespace CashphotoWPF
                         ActualiserRecapEnregistrementCommande(_commande);
 
                         Actualiser_2DataGrids(false);
+
+                        PrintRecapIRL(_commande);
                     }
                     else
                         AfficherTestEnregistrementCommande(false, "Veuillez créer le 1er colis avant d'ajouter le colis supplémentaire.");
@@ -1119,6 +1145,8 @@ namespace CashphotoWPF
                             ActualiserRecapEnregistrementCommande(_commande);
 
                             Actualiser_2DataGrids(false);
+
+                            PrintRecapIRL(_commande);
                         }
                         else
                             AfficherTestEnregistrementCommande(false, "Veuillez créer le 1er colis avant d'ajouter le colis supplémentaire.");
@@ -1137,6 +1165,8 @@ namespace CashphotoWPF
                                 ActualiserRecapEnregistrementCommande(_commande);
 
                                 Actualiser_2DataGrids(false);
+
+                                PrintRecapIRL(_commande);
                             }
                         }
                         else
@@ -1226,7 +1256,6 @@ namespace CashphotoWPF
         /// </summary>
         private void EnregistrerCommande_Click(object sender, RoutedEventArgs e)
         {
-            CreateQRCode(SaisirCommande.Text);
             EnregistrementCommande();
 
             if ((bool)ColisSupplementaire_CheckBox.IsChecked)
@@ -1644,12 +1673,20 @@ namespace CashphotoWPF
             {
                 if (_commande != null)
                 {
-                    string export;
+                    string export = "";
 
                     Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == _commande.NumCommande).First();
 
                     if (commande.Expedier)
-                        export = "La commande est déjà expédiée.";
+                    {
+                        ConfirmationExpedition confirmationExpedition = new ConfirmationExpedition();
+                        if (confirmationExpedition.ShowDialog() == true)
+                        {
+                            Expedition(commande);
+                            export = "La commande de " + commande.NomClientLivraison + " est expédiée.";
+                        }
+                    }
+                        
 
                     else
                     {

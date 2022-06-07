@@ -320,7 +320,7 @@ namespace CashphotoWPF
             proc.StartInfo.FileName = fileName;
             proc.StartInfo.UseShellExecute = true;
             proc.StartInfo.Verb = "runas";
-            //proc.Start();
+            proc.Start();
         }
 
         /// <summary>

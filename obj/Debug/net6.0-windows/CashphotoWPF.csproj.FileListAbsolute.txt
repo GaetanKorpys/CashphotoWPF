@@ -78,6 +78,7 @@ C:\Users\Gaetan\source\repos\CashphotoWPF\obj\Debug\net6.0-windows\App.baml
 C:\Users\Gaetan\source\repos\CashphotoWPF\obj\Debug\net6.0-windows\CashphotoWPF_Content.g.cs
 C:\Users\Gaetan\source\repos\CashphotoWPF\obj\Debug\net6.0-windows\CashphotoWPF.Properties.Resources.resources
 C:\Users\Gaetan\source\repos\CashphotoWPF\obj\Debug\net6.0-windows\CashphotoWPF.csproj.GenerateResource.cache
-C:\Users\Gaetan\source\repos\CashphotoWPF\obj\Debug\net6.0-windows\Interop.bpac.dll
 C:\Users\Gaetan\source\repos\CashphotoWPF\obj\Debug\net6.0-windows\CashphotoWPF.csproj.ResolveComReference.cache
 C:\Users\Gaetan\source\repos\CashphotoWPF\bin\Debug\net6.0-windows\IronBarCode.dll
+C:\Users\Gaetan\source\repos\CashphotoWPF\obj\Debug\net6.0-windows\BoiteDeDialogue\ConfirmationExpedition.g.cs
+C:\Users\Gaetan\source\repos\CashphotoWPF\obj\Debug\net6.0-windows\BoiteDeDialogue\ConfirmationExpedition.baml

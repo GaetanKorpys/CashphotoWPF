@@ -23,5 +23,17 @@ namespace CashphotoWPF.BoiteDeDialogue
         {
             InitializeComponent();
         }
+
+        private void Valider(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = true;
+            this.Close();   
+        }
+
+        private void Annuler(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = false;
+            this.Close();
+        }
     }
 }

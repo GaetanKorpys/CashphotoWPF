@@ -12,6 +12,7 @@ namespace CashphotoWPF
 {
     internal class TimerSuiviFile
     {
+
         private MainWindow _app; //un accès à la fenêtre principale
         private double _hash;
         private DispatcherTimer _timer;

@@ -159,12 +159,19 @@ namespace CashphotoWPF
         private void PrintRecapIRL(Commande commande)
         {
             PrintDocument pd = new PrintDocument();
-
+            int police;
             CreateQRCode(commande);
 
             string nom = commande.NomClientLivraison;
             if (nom == "")
                 nom = commande.NomClientFacturation;
+
+            if (nom.Length <= 14)
+                police = 10;
+            else if (nom.Length <= 18)
+                police = 9;
+            else
+                police = 8;
 
             pd.PrinterSettings = new PrinterSettings
             {
@@ -185,11 +192,42 @@ namespace CashphotoWPF
                 //    m.Width = (int)((double)img.Width / (double)img.Height * (double)m.Height);
                 //    System.Diagnostics.Debug.WriteLine("h " + m.Height + " w " + m.Width);
                 //}
+                
+
+                if (commande.Site == "Amazon")
+                {
+                    string debut, fin;
+                    fin = commande.NumCommande.Substring(12);
+                    debut = commande.NumCommande.Substring(0, 11);
+
+                    string[] tokens = commande.NomClientLivraison.Split(" ");
+                    if (IsAllUpper(tokens[0]))
+                        args.Graphics.DrawString(tokens[0] + " " + tokens[1], new Font("Arial", police), Brushes.Black, 75, 0);
+
+                    else if (IsAllUpper(tokens[1]))
+                        args.Graphics.DrawString(tokens[1] + " " + tokens[0], new Font("Arial", police), Brushes.Black, 75, 0);
+                    else
+                        args.Graphics.DrawString(nom, new Font("Arial", police), Brushes.Black, 75, 0);
+
+                    args.Graphics.DrawString(debut, new Font("Arial", 11), Brushes.Black, 75, 25);
+                    args.Graphics.DrawString(fin, new Font("Arial", 14), Brushes.Black, 75, 50);
+
+                }
+                else
+                {
+                    string nom, prenom;
+                    string[] tokens = commande.NomClientLivraison.Split(" ");
+                    nom = tokens[0].ToUpper();
+                    prenom = tokens[1];
+                    args.Graphics.DrawString(nom + " " + prenom, new Font("Arial", police), Brushes.Black, 75, 0);
+                    args.Graphics.DrawString("CPC " + commande.NumCommande, new Font("Arial", 14), Brushes.Black, 75, 30);
+                }
+
                 m.Width = 70;
                 m.Height = 70;
+
                 args.Graphics.DrawImage(img, m);
-                args.Graphics.DrawString(commande.NumCommande, new Font("Arial", 7), Brushes.Black, 75, 35);
-                args.Graphics.DrawString(nom, new Font("Arial", 8), Brushes.Black, 75, 0);
+
             };
             pd.Print();
         }
@@ -198,6 +236,17 @@ namespace CashphotoWPF
         {
             GeneratedBarcode QRCode = QRCodeWriter.CreateQrCode(commande.NumCommande, 800, QRCodeWriter.QrErrorCorrectionLevel.Medium);
             QRCode.SaveAsPng(GetCheminQRCode());
+        }
+
+        bool IsAllUpper(string input)
+        {
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (!Char.IsUpper(input[i]))
+                    return false;
+            }
+
+            return true;
         }
 
         private string ToNumberAndDot(string s)

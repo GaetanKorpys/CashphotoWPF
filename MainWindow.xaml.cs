@@ -156,22 +156,31 @@ namespace CashphotoWPF
 
         #region ToolBox
 
+        private int getPoliceFromLength(string input)
+        {
+            int police;
+            if (input.Length <= 14)
+                police = 10;
+            else if (input.Length <= 18)
+                police = 9;
+            else
+                police = 8;
+            return police;
+        }
+
         private void PrintRecapIRL(Commande commande)
         {
             PrintDocument pd = new PrintDocument();
             int police;
+            string nom = "";
             CreateQRCode(commande);
 
-            string nom = commande.NomClientLivraison;
-            if (nom == "")
+            if (commande.NomClientLivraison != null && commande.NomClientLivraison != "")
+                nom = commande.NomClientLivraison;
+            else if (commande.NomClientFacturation != null && commande.NomClientFacturation != "")
                 nom = commande.NomClientFacturation;
 
-            if (nom.Length <= 14)
-                police = 10;
-            else if (nom.Length <= 18)
-                police = 9;
-            else
-                police = 8;
+            police = getPoliceFromLength(nom);
 
             pd.PrinterSettings = new PrinterSettings
             {
@@ -182,44 +191,34 @@ namespace CashphotoWPF
                 System.Drawing.Image img = System.Drawing.Image.FromFile(GetCheminQRCode());
                 System.Drawing.Rectangle m = args.PageBounds;
 
-                //if ((double)img.Width / (double)img.Height > (double)m.Width / (double)m.Height) // image is wider
-                //{
-                //    m.Height = (int)((double)img.Height / (double)img.Width * (double)m.Width);
-                //    System.Diagnostics.Debug.WriteLine("h " + m.Height + " w " + m.Width);
-                //}
-                //else
-                //{
-                //    m.Width = (int)((double)img.Width / (double)img.Height * (double)m.Height);
-                //    System.Diagnostics.Debug.WriteLine("h " + m.Height + " w " + m.Width);
-                //}
-                
-
                 if (commande.Site == "Amazon")
                 {
                     string debut, fin;
                     fin = commande.NumCommande.Substring(12);
                     debut = commande.NumCommande.Substring(0, 11);
 
-                    string[] tokens = commande.NomClientLivraison.Split(" ");
-                    if (IsAllUpper(tokens[0]))
-                        args.Graphics.DrawString(tokens[0] + " " + tokens[1], new Font("Arial", police), Brushes.Black, 75, 0);
+                    if(nom != "")
+                    {
+                        string[] tokens = nom.Split(" ");
+                        if (IsAllUpper(tokens[0]))
+                            args.Graphics.DrawString(tokens[0] + " " + tokens[1], new Font("Arial", police), Brushes.Black, 75, 0);
 
-                    else if (IsAllUpper(tokens[1]))
-                        args.Graphics.DrawString(tokens[1] + " " + tokens[0], new Font("Arial", police), Brushes.Black, 75, 0);
-                    else
-                        args.Graphics.DrawString(nom, new Font("Arial", police), Brushes.Black, 75, 0);
+                        else if (IsAllUpper(tokens[1]))
+                            args.Graphics.DrawString(tokens[1] + " " + tokens[0], new Font("Arial", police), Brushes.Black, 75, 0);
+                        else
+                            args.Graphics.DrawString(nom, new Font("Arial", police), Brushes.Black, 75, 0);
 
+                    }
                     args.Graphics.DrawString(debut, new Font("Arial", 11), Brushes.Black, 75, 25);
                     args.Graphics.DrawString(fin, new Font("Arial", 14), Brushes.Black, 75, 50);
-
                 }
                 else
                 {
-                    string nom, prenom;
-                    string[] tokens = commande.NomClientLivraison.Split(" ");
-                    nom = tokens[0].ToUpper();
-                    prenom = tokens[1];
-                    args.Graphics.DrawString(nom + " " + prenom, new Font("Arial", police), Brushes.Black, 75, 0);
+                    if(nom != "")
+                    {
+                        string[] tokens = commande.NomClientLivraison.Split(" ");
+                        args.Graphics.DrawString(tokens[0].ToUpper() + " " + tokens[1], new Font("Arial", police), Brushes.Black, 75, 0);
+                    }
                     args.Graphics.DrawString("CPC " + commande.NumCommande, new Font("Arial", 14), Brushes.Black, 75, 30);
                 }
 

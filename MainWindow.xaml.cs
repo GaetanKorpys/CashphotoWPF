@@ -162,11 +162,11 @@ namespace CashphotoWPF
         {
             int police;
             if (input.Length <= 14)
-                police = 10;
-            else if (input.Length <= 18)
                 police = 9;
-            else
+            else if (input.Length <= 18)
                 police = 8;
+            else
+                police = 7;
             return police;
         }
 
@@ -193,44 +193,66 @@ namespace CashphotoWPF
             {
                 System.Drawing.Image img = CreateQRCode(commande);
                 img.Save("QRCode.png", ImageFormat.Png);
-                System.Drawing.Rectangle m = args.PageBounds;
 
-                if (commande.Site!= null && commande.Site == "Amazon")
+                double? poids = 0;
+                switch(commande.NbColis)
+                {
+                    case 1:
+                        poids = commande.Poids;
+                        break;
+
+                    case 2:
+                        poids = commande.Poids2;
+                        break;
+
+                    case 3:
+                        poids = commande.Poids3;
+                        break;
+
+                    case 4:
+                        poids = commande.Poids4;
+                        break;
+                }
+
+                if(commande.NumCommande.Contains("-"))
                 {
                     string debut, fin;
                     fin = commande.NumCommande.Substring(12);
                     debut = commande.NumCommande.Substring(0, 11);
+                    args.Graphics.DrawString(debut, new Font("Arial", 11), Brushes.Black, 85, 16);
+                    args.Graphics.DrawString(fin, new Font("Arial", 14), Brushes.Black, 85, 36);
 
-                    if(nom != "")
+                    args.Graphics.DrawString("n°"+commande.NbColis.ToString()+" : "+ poids.ToString() + " Kg", new Font("Arial", 12), Brushes.Black, 85, 55);
+
+
+                    if (commande.Site!= null && commande.Site == "Amazon" && nom != "")
                     {
                         string[] tokens = nom.Split(" ");
                         if (IsAllUpper(tokens[0]))
-                            args.Graphics.DrawString(tokens[0] + " " + tokens[1], new Font("Arial", police), Brushes.Black, 75, 0);
+                            args.Graphics.DrawString(tokens[0] + " " + tokens[1], new Font("Arial", police), Brushes.Black, 85, 0);
 
                         else if (IsAllUpper(tokens[1]))
-                            args.Graphics.DrawString(tokens[1] + " " + tokens[0], new Font("Arial", police), Brushes.Black, 75, 0);
+                            args.Graphics.DrawString(tokens[1] + " " + tokens[0], new Font("Arial", police), Brushes.Black, 85, 0);
                         else
-                            args.Graphics.DrawString(nom, new Font("Arial", police), Brushes.Black, 75, 0);
-
+                            args.Graphics.DrawString(nom, new Font("Arial", police), Brushes.Black, 85, 0);
                     }
-                    args.Graphics.DrawString(debut, new Font("Arial", 11), Brushes.Black, 75, 25);
-                    args.Graphics.DrawString(fin, new Font("Arial", 14), Brushes.Black, 75, 50);
                 }
-                else if (commande.Site != null && commande.Site == "Cashphoto")
+                else
                 {
-                    if(nom != "")
+                    args.Graphics.DrawString("CPC " + commande.NumCommande, new Font("Arial", 14), Brushes.Black, 85, 25);
+
+                    args.Graphics.DrawString("n°" + commande.NbColis.ToString() + " : " + poids.ToString() + " Kg", new Font("Arial", 12), Brushes.Black, 85, 55);
+
+
+                    if (commande.Site != null && commande.Site == "Cashphoto" && nom != "")
                     {
                         string[] tokens = commande.NomClientLivraison.Split(" ");
-                        args.Graphics.DrawString(tokens[0].ToUpper() + " " + tokens[1], new Font("Arial", police), Brushes.Black, 75, 0);
+                        args.Graphics.DrawString(tokens[1].ToUpper() + " " + tokens[0], new Font("Arial", police), Brushes.Black, 85, 0);
+                        
                     }
-                    args.Graphics.DrawString("CPC " + commande.NumCommande, new Font("Arial", 14), Brushes.Black, 75, 30);
                 }
-
-                m.Width = 70;
-                m.Height = 70;
-
-                args.Graphics.DrawImage(img, m);
-
+                
+                args.Graphics.DrawImage(img, -13, -13, 100, 100);
             };
             pd.Print();
         }
@@ -1771,8 +1793,6 @@ namespace CashphotoWPF
                             export = "La commande de " + commande.NomClientLivraison + " est expédiée.";
                         }
                     }
-                        
-
                     else
                     {
                         export = "La commande de " + commande.NomClientLivraison + " est expédiée.";
@@ -1790,12 +1810,15 @@ namespace CashphotoWPF
                             ConfirmationPoids confirmationPoids = new ConfirmationPoids(this);
                             if (confirmationPoids.ShowDialog() == true)
                             {
-                                commande.Expedier = true;
-                                commande.Poids = double.Parse(confirmationPoids.InputTextBox.Text, CultureInfo.InvariantCulture);
+                                Commande cmd = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == commande.NumCommande).First();
+
+
+                                cmd.Expedier = true;
+                                cmd.Poids = double.Parse(confirmationPoids.InputTextBox.Text, CultureInfo.InvariantCulture);
 
                                 constante.cashphotoBDD.SaveChanges();
 
-                                Expedition(commande);
+                                Expedition(cmd);
                             }
                         }
                         else

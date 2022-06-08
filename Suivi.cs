@@ -55,10 +55,11 @@ namespace CashphotoWPF
                         fileRow = fileReader.ReadLine();
                         fileDataField = fileRow.Split(delimiter);
 
-                        if(!fileDataField[0].Contains("-"))
-                        {
-                            fileDataField[0] = fileDataField[0].Substring(4);;
-                        }
+                        //if(!fileDataField[0].Contains("-"))
+                        //{
+                        //    fileDataField[0] = fileDataField[0].Substring(4);;
+                        //    System.Diagnostics.Debug.WriteLine("L "+ fileDataField[0]);
+                        //}
 
                         if (commande.NumCommande == fileDataField[0])
                         {

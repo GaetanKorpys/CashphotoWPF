@@ -33,6 +33,8 @@ using IronBarCode;
 using System.Drawing;
 using Brushes = System.Drawing.Brushes;
 using Color = System.Windows.Media.Color;
+using QRCoder;
+using System.Drawing.Imaging;
 
 namespace CashphotoWPF
 {
@@ -170,10 +172,11 @@ namespace CashphotoWPF
 
         private void PrintRecapIRL(Commande commande)
         {
+            System.Diagnostics.Debug.WriteLine("OKKK");
+
             PrintDocument pd = new PrintDocument();
             int police;
             string nom = "";
-            CreateQRCode(commande);
 
             if (commande.NomClientLivraison != null && commande.NomClientLivraison != "")
                 nom = commande.NomClientLivraison;
@@ -188,10 +191,11 @@ namespace CashphotoWPF
             };
             pd.PrintPage += (sender, args) =>
             {
-                System.Drawing.Image img = System.Drawing.Image.FromFile(GetCheminQRCode());
+                System.Drawing.Image img = CreateQRCode(commande);
+                img.Save("QRCode.png", ImageFormat.Png);
                 System.Drawing.Rectangle m = args.PageBounds;
 
-                if (commande.Site == "Amazon")
+                if (commande.Site!= null && commande.Site == "Amazon")
                 {
                     string debut, fin;
                     fin = commande.NumCommande.Substring(12);
@@ -212,7 +216,7 @@ namespace CashphotoWPF
                     args.Graphics.DrawString(debut, new Font("Arial", 11), Brushes.Black, 75, 25);
                     args.Graphics.DrawString(fin, new Font("Arial", 14), Brushes.Black, 75, 50);
                 }
-                else
+                else if (commande.Site != null && commande.Site == "Cashphoto")
                 {
                     if(nom != "")
                     {
@@ -231,10 +235,14 @@ namespace CashphotoWPF
             pd.Print();
         }
 
-        private void CreateQRCode(Commande commande)
+        private Bitmap CreateQRCode(Commande commande)
         {
-            GeneratedBarcode QRCode = QRCodeWriter.CreateQrCode(commande.NumCommande, 800, QRCodeWriter.QrErrorCorrectionLevel.Medium);
-            QRCode.SaveAsPng(GetCheminQRCode());
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(commande.NumCommande, QRCodeGenerator.ECCLevel.Q);
+            QRCode qrCode = new QRCode(qrCodeData);
+            Bitmap qrCodeImage = qrCode.GetGraphic(20);
+            return qrCodeImage;
+            //QRCode.SaveAsPng(GetCheminQRCode());
         }
 
         bool IsAllUpper(string input)
@@ -244,7 +252,6 @@ namespace CashphotoWPF
                 if (!Char.IsUpper(input[i]))
                     return false;
             }
-
             return true;
         }
 
@@ -1174,7 +1181,9 @@ namespace CashphotoWPF
 
                         Actualiser_2DataGrids(false);
 
-                        PrintRecapIRL(_commande);
+                        System.Diagnostics.Debug.WriteLine("dd " + constante.indexTabItem);
+                        if(constante.indexTabItem == 0)
+                            PrintRecapIRL(_commande);
                     }
                     else
                         AfficherTestEnregistrementCommande(false, "Veuillez créer le 1er colis avant d'ajouter le colis supplémentaire.");
@@ -1194,7 +1203,8 @@ namespace CashphotoWPF
 
                             Actualiser_2DataGrids(false);
 
-                            PrintRecapIRL(_commande);
+                            if (constante.indexTabItem == 0)
+                                PrintRecapIRL(_commande);
                         }
                         else
                             AfficherTestEnregistrementCommande(false, "Veuillez créer le 1er colis avant d'ajouter le colis supplémentaire.");
@@ -1214,7 +1224,8 @@ namespace CashphotoWPF
 
                                 Actualiser_2DataGrids(false);
 
-                                PrintRecapIRL(_commande);
+                                if (constante.indexTabItem == 0)
+                                    PrintRecapIRL(_commande);
                             }
                         }
                         else
@@ -1551,10 +1562,12 @@ namespace CashphotoWPF
                     if(commande.Site == "Cashphoto")
                     {
                         Coliposte.IsChecked = true;
+                        GLS.IsEnabled = false;
                         AmazonPageBouton.IsEnabled = false;
                     }
                     else
                     {
+                        GLS.IsEnabled = true;
                         AmazonPageBouton.IsEnabled = true;
                     }
                 }
@@ -1614,10 +1627,12 @@ namespace CashphotoWPF
                         {
                             Coliposte.IsChecked = true;
                             AmazonPageBouton.IsEnabled = false;
+                            GLS.IsEnabled = false;
                         }
                         else
                         {
                             AmazonPageBouton.IsEnabled = true;
+                            GLS.IsEnabled = true;
                         }
                     }
                     else
@@ -1633,6 +1648,13 @@ namespace CashphotoWPF
         #endregion
 
         #region Expédition
+
+        private void RechercheCommandeAmazon_Click(object sender, RoutedEventArgs e)
+        {
+            if (_commande.Site != null && _commande.Site.Equals("Amazon"))
+                Process.Start(new ProcessStartInfo("cmd", $"/c start https://sellercentral-europe.amazon.com/orders-v3/order/" + _commande.NumCommande) { CreateNoWindow = true });
+
+        }
 
         private void CommandeExpedier_Checked(object sender, RoutedEventArgs e)
         {
@@ -1652,18 +1674,28 @@ namespace CashphotoWPF
             {
                 if (_commande != null)
                 {
-                    Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == _commande.NumCommande).First();
-
                     Poids poidsDialog = new Poids(this);
                     if (poidsDialog.ShowDialog() == true)
                     {
+                        Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == _commande.NumCommande).First();
+
                         commande.Poids = double.Parse(poidsDialog.InputTextBox.Text, CultureInfo.InvariantCulture);
                         commande.Preparer = true;
                         constante.cashphotoBDD.SaveChanges();
 
+                        System.Diagnostics.Debug.WriteLine("aa " + _commande.NumCommande);
+                        System.Diagnostics.Debug.WriteLine("aa " + _commande.Poids);
+
+                        //_commande = commande;
+
+                        System.Diagnostics.Debug.WriteLine("bb " + _commande.NumCommande);
+                        System.Diagnostics.Debug.WriteLine("bb " + _commande.Poids);
+
                         Actualiser_2DataGrids(false);
 
                         DisplayTempMessage(Message, "Modification du poids validée.");
+
+
                     }
                 }
             }
@@ -1675,23 +1707,10 @@ namespace CashphotoWPF
             Constante constante = Constante.GetConstante();
 
             string[] tab;
-            double hash;
+            double hash = 0; //Si le fichier n'existe pas ou est vide, on met son hash à 0.
             string filename, path;
 
-            for (int i = 1; i <= commande.NbColis; i++)
-            {
-                expedition.ExpedierCommande(commande, i);
-
-                if (commande.NbColis == 1)
-                    continue;
-
-                if(i != commande.NbColis)
-                {
-                    var taskDelay = Task.Delay(15000);
-                    await taskDelay;
-                }               
-            }
-
+            //Calcul hash du fichier contenant les numéros de suivis forunis par Coliship
             if (constante.transporteur == Transporteur.Transporteurs.Coliposte)
             {
                 //On récupère le hash du fichier pour savoir s'il est modifié ou non
@@ -1702,13 +1721,31 @@ namespace CashphotoWPF
                     filename = System.IO.Path.GetFileName(tab[0]);
                     path = constante.numeroSuiviColiposte + "//" + filename;
                     hash = new FileInfo(path).Length;
+                    System.Diagnostics.Debug.WriteLine("H " + hash);
                 }
-                else
-                    //Le fichier n'existe pas, on met son hash à 0
-                    hash = 0;
-
-                _timer = new TimerSuiviFile(this, hash, commande);
             }
+
+            //On boucle si la commande est expédié avec plusieurs colis.
+            //On imprime autant d'étiquette (avec un numéros de suivi et un poids différent) que de colis.
+            for (int i = 1; i <= commande.NbColis; i++)
+            {
+                expedition.ExpedierCommande(commande, i);
+
+                if (commande.NbColis == 1)
+                    continue;
+
+                if(i != commande.NbColis)
+                {
+                    var taskDelay = Task.Delay(8000);
+                    await taskDelay;
+                }               
+            }
+
+            if (constante.transporteur == Transporteur.Transporteurs.Coliposte)
+                _timer = new TimerSuiviFile(this, hash, commande);
+            else
+                Process.Start(new ProcessStartInfo("cmd", $"/c start https://sellercentral-europe.amazon.com/orders-v3/order/" + commande.NumCommande + "/confirm-shipment") { CreateNoWindow = true });
+
 
             Actualiser_2DataGrids(false);
         }

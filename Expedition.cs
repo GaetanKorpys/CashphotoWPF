@@ -20,11 +20,15 @@ namespace CashphotoWPF
         {
             Constante constante = Constante.GetConstante();
            
-            if (constante.transporteur == Transporteur.Transporteurs.Coliposte)
+            if(commande.Site == "Cashphoto")
                 ExpedierColiposte(commande, NbColis);
-            else
-                ExpedierGLS(commande, NbColis);
-            
+            else if(commande.Site == "Amazon")
+            {
+                if (constante.transporteur == Transporteur.Transporteurs.Coliposte)
+                    ExpedierColiposte(commande, NbColis);
+                else
+                    ExpedierGLS(commande, NbColis);
+            }        
         }
 
         private void ExpedierColiposte(Commande commande, int NbColis)
@@ -122,6 +126,10 @@ namespace CashphotoWPF
                 enc = Encoding.UTF8; //Coliposte lit l'UTF8 en revanche
             }
             StreamWriter fileWriter = new StreamWriter(completepath, false, enc);
+
+            line.Replace("/", "");
+            line.Replace("\r", "");
+            line.Replace("\n", "");
 
             fileWriter.WriteLine(line);
             fileWriter.Flush();

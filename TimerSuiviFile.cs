@@ -35,7 +35,7 @@ namespace CashphotoWPF
             string[] tab;
             string filename;
             double hash;
-
+            System.Diagnostics.Debug.WriteLine("Clock");
             tab = Directory.GetFiles(constante.numeroSuiviColiposte);
             if (tab.Length > 0)
             {

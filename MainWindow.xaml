@@ -169,7 +169,7 @@
 
                 <Button Content="Expedier commande" Click="ExpedierCommande_Click" Grid.Row="2" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" Height="30" Width="190" Margin="0,20,580,0"/>
                 <Button Content="Modifier poids commande" Click="ModifierPoids_Click" Grid.Row="2" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" Height="30" Width="248" Margin="0,20,90,0"/>
-                <Button x:Name="AmazonPageBouton" Content="Rechercher commande Amazon" Grid.Row="2" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" Height="30" Width="296" Margin="500,20,0,0"/>
+                <Button x:Name="AmazonPageBouton" Click="RechercheCommandeAmazon_Click" Content="Rechercher commande Amazon" Grid.Row="2" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold" Height="30" Width="296" Margin="500,20,0,0"/>
 
                 <WrapPanel Grid.Row="2" Grid.Column="1" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Stretch">
                     <WrapPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="20,0,0,0">
@@ -201,25 +201,25 @@
                 <DataGrid Name="DataGridExpe"  SelectionChanged="dataGrid_SelectionChanged" Margin="30,0,20,0" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="1" Height="200" >
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Numéro de commande" Binding="{Binding NumCommande, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <DataGridTextColumn Header="Poids" Binding="{Binding Poids, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <DataGridTextColumn Header="Poids du 2ème colis" Binding="{Binding Poids2, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <DataGridTextColumn Header="Poids du 3ème colis" Binding="{Binding Poids3, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <DataGridTextColumn Header="Poids du 4ème colis" Binding="{Binding Poids4, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <DataGridTextColumn Header="Date" Binding="{Binding Date, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <DataGridTextColumn Header="Nom Client" Binding="{Binding NomClientLivraison, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Numéro de commande" Binding="{Binding NumCommande, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="Auto" />
+                        <DataGridTextColumn Header="Poids" Binding="{Binding Poids, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                        <DataGridTextColumn Header="Poids 2" Binding="{Binding Poids2, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Width="*"/>
+                        <DataGridTextColumn Header="Poids 3" Binding="{Binding Poids3, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"   Width="*"/>
+                        <DataGridTextColumn Header="Poids 4" Binding="{Binding Poids4, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Width="*"/>
+                        <DataGridTextColumn Header="Date" Binding="{Binding Date, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                        <DataGridTextColumn Header="Nom Client" Binding="{Binding NomClientLivraison, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
                     </DataGrid.Columns>
                 </DataGrid>
 
-                <DataGrid Name="DatagGridArticle" Visibility="Visible" SelectionChanged="dataGrid_SelectionChanged" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="30,250,20,0" Height="150">
+                <DataGrid Name="DatagGridArticle" FontSize="16" Visibility="Visible" SelectionChanged="dataGrid_SelectionChanged" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="30,250,20,0" Height="150">
 
 
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Code" Binding="{Binding IdAmazon, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <DataGridTextColumn Header="Article" Binding="{Binding NomArticle, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <DataGridTextColumn Header="Quantite" Binding="{Binding Quantite, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <DataGridTextColumn Header="Prix TTC" Binding="{Binding Prix, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Code" Binding="{Binding IdAmazon, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Width="Auto"/>
+                        <DataGridTextColumn Header="Article" Binding="{Binding NomArticle, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Width="Auto"/>
+                        <DataGridTextColumn Header="Quantite" Binding="{Binding Quantite, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Width="*"/>
+                        <DataGridTextColumn Header="Prix TTC" Binding="{Binding Prix, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Width="*"/>
                     </DataGrid.Columns>
                 </DataGrid>
 

@@ -16,62 +16,58 @@ namespace CashphotoWPF
         {
             _app = app;
         }
-
-        private List<string> getSuiviFilesFromColiposte(string folder)
-        {
-            List<string> FilesList = new List<string>();
-
-            foreach (string data in Directory.EnumerateFiles(folder))
-            {
-                if (data.Contains(".csv"))
-                    FilesList.Add(data);
-            }
-
-            return FilesList;
-        }
-
+        
         public void createSuiviFromCommande(Commande commande)
         {
             Constante constante = Constante.GetConstante();
             string delimiter = ";";
             string fileRow;
             string[] fileDataField;
+            string[] tab;
           
-            List<string> FilesList = getSuiviFilesFromColiposte(constante.numeroSuiviColiposte);
+            string pathNumSuiviColipost = _app.getSuiviFileFromColiposte();
 
-            foreach (string data in FilesList)
+            tab = Directory.GetFiles(constante.numeroSuiviColiposte);
+
+            foreach (string data in tab)
             {
-                if (File.Exists(data))
-                {
-                    StreamReader fileReader = new StreamReader(data);
-
-                    if (fileReader.Peek() != -1)
-                    {
-                        fileRow = fileReader.ReadLine();
-                    }
-
-                    while (fileReader.Peek() != -1)
-                    {
-                        fileRow = fileReader.ReadLine();
-                        fileDataField = fileRow.Split(delimiter);
-
-                        //if(!fileDataField[0].Contains("-"))
-                        //{
-                        //    fileDataField[0] = fileDataField[0].Substring(4);;
-                        //    System.Diagnostics.Debug.WriteLine("L "+ fileDataField[0]);
-                        //}
-
-                        if (commande.NumCommande == fileDataField[0])
-                        {
-                            if (commande.Site == "Amazon")
-                                createSuiviForAmazon(commande, fileDataField);
-                            else if (commande.Site == "Cashphoto")
-                                createSuiviForCashphoto(commande, fileDataField);
-                        }
-                    }
-                    fileReader.Close();
-                }
+                if (!pathNumSuiviColipost.Equals(data))
+                    _app.putInBackup(data, constante.numeroSuiviColiposte + "\\backup");
             }
+
+
+
+            if (File.Exists(pathNumSuiviColipost))
+            {
+                StreamReader fileReader = new StreamReader(pathNumSuiviColipost);
+
+                if (fileReader.Peek() != -1)
+                {
+                    fileRow = fileReader.ReadLine();
+                }
+
+                while (fileReader.Peek() != -1)
+                {
+                    fileRow = fileReader.ReadLine();
+                    fileDataField = fileRow.Split(delimiter);
+
+                    //if(!fileDataField[0].Contains("-"))
+                    //{
+                    //    fileDataField[0] = fileDataField[0].Substring(4);;
+                    //    System.Diagnostics.Debug.WriteLine("L "+ fileDataField[0]);
+                    //}
+
+                    if (commande.NumCommande == fileDataField[0])
+                    {
+                        if (commande.Site == "Amazon")
+                            createSuiviForAmazon(commande, fileDataField);
+                        else if (commande.Site == "Cashphoto")
+                            createSuiviForCashphoto(commande, fileDataField);
+                    }
+                }
+                fileReader.Close();
+            }
+            
         }
 
         private void createSuiviForAmazon(Commande c, string[] line)
@@ -119,12 +115,11 @@ namespace CashphotoWPF
             entete += "ship_from_address_countrycode";
 
             tab = Directory.GetFiles(constante.numeroSuiviAmazon);
-            if(tab.Length > 0)
-            {
-                lastFile = tab[0];
 
-                if (!path.Equals(lastFile))                                                                                                   
-                    File.Delete(tab[0]);
+            foreach(string data in tab)
+            {
+                if (!path.Equals(data))
+                    _app.putInBackup(data, constante.backupNumeroSuiviAmazon);
             }
 
             StreamWriter sw = File.AppendText(path);
@@ -202,12 +197,12 @@ namespace CashphotoWPF
             constante.cashphotoBDD.SaveChanges();
 
             tab = Directory.GetFiles(constante.numeroSuiviCashphoto);
-            if (tab.Length > 0)
-            {
-                lastFile = tab[0];
 
-                if (!path.Equals(lastFile))
-                    File.Delete(tab[0]);
+            foreach (string data in tab)
+            {
+                System.Diagnostics.Debug.WriteLine("nn " + constante.backupNumeroSuiviCashphoto);
+                if (!path.Equals(data))
+                    _app.putInBackup(data, constante.backupNumeroSuiviCashphoto);
             }
 
             StreamWriter sw = File.AppendText(path);

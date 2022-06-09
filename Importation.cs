@@ -99,7 +99,7 @@ namespace CashphotoWPF
                 if (File.Exists(data))
                 {
                     //System.Text.Encoding.GetEncoding(PrestashopEncodage)
-                    StreamReader streamReader = new StreamReader(data, System.Text.Encoding.GetEncoding(1250));
+                    StreamReader streamReader = new StreamReader(data, System.Text.Encoding.GetEncoding(1252));
                     if (streamReader.Peek() != -1)
                     {
                         string line = streamReader.ReadLine();

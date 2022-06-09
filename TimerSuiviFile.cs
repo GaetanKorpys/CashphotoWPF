@@ -32,25 +32,21 @@ namespace CashphotoWPF
         private void OnTimedEvent(object sender, EventArgs e)
         {
             Constante constante = Constante.GetConstante();
-            string[] tab;
             string filename;
             double hash;
             System.Diagnostics.Debug.WriteLine("Clock");
-            tab = Directory.GetFiles(constante.numeroSuiviColiposte);
-            if (tab.Length > 0)
+            
+            string path = _app.getSuiviFileFromColiposte();
+
+            hash = new FileInfo(path).Length;
+
+            if (_hash != hash)
             {
-                filename = System.IO.Path.GetFileName(tab[0]);
-                string path = constante.numeroSuiviColiposte + "//" + filename;
-
-                hash = new FileInfo(path).Length;
-
-                if (_hash != hash)
-                {
-                    Suivi suivi = new Suivi(_app);
-                    suivi.createSuiviFromCommande(_commande);
-                    StopRecherche();
-                }
+                Suivi suivi = new Suivi(_app);
+                suivi.createSuiviFromCommande(_commande);
+                StopRecherche();
             }
+            
         }
 
         private void StopRecherche()

@@ -35,6 +35,7 @@ using Brushes = System.Drawing.Brushes;
 using Color = System.Windows.Media.Color;
 using QRCoder;
 using System.Drawing.Imaging;
+using Path = System.IO.Path;
 
 namespace CashphotoWPF
 {
@@ -157,6 +158,15 @@ namespace CashphotoWPF
         #endregion
 
         #region ToolBox
+
+        public void putInBackup(string filename, string folder)
+        {
+            if(File.Exists(filename))
+            {
+                File.Copy(filename, folder +"\\"+ Path.GetFileName(filename));
+                File.Delete(filename);
+            }
+        }
 
         private int getPoliceFromLength(string input)
         {
@@ -764,10 +774,23 @@ namespace CashphotoWPF
             }
             return articles;
         }
-        
+
         #endregion
 
         #region Configuration
+
+        public string getSuiviFileFromColiposte()
+        {
+            Constante constante = Constante.GetConstante();
+
+            string date = DateTime.Now.ToString("yyyy-MM-dd");
+            string filename = "export.txt-" + date + ".csv";
+            string path = constante.numeroSuiviColiposte + "\\" + filename;
+            
+            System.Diagnostics.Debug.WriteLine(path);
+            return path;
+
+        }
 
         /// <summary>
         /// Modifie le chemin d'un dossier d'import ou d'export.

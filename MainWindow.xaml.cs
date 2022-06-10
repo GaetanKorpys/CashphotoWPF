@@ -163,8 +163,7 @@ namespace CashphotoWPF
         {
             if(File.Exists(filename))
             {
-                File.Copy(filename, folder +"\\"+ Path.GetFileName(filename));
-                File.Delete(filename);
+                File.Copy(filename, folder +"\\"+ Path.GetFileName(filename),true);
             }
         }
 
@@ -622,6 +621,11 @@ namespace CashphotoWPF
         private void TestConnexionBDD_Click(object sender, RoutedEventArgs e)
         {
             TestConnexionBDD();
+            Constante constante = Constante.GetConstante();
+            if (constante.BDDOK)
+                DisplayTempMessage(ReponseBDD, "Connexion OK");
+            else
+                DisplayTempMessage(ReponseBDD, "Erreur connexion");
         }
 
         /// <summary>
@@ -636,14 +640,12 @@ namespace CashphotoWPF
                 mySolidColorBrush.Color = Color.FromRgb(0, 255, 0);
                 LabelTestBDDPrep.Content = "Connexion OK";
                 LabelTestBDDExpe.Content = "Connexion OK";
-                DisplayTempMessage(ReponseBDD, "Connexion OK");
             }
             else
             {
                 mySolidColorBrush.Color = Color.FromRgb(255, 0, 0);
                 LabelTestBDDPrep.Content = "Erreur connexion";
                 LabelTestBDDExpe.Content = "Erreur connexion";
-                DisplayTempMessage(ReponseBDD, "Erreur connexion");
             }
             LedTestBDDPrep.Fill = mySolidColorBrush;
             LedTestBDDExpe.Fill = mySolidColorBrush;
@@ -1728,14 +1730,6 @@ namespace CashphotoWPF
                         commande.Preparer = true;
                         constante.cashphotoBDD.SaveChanges();
 
-                        System.Diagnostics.Debug.WriteLine("aa " + _commande.NumCommande);
-                        System.Diagnostics.Debug.WriteLine("aa " + _commande.Poids);
-
-                        //_commande = commande;
-
-                        System.Diagnostics.Debug.WriteLine("bb " + _commande.NumCommande);
-                        System.Diagnostics.Debug.WriteLine("bb " + _commande.Poids);
-
                         Actualiser_2DataGrids(false);
 
                         DisplayTempMessage(Message, "Modification du poids validée.");
@@ -1755,19 +1749,25 @@ namespace CashphotoWPF
             double hash = 0; //Si le fichier n'existe pas ou est vide, on met son hash à 0.
             string filename, path;
 
+            filename = getSuiviFileFromColiposte();
+            tab = Directory.GetFiles(constante.numeroSuiviColiposte);
+
+            foreach (string data in tab)
+            {
+                if (!filename.Equals(data))
+                    putInBackup(data, constante.numeroSuiviColiposte + "\\backup");
+            }
+
+
             //Calcul hash du fichier contenant les numéros de suivis forunis par Coliship
             if (constante.transporteur == Transporteur.Transporteurs.Coliposte)
             {
                 //On récupère le hash du fichier pour savoir s'il est modifié ou non
-                tab = Directory.GetFiles(constante.numeroSuiviColiposte);
-                if (tab.Length > 0)
-                {
+                if (File.Exists(filename))
                     //Le ficher existe, on récupère son hash
-                    filename = System.IO.Path.GetFileName(tab[0]);
-                    path = constante.numeroSuiviColiposte + "//" + filename;
-                    hash = new FileInfo(path).Length;
-                    System.Diagnostics.Debug.WriteLine("H " + hash);
-                }
+                    hash = new FileInfo(filename).Length;
+                else
+                    hash = 0;
             }
 
             //On boucle si la commande est expédié avec plusieurs colis.
@@ -1854,7 +1854,7 @@ namespace CashphotoWPF
 
         private void ExpedierCommande_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.Enter)
+            if(e.Key == Key.Enter && !(bool)Scanner_CheckBox.IsChecked)
             {
                 if(DataGridExpe.Items.Count == 1)
                 {

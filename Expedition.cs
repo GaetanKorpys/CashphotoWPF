@@ -67,7 +67,8 @@ namespace CashphotoWPF
 
 
             ExportCSV(line, constante.commandeParsePourColiposte, commande, Transporteur.Transporteurs.Coliposte, NbColis);
-    
+            ExportCSV(line, constante.backupCommandeTransporteurColiposte, commande, Transporteur.Transporteurs.Coliposte, NbColis);
+
         }
 
         private void ExpedierGLS(Commande commande, int NbColis)
@@ -107,7 +108,8 @@ namespace CashphotoWPF
             line += "SODEX FAGOT-THIL SAS" + separateur + "13 rue De Gaulle" + separateur + separateur + "FR" + separateur + "57290" + separateur + "Seremange Erzange" + separateur + separateur;
             
             ExportCSV(line, constante.commandeParsePourGLS, commande, Transporteur.Transporteurs.GLS, NbColis);
-            
+            ExportCSV(line, constante.backupCommandeTransporteurGLS, commande, Transporteur.Transporteurs.GLS, NbColis);
+
         }
 
         private void ExportCSV(string line, string path, Commande commande, Transporteur.Transporteurs transporteurs, int NbColis)

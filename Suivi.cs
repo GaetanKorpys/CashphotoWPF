@@ -27,16 +27,6 @@ namespace CashphotoWPF
           
             string pathNumSuiviColipost = _app.getSuiviFileFromColiposte();
 
-            tab = Directory.GetFiles(constante.numeroSuiviColiposte);
-
-            foreach (string data in tab)
-            {
-                if (!pathNumSuiviColipost.Equals(data))
-                    _app.putInBackup(data, constante.numeroSuiviColiposte + "\\backup");
-            }
-
-
-
             if (File.Exists(pathNumSuiviColipost))
             {
                 StreamReader fileReader = new StreamReader(pathNumSuiviColipost);
@@ -116,10 +106,11 @@ namespace CashphotoWPF
 
             tab = Directory.GetFiles(constante.numeroSuiviAmazon);
 
+            //On supprime manuellement l'ancien fichier
             foreach(string data in tab)
             {
                 if (!path.Equals(data))
-                    _app.putInBackup(data, constante.backupNumeroSuiviAmazon);
+                    File.Delete(data);
             }
 
             StreamWriter sw = File.AppendText(path);
@@ -167,6 +158,8 @@ namespace CashphotoWPF
 
             sw.Close();
 
+            _app.putInBackup(path, constante.backupNumeroSuiviAmazon);
+
         }
 
         private void createSuiviForCashphoto(Commande c, string[] line)
@@ -196,15 +189,6 @@ namespace CashphotoWPF
 
             constante.cashphotoBDD.SaveChanges();
 
-            tab = Directory.GetFiles(constante.numeroSuiviCashphoto);
-
-            foreach (string data in tab)
-            {
-                System.Diagnostics.Debug.WriteLine("nn " + constante.backupNumeroSuiviCashphoto);
-                if (!path.Equals(data))
-                    _app.putInBackup(data, constante.backupNumeroSuiviCashphoto);
-            }
-
             StreamWriter sw = File.AppendText(path);
 
 
@@ -221,6 +205,10 @@ namespace CashphotoWPF
             sw.WriteLine(row);
 
             sw.Close();
+
+            //L'ancien fichier est supprimé par Prestashop
+            //On s'occupe juste de backup le fichier à chaque modification, on écrase le fichier
+            _app.putInBackup(path, constante.backupNumeroSuiviCashphoto);
         }
     }
 }

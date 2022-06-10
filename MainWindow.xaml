@@ -146,7 +146,7 @@
                     <RowDefinition Height="413*"/>
                     <RowDefinition Height="127*"/>
                 </Grid.RowDefinitions>
-                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center" Height="37" Width="838">
+                <Grid VerticalAlignment="Center" Height="53" Width="838" Margin="8,0,8,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="265*"/>
                         <ColumnDefinition Width="270*"/>
@@ -154,7 +154,8 @@
                     </Grid.ColumnDefinitions>
                     <Label Content="Rechercher une commande" VerticalAlignment="Center" HorizontalAlignment="Center" Height="33" Width="230" Margin="0,0,0,5"/>
                     <TextBox Grid.Row="0" Grid.Column="1" x:Name="RechercherCommande2" KeyDown="ExpedierCommande_KeyDown" TextChanged="rechercheCommande_TextChanged" Width="217" Height="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <CheckBox x:Name="Expedier_CheckBox" Checked="CommandeExpedier_Checked" Unchecked="CommandeExpedier_Unchecked" Grid.Column="2" Content="Commandes déjà expédiées" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <CheckBox x:Name="Expedier_CheckBox" Checked="CommandeExpedier_Checked" Unchecked="CommandeExpedier_Unchecked" Grid.Column="2" Content="Commandes déjà expédiées" Margin="50,0,0,25" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <CheckBox x:Name="Scanner_CheckBox" Grid.Column="2" Content="Désactiver scanner" Margin="50,25,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 </Grid>
 
 
@@ -288,7 +289,7 @@
                     <Label x:Name="DossierNumeroSuiviAmazon" Grid.Row="1"  Content="..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="80,25,0,0" Height="35" FontSize="12" Width="297"/>
                     <Button x:Name="ModifierDossierNumeroSuiviAmazonBouton" Click="ModifierConfiguration" Grid.Row="1" Grid.Column="1" Content="Modifier" Width="70" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
 
-                    <Label Grid.Row="2" Grid.Column="0" Content="Numéro de suivi pour Amazon" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65,0,0,30" Height="26" FontSize="14" Width="208"/>
+                    <Label Grid.Row="2" Grid.Column="0" Content="Numéro de suivi pour Cashphoto" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="65,0,0,30" Height="26" FontSize="14" Width="215"/>
                     <Label x:Name="DossierNumeroSuiviCashphoto" Grid.Row="2"  Content="..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="80,25,0,0" Height="35" FontSize="12" Width="313" />
                     <Button x:Name="ModifierDossierNumeroSuiviCashphotoBouton" Click="ModifierConfiguration" Grid.Row="2" Grid.Column="1" Content="Modifier" Width="70" Height="32" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.4,-0.457"/>
 

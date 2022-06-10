@@ -38,15 +38,20 @@ namespace CashphotoWPF
             
             string path = _app.getSuiviFileFromColiposte();
 
-            hash = new FileInfo(path).Length;
-
-            if (_hash != hash)
+            if(File.Exists(path))
             {
-                Suivi suivi = new Suivi(_app);
-                suivi.createSuiviFromCommande(_commande);
-                StopRecherche();
+                hash = new FileInfo(path).Length;
+
+                if (_hash != hash)
+                {
+                    Suivi suivi = new Suivi(_app);
+                    suivi.createSuiviFromCommande(_commande);
+                    StopRecherche();
+                }
             }
-            
+            else
+                StopRecherche();
+
         }
 
         private void StopRecherche()

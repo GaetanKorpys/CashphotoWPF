@@ -82,3 +82,5 @@ C:\Users\Gaetan\source\repos\CashphotoWPF\bin\Debug\net6.0-windows\IronBarCode.d
 C:\Users\Gaetan\source\repos\CashphotoWPF\obj\Debug\net6.0-windows\BoiteDeDialogue\ConfirmationExpedition.g.cs
 C:\Users\Gaetan\source\repos\CashphotoWPF\obj\Debug\net6.0-windows\BoiteDeDialogue\ConfirmationExpedition.baml
 C:\Users\Gaetan\source\repos\CashphotoWPF\bin\Debug\net6.0-windows\QRCoder.dll
+C:\Users\Gaetan\source\repos\CashphotoWPF\obj\Debug\net6.0-windows\BoiteDeDialogue\ModificationPoids.g.cs
+C:\Users\Gaetan\source\repos\CashphotoWPF\obj\Debug\net6.0-windows\BoiteDeDialogue\ModificationPoids.baml

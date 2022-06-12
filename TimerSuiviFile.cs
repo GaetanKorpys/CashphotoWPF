@@ -24,7 +24,7 @@ namespace CashphotoWPF
             _hash = hash;
             _commande = commande;
             _timer = new DispatcherTimer();
-            _timer.Interval = new TimeSpan(0, 0, 0, 1);
+            _timer.Interval = new TimeSpan(0, 0, 0, 2);
             _timer.Tick += new EventHandler(OnTimedEvent);
             _timer.Start();
         }
@@ -49,8 +49,6 @@ namespace CashphotoWPF
                     StopRecherche();
                 }
             }
-            else
-                StopRecherche();
 
         }
 

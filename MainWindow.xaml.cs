@@ -789,7 +789,6 @@ namespace CashphotoWPF
             string filename = "export.txt-" + date + ".csv";
             string path = constante.numeroSuiviColiposte + "\\" + filename;
             
-            System.Diagnostics.Debug.WriteLine(path);
             return path;
 
         }
@@ -1031,11 +1030,6 @@ namespace CashphotoWPF
         #region Préparation
         //-------------ZONE RECAP-------------
 
-        private void PoidsRecap_GotFocus(object sender, RoutedEventArgs e)
-        {
-            _focusedTextBox = PoidsRecap;
-        }
-
         private void NumCommandeRecap_GotFocus(object sender, RoutedEventArgs e)
         {
             _focusedTextBox = NumCommandeRecap;
@@ -1071,19 +1065,10 @@ namespace CashphotoWPF
                     AfficherTestRecap(true, "Numéro de commande modifié.");
 
                     Actualiser_2DataGrids(false);
+
+                    if (constante.indexTabItem == 0 && _commande.Preparer)
+                        PrintRecapIRL(_commande);
                 }
-            }
-        }
-
-
-        private void RecapPoids_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (_focusedTextBox == PoidsRecap)
-            {
-                if (isValidPoids(PoidsRecap.Text))
-                    BoutonPoidsRecap.IsEnabled = true;
-                else
-                    BoutonPoidsRecap.IsEnabled = false;
             }
         }
 
@@ -1093,16 +1078,56 @@ namespace CashphotoWPF
             TestConnexionBDD();
             if (constante.BDDOK)
             {
-                Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == _commande.NumCommande).First();
+                if (_commande.NbColis != 1)
+                {
+                    ModificationPoids modificationPoids = new ModificationPoids(this, _commande);
+                    if (modificationPoids.ShowDialog() == true)
+                    {
+                        Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == _commande.NumCommande).First();
+                        switch (int.Parse(modificationPoids.ChoixColis.Text))
+                        {
+                            case 1:
+                                commande.Poids = double.Parse(modificationPoids.PoidsColis.Text, CultureInfo.InvariantCulture);
+                                break;
+                            case 2:
+                                commande.Poids2 = double.Parse(modificationPoids.PoidsColis.Text, CultureInfo.InvariantCulture);
+                                break;
+                            case 3:
+                                commande.Poids3 = double.Parse(modificationPoids.PoidsColis.Text, CultureInfo.InvariantCulture);
+                                break;
+                            case 4:
+                                commande.Poids4 = double.Parse(modificationPoids.PoidsColis.Text, CultureInfo.InvariantCulture);
+                                break;
+                            default:
+                                break;
+                        }
 
-                commande.Poids = double.Parse(PoidsRecap.Text, CultureInfo.InvariantCulture);
-                constante.cashphotoBDD.SaveChanges();
+                        commande.Preparer = true;
+                        constante.cashphotoBDD.SaveChanges();
+;
 
-                _commande = commande;
+                        AfficherTestRecap(true, "Poids modifié.");
 
-                AfficherTestRecap(true, "Poids modifié.");
+                        Actualiser_2DataGrids(false);
+                    }
+                }
+                else
+                {
+                    Poids poidsDialog = new Poids(this);
+                    if (poidsDialog.ShowDialog() == true)
+                    {
+                        Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == _commande.NumCommande).First();
 
-                Actualiser_2DataGrids(false);
+                        commande.Poids = double.Parse(poidsDialog.InputTextBox.Text, CultureInfo.InvariantCulture);
+                        commande.Preparer = true;
+                        constante.cashphotoBDD.SaveChanges();
+
+                        AfficherTestRecap(true, "Poids modifié.");
+
+                        Actualiser_2DataGrids(false);
+                    }
+
+                }
             }
         }
 
@@ -1121,11 +1146,6 @@ namespace CashphotoWPF
                 NumCommandeRecap.Focus();
 
             }
-            else if (sender.Equals(PoidsRecap))
-            {
-                PoidsRecap.Focusable = true;
-                PoidsRecap.Focus();
-            }
         }
 
         /// <summary>
@@ -1138,10 +1158,6 @@ namespace CashphotoWPF
             {
                 NumCommandeRecap.Focusable = false;
             }
-            else if (sender.Equals(PoidsRecap))
-            {
-                PoidsRecap.Focusable = false;
-            }
         }
 
         private void Recap_GotFocus(object sender, RoutedEventArgs e)
@@ -1149,10 +1165,6 @@ namespace CashphotoWPF
             if (sender.Equals(NumCommandeRecap))
             {
                 _focusedTextBox = NumCommandeRecap;
-            }
-            else if (sender.Equals(PoidsRecap))
-            {
-                _focusedTextBox = PoidsRecap;
             }
         }
 
@@ -1166,10 +1178,6 @@ namespace CashphotoWPF
             {
                 NumCommandeRecap.Cursor = NumCommandeRecap.Focusable ? Cursors.IBeam : Cursors.Arrow;
             }
-            else if (sender.Equals(PoidsRecap))
-            {
-                PoidsRecap.Cursor = PoidsRecap.Focusable ? Cursors.IBeam : Cursors.Arrow;
-            }
         }
 
         /// <summary>
@@ -1181,11 +1189,6 @@ namespace CashphotoWPF
             Constante constante = Constante.GetConstante();
 
             NumCommandeRecap.Text = commande.NumCommande;
-
-            if (commande.Poids2 != null)
-                PoidsRecap.Text = commande.Poids.ToString().Replace(",", ".") + " | " + commande.Poids2.ToString().Replace(",", ".");
-            else
-                PoidsRecap.Text = commande.Poids.ToString().Replace(",", ".");
         }
 
         /// <summary>
@@ -1261,7 +1264,10 @@ namespace CashphotoWPF
                         if (ColisSupplementaire_CheckBox.IsChecked == true)
                         {
                             if (commande.NbColis == 4)
+                            {
                                 AfficherTestEnregistrementCommande(false, "Le nombre de colis maximum est atteint : 4 colis pour cette commande.");
+                                ResetFocusEnregistrementCommande();
+                            }
                             else
                             {
                                 _commande = CompleterCommande(commande, SaisirPoids.Text, true);
@@ -1526,6 +1532,14 @@ namespace CashphotoWPF
             }
         }
 
+        private void ShowOrHideDatagridArticleColumn(Commande commande)
+        {
+            if(commande.Site == "Amazon")
+                DatagGridArticle.Columns[0].Visibility = Visibility.Visible;
+            else
+                DatagGridArticle.Columns[0].Visibility = Visibility.Collapsed;
+        }
+
         private void Actualiser_DataGridPrep()
         {
             if (RechercherCommande1.Text.Equals(""))
@@ -1590,7 +1604,6 @@ namespace CashphotoWPF
                     NumCommandeRecap.Focusable = true;
 
                     PoidsRecap_WrapPanel.Visibility = Visibility.Visible;
-                    PoidsRecap.Focusable = true;
                 }
             }
             else if(sender.Equals(DataGridExpe))
@@ -1603,10 +1616,10 @@ namespace CashphotoWPF
                     RecapExpe_WrapPanel.Visibility = Visibility.Visible;
                     DatagGridArticle.Visibility = Visibility.Visible;
 
-                    ActualiserDataGridArticle(commande.NumCommande);
+                    ActualiserDataGridArticle(commande);
                     ActualiserRecapExpe(commande.NumCommande);
 
-                    if(commande.Site == "Cashphoto")
+                    if (commande.Site == "Cashphoto")
                     {
                         Coliposte.IsChecked = true;
                         GLS.IsEnabled = false;
@@ -1617,6 +1630,7 @@ namespace CashphotoWPF
                         GLS.IsEnabled = true;
                         AmazonPageBouton.IsEnabled = true;
                     }
+
                 }
             }
         }
@@ -1653,6 +1667,10 @@ namespace CashphotoWPF
                 }
                 else if (sender.Equals(RechercherCommande2))
                 {
+                    string stringNoTilda = RechercherCommande2.Text.Replace("~","");
+                    RechercherCommande2.CaretIndex = RechercherCommande2.Text.Length;
+                    RechercherCommande2.Text = stringNoTilda;
+
                     bool expedier;
                     if ((bool)Expedier_CheckBox.IsChecked)
                         expedier = true;
@@ -1667,7 +1685,7 @@ namespace CashphotoWPF
                         ActualiserRecapExpe(_commande.NumCommande);
                         RecapExpe_WrapPanel.Visibility = Visibility.Visible;
 
-                        ActualiserDataGridArticle(_commande.NumCommande);
+                        ActualiserDataGridArticle(_commande);
                         DatagGridArticle.Visibility = Visibility.Visible;
 
                         if (_commande.Site == "Cashphoto")
@@ -1721,20 +1739,54 @@ namespace CashphotoWPF
             {
                 if (_commande != null)
                 {
-                    Poids poidsDialog = new Poids(this);
-                    if (poidsDialog.ShowDialog() == true)
+                    if (_commande.NbColis != 1)
                     {
-                        Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == _commande.NumCommande).First();
+                        ModificationPoids modificationPoids = new ModificationPoids(this, _commande);
+                        if (modificationPoids.ShowDialog() == true)
+                        {
+                            Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == _commande.NumCommande).First(); ;
 
-                        commande.Poids = double.Parse(poidsDialog.InputTextBox.Text, CultureInfo.InvariantCulture);
-                        commande.Preparer = true;
-                        constante.cashphotoBDD.SaveChanges();
+                            switch (int.Parse(modificationPoids.ChoixColis.Text))
+                            {
+                                case 1:
+                                    commande.Poids = double.Parse(modificationPoids.PoidsColis.Text, CultureInfo.InvariantCulture);
+                                    break;
+                                case 2:
+                                    commande.Poids2 = double.Parse(modificationPoids.PoidsColis.Text, CultureInfo.InvariantCulture);
+                                    break;
+                                case 3:
+                                    commande.Poids3 = double.Parse(modificationPoids.PoidsColis.Text, CultureInfo.InvariantCulture);
+                                    break;
+                                case 4:
+                                    commande.Poids4 = double.Parse(modificationPoids.PoidsColis.Text, CultureInfo.InvariantCulture);
+                                    break;
+                                default:
+                                    break;
+                            }
 
-                        Actualiser_2DataGrids(false);
+                            commande.Preparer = true;
+                            constante.cashphotoBDD.SaveChanges();
 
-                        DisplayTempMessage(Message, "Modification du poids validée.");
+                            Actualiser_2DataGrids(false);
 
+                            DisplayTempMessage(Message, "Modification du poids validée.");
+                        }
+                    }
+                    else
+                    {
+                        Poids poidsDialog = new Poids(this);
+                        if (poidsDialog.ShowDialog() == true)
+                        {
+                            Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == _commande.NumCommande).First();
 
+                            commande.Poids = double.Parse(poidsDialog.InputTextBox.Text, CultureInfo.InvariantCulture);
+                            commande.Preparer = true;
+                            constante.cashphotoBDD.SaveChanges();
+
+                            Actualiser_2DataGrids(false);
+
+                            DisplayTempMessage(Message, "Modification du poids validée.");
+                        }
                     }
                 }
             }
@@ -1752,30 +1804,41 @@ namespace CashphotoWPF
             filename = getSuiviFileFromColiposte();
             tab = Directory.GetFiles(constante.numeroSuiviColiposte);
 
+            System.Diagnostics.Debug.WriteLine("LLLLLL");
+
             foreach (string data in tab)
             {
-                if (!filename.Equals(data))
+                System.Diagnostics.Debug.WriteLine(data);
+                if (filename != data)
+                {
                     putInBackup(data, constante.numeroSuiviColiposte + "\\backup");
+                    File.Delete(data);
+                }
+                    
             }
 
+            System.Diagnostics.Debug.WriteLine("GGGGG");
 
-            //Calcul hash du fichier contenant les numéros de suivis forunis par Coliship
-            if (constante.transporteur == Transporteur.Transporteurs.Coliposte)
-            {
-                //On récupère le hash du fichier pour savoir s'il est modifié ou non
-                if (File.Exists(filename))
-                    //Le ficher existe, on récupère son hash
-                    hash = new FileInfo(filename).Length;
-                else
-                    hash = 0;
-            }
+            System.Diagnostics.Debug.WriteLine("KKKKKKK");
 
             //On boucle si la commande est expédié avec plusieurs colis.
             //On imprime autant d'étiquette (avec un numéros de suivi et un poids différent) que de colis.
             for (int i = 1; i <= commande.NbColis; i++)
             {
-                expedition.ExpedierCommande(commande, i);
+                //Calcul hash du fichier contenant les numéros de suivis forunis par Coliship
+                if (constante.transporteur == Transporteur.Transporteurs.Coliposte)
+                {
+                    //On récupère le hash du fichier pour savoir s'il est modifié ou non
+                    if (File.Exists(filename))
+                        //Le ficher existe, on récupère son hash
+                        hash = new FileInfo(filename).Length;
+                    else
+                        hash = 0;
+                }
 
+                System.Diagnostics.Debug.WriteLine("OK");
+                expedition.ExpedierCommande(commande, i);
+                System.Diagnostics.Debug.WriteLine(" Fin");
                 if (commande.NbColis == 1)
                     continue;
 
@@ -1805,19 +1868,20 @@ namespace CashphotoWPF
                 {
                     string export = "";
 
-                    Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == _commande.NumCommande).First();
-
-                    if (commande.Expedier)
+                    if (_commande.Expedier)
                     {
                         ConfirmationExpedition confirmationExpedition = new ConfirmationExpedition();
                         if (confirmationExpedition.ShowDialog() == true)
                         {
+                            Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == _commande.NumCommande).First();
+
                             Expedition(commande);
                             export = "La commande de " + commande.NomClientLivraison + " est expédiée.";
                         }
                     }
                     else
                     {
+                        Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == _commande.NumCommande).First();
                         export = "La commande de " + commande.NomClientLivraison + " est expédiée.";
                         if (isCompleteCommande(commande) && commande.Preparer)
                         {
@@ -1833,7 +1897,7 @@ namespace CashphotoWPF
                             ConfirmationPoids confirmationPoids = new ConfirmationPoids(this);
                             if (confirmationPoids.ShowDialog() == true)
                             {
-                                Commande cmd = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == commande.NumCommande).First();
+                                Commande cmd = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == _commande.NumCommande).First();
 
 
                                 cmd.Expedier = true;
@@ -1859,6 +1923,8 @@ namespace CashphotoWPF
                 if(DataGridExpe.Items.Count == 1)
                 {
                     ExpeditionRedondance();
+                    if ((bool)Expedier_CheckBox.IsChecked)
+                        Expedier_CheckBox.IsChecked = false;
                 }
             }
         }
@@ -1866,6 +1932,8 @@ namespace CashphotoWPF
         private void ExpedierCommande_Click(object sender, RoutedEventArgs e)
         {
             ExpeditionRedondance();
+            if ((bool)Expedier_CheckBox.IsChecked)
+                Expedier_CheckBox.IsChecked = false;
         }
 
 
@@ -1906,9 +1974,10 @@ namespace CashphotoWPF
             }
         }
 
-        private void ActualiserDataGridArticle(string numCommande)
+        private void ActualiserDataGridArticle(Commande commande)
         {
-            DatagGridArticle.ItemsSource = getArticlesFromCommande(numCommande);
+            DatagGridArticle.ItemsSource = getArticlesFromCommande(commande.NumCommande);
+            ShowOrHideDatagridArticleColumn(commande);
         }
 
         public void ImporterCommandes() 

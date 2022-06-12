@@ -81,11 +81,11 @@
                 <Button x:Name="BoutonEnter" Click="KeyEnter_Click" Content="Entrée" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="170" Width="86" Margin="140,0,0,80" FontWeight="Bold" FontSize="18" />
                 <DataGrid Name="DataGridPrep" SelectionChanged="dataGrid_SelectionChanged" Grid.Column="0" Margin="30,100,20,0" Grid.Row="1" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Top">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Numéro de commande" Binding="{Binding NumCommande, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Numéro commande" Binding="{Binding NumCommande, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         <DataGridTextColumn Header="Poids" Binding="{Binding Poids, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <DataGridTextColumn Header="Poids 2ème colis" Binding="{Binding Poids2, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <DataGridTextColumn Header="Poids 3ème colis" Binding="{Binding Poids3, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <DataGridTextColumn Header="Poids 4ème colis" Binding="{Binding Poids4, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Poids 2" Binding="{Binding Poids2, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Poids 3" Binding="{Binding Poids3, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <DataGridTextColumn Header="Poids 4" Binding="{Binding Poids4, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         <DataGridTextColumn Header="Date" Binding="{Binding Date, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </DataGrid.Columns>
                 </DataGrid>
@@ -117,14 +117,12 @@
 
                 <WrapPanel x:Name="NumCommandeRecap_WrapPanel" Grid.Row="1" Grid.Column="1" Visibility="Hidden" VerticalAlignment="Center" Margin="0,0,0,70" HorizontalAlignment="Center" Orientation="Horizontal">
                     <Label Content="Numéro commande :" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Height="34" Width="178" />
-                    <TextBox x:Name="NumCommandeRecap" TextChanged="RecapNumCommande_TextChanged" GotFocus="NumCommandeRecap_GotFocus" BorderThickness="0" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Margin="5,0,0,0" />
-                    <Button x:Name="BoutonNumCommandeRecap" Click="BoutonNumCommandeRecap_Click" IsEnabled="False" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Valider" Width="60" Height="32" FontSize="12" Margin="15,0,0,0"/>
+                    <TextBox x:Name="NumCommandeRecap" TextChanged="RecapNumCommande_TextChanged" GotFocus="NumCommandeRecap_GotFocus" BorderThickness="0" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Margin="5,5,0,0" FontSize="14" />
+                    <Button x:Name="BoutonNumCommandeRecap" Click="BoutonNumCommandeRecap_Click" IsEnabled="False" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="VALIDER" Height="32" FontSize="14" Margin="0,5,0,0"/>
                 </WrapPanel>
 
                 <WrapPanel x:Name="PoidsRecap_WrapPanel" Grid.Row="1" Grid.Column="1" Visibility="Hidden" VerticalAlignment="Center" Margin="0,30,0,0" HorizontalAlignment="Center" Orientation="Horizontal">
-                    <Label Content="Poids du colis :" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,50,0" Height="34" Width="127" />
-                    <TextBox x:Name="PoidsRecap" TextChanged="RecapPoids_TextChanged" GotFocus="PoidsRecap_GotFocus" BorderThickness="0" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Margin="5,0,0,0" />
-                    <Button x:Name="BoutonPoidsRecap" Click="BoutonPoidsRecap_Click" IsEnabled="False" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Valider" Width="60" Height="32" FontSize="12" Margin="15,0,0,0"/>
+                    <Button x:Name="BoutonPoidsRecap" Click="BoutonPoidsRecap_Click" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="MODIFIER POIDS COMMANDE" Width="250" Height="32" FontSize="14" Margin="0,0,0,0"/>
                 </WrapPanel>
 
                 <WrapPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="0,120,0,0" HorizontalAlignment="Stretch">
@@ -213,8 +211,6 @@
                 </DataGrid>
 
                 <DataGrid Name="DatagGridArticle" FontSize="16" Visibility="Visible" SelectionChanged="dataGrid_SelectionChanged" AutoGenerateColumns="False" ColumnWidth="*" IsReadOnly="True" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="30,250,20,0" Height="150">
-
-
 
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Code" Binding="{Binding IdAmazon, NotifyOnTargetUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Width="Auto"/>

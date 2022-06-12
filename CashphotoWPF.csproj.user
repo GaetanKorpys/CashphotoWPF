@@ -18,6 +18,9 @@
     <Compile Update="BoiteDeDialogue\ConfirmationPoids.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="BoiteDeDialogue\ModificationPoids.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="BoiteDeDialogue\Poids.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -36,6 +39,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="BoiteDeDialogue\Email.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="BoiteDeDialogue\ModificationPoids.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="BoiteDeDialogue\Poids.xaml">

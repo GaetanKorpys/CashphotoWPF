@@ -76,8 +76,8 @@ namespace CashphotoWPF
                         }
 
                         exist = constante.cashphotoBDD.Articles.Where(article => article.NumCommande == numCommande && article.NomArticle == fileDataField[8]).Count();
-                        if(exist == 0)
-                            AddArticleAmazon(fileDataField);
+                        //if(exist == 0)
+                        AddArticleAmazon(fileDataField);
 
 
                     }
@@ -126,23 +126,23 @@ namespace CashphotoWPF
                             {
                                 CompleterCommandeCashphoto(fileDataField);
                                 import++;
-                            }
+                            } 
                                 
                         }
 
-                       
+                        while(streamReader.Peek() != -1)
+                        {
+                            line = streamReader.ReadLine();
+                            line = line.Replace("\"", "");
+                            fileDataField = line.Split(delimiter);
 
-                        line = streamReader.ReadLine();
-                        line = line.Replace("\"", "");
-                        fileDataField = line.Split(delimiter);
-
-                        exist = constante.cashphotoBDD.Articles.Where(article => article.NumCommande == numCommande && article.NomArticle == fileDataField[1]).Count();
-                        if (exist == 0)
+                            exist = constante.cashphotoBDD.Articles.Where(article => article.NumCommande == numCommande && article.NomArticle == fileDataField[1]).Count();
+                            //if (exist == 0)
                             AddArticleCashphoto(fileDataField, numCommande);
+                        }
                     }
 
-                    streamReader.Close();
-                    string filename = Path.GetFileName(data);
+                    streamReader.Close();;
                        
                     File.Delete(data);
                     

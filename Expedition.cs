@@ -58,12 +58,28 @@ namespace CashphotoWPF
                     break;
             }
 
+            string path = constante.backupCommandeCashphoto + "\\" + commande.NumCommande + ".csv";
+            string CodeRetrait = "";
+            System.Diagnostics.Debug.WriteLine("gggggg " + path);
+            if (File.Exists(path))
+            {
+
+                StreamReader streamReader = new StreamReader(path, System.Text.Encoding.GetEncoding(1252));
+                if (streamReader.Peek() != -1)
+                {
+                    string row = streamReader.ReadLine();
+                    row = row.Replace("\"", "");
+                    string[] fileDataField = row.Split(";");
+                    CodeRetrait = fileDataField[21];
+                    System.Diagnostics.Debug.WriteLine("gggggg "+CodeRetrait);
+                }
+            }
 
             line = separateur + commande.NumCommande + separateur + commande.NomClientLivraison + separateur;
             line += commande.Adresse1 + separateur + commande.Adresse2 + separateur + commande.Adresse3 + separateur;
             line += commande.CodePostal + separateur + commande.Ville + separateur + commande.Pays + separateur + linePoids + separateur;
             line += "0" + separateur + "N" + separateur + pn.getFixe() + separateur + commande.Mail + separateur + separateur + separateur + separateur + separateur;
-            line += pn.getMobile() + separateur + separateur + separateur + separateur + "Cashphoto.com" + separateur + separateur + separateur + "1" + separateur + commande.NumCommande;
+            line += pn.getMobile() + separateur + separateur + separateur + CodeRetrait + separateur + "Cashphoto.com" + separateur + separateur + separateur + "1" + separateur + commande.NumCommande;
 
 
             ExportCSV(line, constante.commandeParsePourColiposte, commande, Transporteur.Transporteurs.Coliposte, NbColis);

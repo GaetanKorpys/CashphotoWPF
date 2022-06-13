@@ -301,7 +301,7 @@ namespace CashphotoWPF
             commande.NbColis = 1;
             commande.NumCommande = numCommande;
             commande.Poids = double.Parse(Data[9]) / 1000; //Poids approximatif
-            commande.NomClientLivraison = Data[16] + " " + Data[2];
+            commande.NomClientLivraison = Data[16] + " " + Data[2].ToUpper();
             commande.TelClientFacturation = Data[12];
             commande.TelClientLivraison = Data[18];
             commande.Mail = Data[13];

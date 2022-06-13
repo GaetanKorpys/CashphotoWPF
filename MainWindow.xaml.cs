@@ -276,7 +276,7 @@ namespace CashphotoWPF
             //QRCode.SaveAsPng(GetCheminQRCode());
         }
 
-        bool IsAllUpper(string input)
+        public bool IsAllUpper(string input)
         {
             for (int i = 0; i < input.Length; i++)
             {

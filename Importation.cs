@@ -266,7 +266,7 @@ namespace CashphotoWPF
                 Data[18] = constante.telephone;
 
             Commande commande = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == numCommande).First();
-            commande.NomClientLivraison = Data[16] + " " + Data[2];
+            commande.NomClientLivraison = Data[16] + " " + Data[2].ToUpper();
             commande.TelClientFacturation = Data[12];
             commande.TelClientLivraison = Data[18];
             commande.Mail = Data[13];

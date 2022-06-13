@@ -43,16 +43,16 @@ namespace CashphotoWPF
             switch (NbColis)
             {
                 case 1:
-                    linePoids = (commande.Poids*1000).ToString();
+                    linePoids = (commande.Poids * 1000).ToString();
                     break;
                 case 2:
-                    linePoids = (commande.Poids2*1000).ToString();
+                    linePoids = (commande.Poids2 * 1000).ToString();
                     break;
                 case 3:
-                    linePoids = (commande.Poids3*1000).ToString();
+                    linePoids = (commande.Poids3 * 1000).ToString();
                     break;
                 case 4:
-                    linePoids = (commande.Poids4*1000).ToString();
+                    linePoids = (commande.Poids4 * 1000).ToString();
                     break;
                 default:
                     break;
@@ -71,14 +71,31 @@ namespace CashphotoWPF
                     row = row.Replace("\"", "");
                     string[] fileDataField = row.Split(";");
                     CodeRetrait = fileDataField[21];
-                    System.Diagnostics.Debug.WriteLine("gggggg "+CodeRetrait);
+                    System.Diagnostics.Debug.WriteLine("gggggg " + CodeRetrait);
                 }
             }
+            string nom = commande.NomClientLivraison;
+            string prenom = "";
 
-            line = separateur + commande.NumCommande + separateur + commande.NomClientLivraison + separateur;
+            if (commande.Site == "Cashphoto")
+            {
+                nom = "";
+                string[] tab = commande.NomClientLivraison.Split(" ");
+                foreach (string s in tab)
+                {
+                    if (_app.IsAllUpper(s))
+                        nom = nom + s + " ";
+                    else
+                        prenom = prenom + s + " ";
+                }
+            }
+            
+            
+
+            line = separateur + commande.NumCommande + separateur + nom + separateur;
             line += commande.Adresse1 + separateur + commande.Adresse2 + separateur + commande.Adresse3 + separateur;
             line += commande.CodePostal + separateur + commande.Ville + separateur + commande.Pays + separateur + linePoids + separateur;
-            line += "0" + separateur + "N" + separateur + pn.getFixe() + separateur + commande.Mail + separateur + separateur + separateur + separateur + separateur;
+            line += "0" + separateur + "N" + separateur + pn.getFixe() + separateur + commande.Mail + separateur + separateur + separateur + prenom + separateur + separateur;
             line += pn.getMobile() + separateur + separateur + separateur + CodeRetrait + separateur + "Cashphoto.com" + separateur + separateur + separateur + "1" + separateur + commande.NumCommande;
 
 

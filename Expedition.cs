@@ -35,8 +35,12 @@ namespace CashphotoWPF
         {
             Constante constante = Constante.GetConstante();
             string separateur = ";";
-            string line;
+            string line = "";
             string linePoids = "";
+            string nom = commande.NomClientLivraison;
+            string prenom = "";
+            string row = "";
+            string[] fileDataField;
 
             PhoneNumber pn = new PhoneNumber(commande);
 
@@ -67,38 +71,49 @@ namespace CashphotoWPF
                 StreamReader streamReader = new StreamReader(path, System.Text.Encoding.GetEncoding(1252));
                 if (streamReader.Peek() != -1)
                 {
-                    string row = streamReader.ReadLine();
+                    row = streamReader.ReadLine();
                     row = row.Replace("\"", "");
-                    string[] fileDataField = row.Split(";");
+                    fileDataField = row.Split(";");
                     CodeRetrait = fileDataField[21];
                     System.Diagnostics.Debug.WriteLine("gggggg " + CodeRetrait);
                 }
+                streamReader.Close();
             }
-            string nom = commande.NomClientLivraison;
-            string prenom = "";
+
 
             if (commande.Site == "Cashphoto")
             {
-                nom = "";
-                string[] tab = commande.NomClientLivraison.Split(" ");
-                foreach (string s in tab)
-                {
-                    if (_app.IsAllUpper(s))
-                        nom = nom + s + " ";
-                    else
-                        prenom = prenom + s + " ";
-                }
+                //nom = "";
+                //string[] tab = commande.NomClientLivraison.Split(" ");
+                //foreach (string s in tab)
+                //{
+                //    if (_app.IsAllUpper(s))
+                //        nom = nom + s + " ";
+                //    else
+                //        prenom = prenom + s + " ";
+                //}
+
+                System.Diagnostics.Debug.WriteLine(row);
+                fileDataField = row.Split(";");
+                fileDataField[2] = fileDataField[2].ToUpper();
+                fileDataField[9] = linePoids;
+                fileDataField[12] = pn.getFixe();
+                fileDataField[18] = pn.getMobile();
+                fileDataField[13] = commande.Mail;
+
+                foreach(string s in fileDataField) line += s + ";";
+
             }
-            
-            
+            else
+            {
+                line += separateur + commande.NumCommande + separateur + nom + separateur;
+                line += commande.Adresse1 + separateur + commande.Adresse2 + separateur + commande.Adresse3 + separateur;
+                line += commande.CodePostal + separateur + commande.Ville + separateur + commande.Pays + separateur + linePoids + separateur;
+                line += "0" + separateur + "N" + separateur + pn.getFixe() + separateur + commande.Mail + separateur + separateur + separateur + prenom + separateur + separateur;
+                line += pn.getMobile() + separateur + separateur + separateur + CodeRetrait + separateur + "Cashphoto.com" + separateur + separateur + separateur + "1" + separateur + commande.NumCommande;
+            }
 
-            line = separateur + commande.NumCommande + separateur + nom + separateur;
-            line += commande.Adresse1 + separateur + commande.Adresse2 + separateur + commande.Adresse3 + separateur;
-            line += commande.CodePostal + separateur + commande.Ville + separateur + commande.Pays + separateur + linePoids + separateur;
-            line += "0" + separateur + "N" + separateur + pn.getFixe() + separateur + commande.Mail + separateur + separateur + separateur + prenom + separateur + separateur;
-            line += pn.getMobile() + separateur + separateur + separateur + CodeRetrait + separateur + "Cashphoto.com" + separateur + separateur + separateur + "1" + separateur + commande.NumCommande;
-
-
+            System.Diagnostics.Debug.WriteLine(line);
             ExportCSV(line, constante.commandeParsePourColiposte, commande, Transporteur.Transporteurs.Coliposte, NbColis);
             ExportCSV(line, constante.backupCommandeTransporteurColiposte, commande, Transporteur.Transporteurs.Coliposte, NbColis);
 

@@ -43,7 +43,7 @@ namespace CashphotoWPF
                 if(File.Exists(data))
                 {
 
-                    _app.putInBackup(data, constante.backupCommandeAmazon);
+                    File.Copy(data, constante.backupCommandeAmazon + "\\" + Path.GetFileName(data), true);             
 
                     StreamReader streamReader = new StreamReader(data);
                     //On ignore la 1ère ligne dans le ficher Amazon
@@ -102,7 +102,7 @@ namespace CashphotoWPF
                 if (File.Exists(data))
                 {
 
-                    _app.putInBackup(data, constante.backupCommandeCashphoto);
+                    File.Copy(data, constante.backupCommandeCashphoto + "\\" + Path.GetFileName(data), true);
 
                     StreamReader streamReader = new StreamReader(data, System.Text.Encoding.GetEncoding(1252));
                     if (streamReader.Peek() != -1)

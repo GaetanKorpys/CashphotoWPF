@@ -26,15 +26,11 @@ namespace CashphotoWPF
             string[] tab;
           
             string pathNumSuiviColipost = _app.getSuiviFileFromColiposte();
-
+            System.Diagnostics.Debug.WriteLine("oPPP "+ pathNumSuiviColipost);
             if (File.Exists(pathNumSuiviColipost))
             {
                 StreamReader fileReader = new StreamReader(pathNumSuiviColipost);
-
-                if (fileReader.Peek() != -1)
-                {
-                    fileRow = fileReader.ReadLine();
-                }
+                System.Diagnostics.Debug.WriteLine("oPPdd"); 
 
                 while (fileReader.Peek() != -1)
                 {
@@ -46,6 +42,8 @@ namespace CashphotoWPF
                     //    fileDataField[0] = fileDataField[0].Substring(4);;
                     //    System.Diagnostics.Debug.WriteLine("L "+ fileDataField[0]);
                     //}
+
+                    System.Diagnostics.Debug.WriteLine("ok");
 
                     if (commande.NumCommande == fileDataField[0])
                     {
@@ -154,11 +152,12 @@ namespace CashphotoWPF
                 row += "FR";
 
                 sw.WriteLine(row);
+                _app.putInBackup(row, constante.backupNumeroSuiviAmazon, filename);
             }
 
             sw.Close();
 
-            _app.putInBackup(path, constante.backupNumeroSuiviAmazon);
+            
 
         }
 
@@ -208,7 +207,7 @@ namespace CashphotoWPF
 
             //L'ancien fichier est supprimé par Prestashop
             //On s'occupe juste de backup le fichier à chaque modification, on écrase le fichier
-            _app.putInBackup(path, constante.backupNumeroSuiviCashphoto);
+            _app.putInBackup(row, constante.backupNumeroSuiviCashphoto, filename);
         }
     }
 }

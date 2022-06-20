@@ -159,12 +159,11 @@ namespace CashphotoWPF
 
         #region ToolBox
 
-        public void putInBackup(string filename, string folder)
+        public void putInBackup(string row, string folder, string filename)
         {
-            if(File.Exists(filename))
-            {
-                File.Copy(filename, folder +"\\"+ Path.GetFileName(filename),true);
-            }
+            StreamWriter sw = File.AppendText(folder+"\\"+filename);
+            sw.WriteLine(row);
+            sw.Close();
         }
 
         private int getPoliceFromLength(string input)
@@ -1811,7 +1810,7 @@ namespace CashphotoWPF
                 System.Diagnostics.Debug.WriteLine(data);
                 if (filename != data)
                 {
-                    putInBackup(data, constante.numeroSuiviColiposte + "\\backup");
+                    File.Copy(data, constante.numeroSuiviColiposte + "\\backup" + "\\" + Path.GetFileName(data), true);
                     File.Delete(data);
                 }
                     

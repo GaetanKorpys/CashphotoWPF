@@ -40,9 +40,7 @@
   <ItemGroup>
     <Resource Include="Images\delete.png" />
     <Resource Include="Images\logo_new_cashphoto.ico" />
-    <Resource Include="Images\logo_new_cashphoto.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    <Resource Include="Images\logo_new_cashphoto.png" />
   </ItemGroup>
 
   <ItemGroup>

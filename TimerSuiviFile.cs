@@ -41,7 +41,8 @@ namespace CashphotoWPF
             if(File.Exists(path))
             {
                 hash = new FileInfo(path).Length;
-
+                System.Diagnostics.Debug.WriteLine("hash fichier"+hash);
+                System.Diagnostics.Debug.WriteLine("hash " + _hash);
                 if (_hash != hash)
                 {
                     Suivi suivi = new Suivi(_app);
@@ -55,6 +56,7 @@ namespace CashphotoWPF
         private void StopRecherche()
         {
             _timer.Stop();
+            System.Diagnostics.Debug.WriteLine("Stop");
         }
     }
 }

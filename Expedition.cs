@@ -95,13 +95,16 @@ namespace CashphotoWPF
 
                 System.Diagnostics.Debug.WriteLine(row);
                 fileDataField = row.Split(";");
+                fileDataField[1] = commande.NumCommande;
                 fileDataField[2] = fileDataField[2].ToUpper();
                 fileDataField[9] = linePoids;
                 fileDataField[12] = pn.getFixe();
-                fileDataField[18] = pn.getMobile();
                 fileDataField[13] = commande.Mail;
+                fileDataField[18] = pn.getMobile();
+                fileDataField[26] = commande.NumCommande;
 
-                foreach(string s in fileDataField) line += s + ";";
+
+                foreach (string s in fileDataField) line += s + ";";
 
             }
             else

@@ -101,9 +101,6 @@ namespace CashphotoWPF
             {
                 if (File.Exists(data))
                 {
-
-                    File.Copy(data, constante.backupCommandeCashphoto + "\\" + Path.GetFileName(data), true);
-
                     StreamReader streamReader = new StreamReader(data, System.Text.Encoding.GetEncoding(1252));
                     if (streamReader.Peek() != -1)
                     {
@@ -111,6 +108,8 @@ namespace CashphotoWPF
                         line = line.Replace("\"","");
                         string[] fileDataField = line.Split(delimiter);
                         string numCommande = fileDataField[26].Substring(1);
+
+                        File.Copy(data, constante.backupCommandeCashphoto + "\\" + numCommande + ".csv", true);
 
                         int exist = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == numCommande).Count();
                         if (exist == 0)

@@ -67,7 +67,7 @@ namespace CashphotoWPF
             System.Diagnostics.Debug.WriteLine("gggggg " + path);
             if (File.Exists(path))
             {
-
+                System.Diagnostics.Debug.WriteLine("dddd ");
                 StreamReader streamReader = new StreamReader(path, System.Text.Encoding.GetEncoding(1252));
                 if (streamReader.Peek() != -1)
                 {

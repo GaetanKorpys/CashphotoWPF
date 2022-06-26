@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:CashphotoWPF.BoiteDeDialogue"
       mc:Ignorable="d"
       WindowStartupLocation="CenterScreen"
-      Title="Confirmation du poids" Width="360" Height="240">
+      Title="Confirmation du poids" Width="800" Height="500">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -18,18 +18,58 @@
             <RowDefinition Height="3*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
+
+        <Button x:Name="Bouton9" Click="Key9_Click" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50" Margin="0,0,20,180" FontSize="48">
+            <Label Content="9" HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="40" FontWeight="Normal" Margin="5,0,0,0" FontSize="48"/>
+        </Button>
+        <Button x:Name="Bouton8" Click="Key8_Click" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50" Margin="0,0,140,180">
+            <Label Content="8" HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="40" FontSize="48" Margin="5,0,0,0" FontWeight="Normal"/>
+        </Button>
+        <Button x:Name="Bouton7" Click="Key7_Click" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50" Margin="0,0,260,180">
+            <Label Content="7" HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="40" Margin="5,0,0,0" FontSize="48" FontWeight="Normal"/>
+        </Button>
+        <Button x:Name="Bouton6" Click="Key6_Click" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50" Margin="0,0,20,60">
+            <Label Content="6" HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="40" FontWeight="Normal" Margin="5,0,0,0" FontSize="48"/>
+        </Button>
+        <Button x:Name="Bouton5" Click="Key5_Click" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50" Margin="0,0,140,60">
+            <Label Content="5" HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="40" FontWeight="Normal" Margin="5,0,0,0" FontSize="48"/>
+        </Button>
+        <Button x:Name="Bouton4" Click="Key4_Click" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50" Margin="0,0,260,60">
+            <Label Content="4" HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="40" FontWeight="Normal" Margin="5,0,0,0" FontSize="48"/>
+        </Button>
+        <Button x:Name="Bouton3" Click="Key3_Click" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50" Margin="0,60,20,0">
+            <Label Content="3" HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="40" FontWeight="Normal" Margin="5,0,0,0" FontSize="48"/>
+        </Button>
+        <Button x:Name="Bouton2" Click="Key2_Click" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50" Margin="0,60,140,0">
+            <Label Content="2" HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="40" FontWeight="Normal" Margin="5,0,0,0" FontSize="48"/>
+        </Button>
+        <Button x:Name="Bouton1" Click="Key1_Click" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50" Margin="0,60,260,0">
+            <Label Content="1" HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="40" FontWeight="Normal" Margin="5,0,0,0" FontSize="48"/>
+        </Button>
+        <Button x:Name="Bouton0" Click="Key0_Click" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50" Margin="0,180,260,0">
+            <Label Content="0" HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="40" FontWeight="Normal" Margin="5,0,0,0" FontSize="48"/>
+        </Button>
+        <Button x:Name="BoutonDot" Click="KeyDot_Click" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="50" Margin="0,180,140,0">
+            <Label Content="." HorizontalAlignment="Center" VerticalAlignment="Center" Height="80" Width="20" FontWeight="Normal" FontSize="48"/>
+        </Button>
+        <Button x:Name="BoutonDelete" Click="KeyDelete_Click" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Height="50" Width="150" Margin="80,180,0,0" FontSize="11">
+            <Image Source="..\Images\delete.png" Height="32" Width="35" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Button>
+        <Button x:Name="BoutonEnter" Click="KeyEnter_Click" Content="Entrée" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Height="170" Width="86" Margin="140,0,0,60" FontWeight="Bold" FontSize="18" />
+
+
         <Label Content="Veuillez sélectionner le colis et son poids :" Grid.Row="0" Grid.ColumnSpan="2" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0"/>
-        <Label x:Name="NbColis" Content="" Grid.Row="1" Grid.ColumnSpan="2" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,124" Grid.RowSpan="2" Width="277" HorizontalContentAlignment="Center"/>
+        <Label x:Name="NbColis" Content="" Grid.Row="1" Grid.Column="0" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,250" Grid.RowSpan="2" Width="277" HorizontalContentAlignment="Center"/>
 
-        <TextBox x:Name="ChoixColis" Grid.Row="1" Grid.ColumnSpan="2" Width="133" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="30,0,0,35"/>
-        <TextBox x:Name="PoidsColis" Grid.Row="1" Grid.ColumnSpan="2" Width="133" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="30,25,0,0"/>
+        <TextBox x:Name="ChoixColis" Grid.Row="1" Grid.Column="0" Width="133" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="30,0,0,35" GotFocus="ChoixColis_GotFocus"/>
+        <TextBox x:Name="PoidsColis" Grid.Row="1" Grid.Column="0" Width="133" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="30,25,0,0" GotFocus="PoidsColis_GotFocus"/>
 
-        <Label x:Name="ChoixColisLabel" Content="Choix du colis :" Grid.Row="1" Grid.ColumnSpan="2" Width="91" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,200,35"/>
-        <Label x:Name="PoidsColisLabel" Content="Poids du colis :" Grid.Row="1" Grid.ColumnSpan="2" Width="91" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,25,200,0"/>
+        <Label x:Name="ChoixColisLabel" Content="Choix du colis :" Grid.Row="1" Grid.Column="0" Width="91" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,200,35"/>
+        <Label x:Name="PoidsColisLabel" Content="Poids du colis :" Grid.Row="1" Grid.Column="0" Width="91" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,25,200,0"/>
 
 
-        <Label x:Name="ErreurPoids" Content="" Grid.Row="1" Grid.ColumnSpan="2" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,42,0,0" Grid.RowSpan="2" Width="277" HorizontalContentAlignment="Center"/>
-        <Button Content="Valider" IsDefault="True" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Bottom" Margin="5,5,5,5" Click="Valider"/>
-        <Button Content="Annuler" IsCancel="true" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Bottom" Margin="5,5,5,5" Click="Annuler"/>
+        <Label x:Name="ErreurPoids" Content="" Grid.Row="1" Grid.Column="0" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,42,0,0" Grid.RowSpan="2" Width="277" HorizontalContentAlignment="Center"/>
+        <Button Content="Valider" IsDefault="True" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Bottom" Margin="5,5,20,20" Click="Valider"/>
+        <Button Content="Annuler" IsCancel="true" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Bottom" Margin="20,5,5,20" Click="Annuler"/>
     </Grid>
 </Window>

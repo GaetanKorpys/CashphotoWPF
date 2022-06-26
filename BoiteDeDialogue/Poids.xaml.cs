@@ -21,6 +21,7 @@ namespace CashphotoWPF.BoiteDeDialogue
     public partial class Poids : Window
     {
         private MainWindow _app; //un accès à la fenêtre principale
+        private TextBox _focusedTextBox { get; set; }
         public Poids(MainWindow app)
         {
             InitializeComponent();
@@ -47,5 +48,90 @@ namespace CashphotoWPF.BoiteDeDialogue
             this.DialogResult = false;
             this.Close();
         }
+
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox = InputTextBox;
+        }
+
+        //-------------Clavier Virtuel-------------
+
+        private void Key0_Click(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox.Text += "0";
+            _focusedTextBox.CaretIndex = _focusedTextBox.Text.Length;
+        }
+
+        private void Key1_Click(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox.Text += "1";
+            _focusedTextBox.CaretIndex = _focusedTextBox.Text.Length;
+        }
+
+        private void Key2_Click(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox.Text += "2";
+            _focusedTextBox.CaretIndex = _focusedTextBox.Text.Length;
+        }
+
+        private void Key3_Click(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox.Text += "3";
+            _focusedTextBox.CaretIndex = _focusedTextBox.Text.Length;
+        }
+
+        private void Key4_Click(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox.Text += "4";
+            _focusedTextBox.CaretIndex = _focusedTextBox.Text.Length;
+        }
+        private void Key5_Click(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox.Text += "5";
+            _focusedTextBox.CaretIndex = _focusedTextBox.Text.Length;
+        }
+
+        private void Key6_Click(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox.Text += "6";
+            _focusedTextBox.CaretIndex = _focusedTextBox.Text.Length;
+        }
+        private void Key7_Click(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox.Text += "7";
+            _focusedTextBox.CaretIndex = _focusedTextBox.Text.Length;
+        }
+        private void Key8_Click(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox.Text += "8";
+            _focusedTextBox.CaretIndex = _focusedTextBox.Text.Length;
+        }
+        private void Key9_Click(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox.Text += "9";
+            _focusedTextBox.CaretIndex = _focusedTextBox.Text.Length;
+        }
+
+        private void KeyDot_Click(object sender, RoutedEventArgs e)
+        {
+            _focusedTextBox.Text += ".";
+            _focusedTextBox.CaretIndex = _focusedTextBox.Text.Length;
+        }
+
+        private void KeyDelete_Click(object sender, RoutedEventArgs e)
+        {
+            //_focusedTextBox
+            var routedEvent = Keyboard.KeyDownEvent;
+            _focusedTextBox.RaiseEvent(new KeyEventArgs(Keyboard.PrimaryDevice, PresentationSource.FromVisual(_focusedTextBox), 0, Key.Back) { RoutedEvent = routedEvent });
+
+        }
+
+        private void KeyEnter_Click(object sender, RoutedEventArgs e)
+        {
+            var routedEvent = Keyboard.KeyDownEvent;
+            _focusedTextBox.RaiseEvent(new KeyEventArgs(Keyboard.PrimaryDevice, PresentationSource.FromVisual(_focusedTextBox), 0, Key.Enter) { RoutedEvent = routedEvent });
+        }
+
     }
 }

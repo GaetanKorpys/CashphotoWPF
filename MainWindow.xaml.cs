@@ -1715,7 +1715,7 @@ namespace CashphotoWPF
 
         private void RechercheCommandeAmazon_Click(object sender, RoutedEventArgs e)
         {
-            if (_commande.Site != null && _commande.Site.Equals("Amazon"))
+            if (_commande != null && _commande.Site != null && _commande.Site.Equals("Amazon"))
                 Process.Start(new ProcessStartInfo("cmd", $"/c start https://sellercentral-europe.amazon.com/orders-v3/order/" + _commande.NumCommande) { CreateNoWindow = true });
 
         }

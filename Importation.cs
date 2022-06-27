@@ -76,8 +76,8 @@ namespace CashphotoWPF
                         }
 
                         exist = constante.cashphotoBDD.Articles.Where(article => article.NumCommande == numCommande && article.NomArticle == fileDataField[8]).Count();
-                        //if(exist == 0)
-                        AddArticleAmazon(fileDataField);
+                        if(exist == 0)
+                            AddArticleAmazon(fileDataField);
 
 
                     }
@@ -136,8 +136,8 @@ namespace CashphotoWPF
                             fileDataField = line.Split(delimiter);
 
                             exist = constante.cashphotoBDD.Articles.Where(article => article.NumCommande == numCommande && article.NomArticle == fileDataField[1]).Count();
-                            //if (exist == 0)
-                            AddArticleCashphoto(fileDataField, numCommande);
+                            if (exist == 0)
+                                AddArticleCashphoto(fileDataField, numCommande);
                         }
                     }
 

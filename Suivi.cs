@@ -166,8 +166,7 @@ namespace CashphotoWPF
             Constante constante = Constante.GetConstante();
 
             string date = DateTime.Today.ToShortDateString().Replace("/", "_");
-            string filename = "RetourNSuiviPrestashop" + "_" + date + ".csv";
-            string path = constante.numeroSuiviCashphoto + "\\" + filename;
+           
             string entete = "ReferenceExpedition;NumeroColis";
             string delimiter = ";";
             string row, lastFile;
@@ -176,7 +175,10 @@ namespace CashphotoWPF
 
             Commande cmd = constante.cashphotoBDD.Commandes.Where(commande => commande.NumCommande == c.NumCommande).First();
 
-            if(cmd.NumeroSuivi == null)
+            string filename = cmd.NumCommande + ".csv";
+            string path = constante.numeroSuiviCashphoto + "\\" + filename;
+
+            if (cmd.NumeroSuivi == null)
                 cmd.NumeroSuivi = line[1];
             else if(cmd.NumeroSuivi2 == null)
                 cmd.NumeroSuivi2 = line[1];
